@@ -64,20 +64,6 @@ This timer is designed to work without an internet connection after the HTML fil
 
 You can download `index.html` and open it directly in Chrome, Edge, Firefox, or another modern browser.
 
-## Publish with GitHub Pages
-
-1. Create a new GitHub repository.
-2. Upload `index.html` and `README.md` to the repository root.
-3. Open the repository's **Settings**.
-4. Open **Pages**.
-5. Under **Build and deployment**, choose **Deploy from a branch**.
-6. Select the `main` branch and `/ (root)` folder.
-7. Save the settings.
-8. GitHub will provide a public URL for the timer.
-
-The site will usually be available at a URL similar to:
-
-`https://YOUR-USERNAME.github.io/REPOSITORY-NAME/`
 
 ## Privacy
 
