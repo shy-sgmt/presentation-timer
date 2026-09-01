@@ -87,4 +87,12 @@ Saved timer settings remain in the browser's local storage.
 
 ## License
 
-You may add a license of your choice before publishing. For a simple open-source release, the MIT License is a common option.
+This project is released under the **MIT License**.
+
+You are free to use, copy, modify, merge, publish, distribute, sublicense, and reuse this project, including for personal, educational, academic, and commercial purposes, subject to the terms of the MIT License.
+
+See [`LICENSE`](LICENSE) for details.
+
+## Author
+
+Shoya Sugimoto
