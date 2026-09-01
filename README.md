@@ -1,6 +1,9 @@
 # Presentation Timer
 
-A lightweight, offline-friendly presentation timer for talks, seminars, and conference sessions.
+**▶ [Open Presentation Timer](https://shy-sgmt.github.io/presentation-timer/)**
+
+A simple presentation timer with Q&A timing, configurable bell alerts, overtime notifications, and English/Japanese support.
+
 
 ## Features
 
