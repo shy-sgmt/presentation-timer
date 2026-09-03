@@ -738,6 +738,32 @@
   }
 
 
+
+  /* v13: wider settings workspace on desktop */
+  @media (min-width: 901px) {
+    .settings-shell {
+      width: min(1500px, calc(100vw - 32px)) !important;
+      max-width: none !important;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .settings-panel,
+    .settings-groups {
+      width: 100% !important;
+      max-width: none !important;
+    }
+    .settings-groups {
+      grid-template-columns: minmax(270px, 0.72fr) minmax(0, 3.28fr) !important;
+      gap: 14px !important;
+    }
+    .event-table {
+      min-width: 1080px;
+    }
+    .event-table th:nth-child(4) { width: 190px; }
+    .event-table th:nth-child(5) { width: 340px; }
+  }
+
 </style>
 </head>
 <body>
