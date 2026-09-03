@@ -1,146 +1,199 @@
 # Presentation Timer
 
-**▶ [Open Presentation Timer](https://shy-sgmt.github.io/presentation-timer/)**
+## Download and run
 
-A flexible presentation and session timer with customizable events, bell alerts, countdown/count-up behavior, automatic overtime after Session End, templates, themes, and English/Japanese support.
+No installation is required.
 
-## Quick start
+### Windows
 
-### Use in your browser
-Open the link above. No installation is required.
+1. Download and extract the ZIP.
+2. Double-click:
 
-### Install as an app (PWA)
-On supported browsers, open the web version and use **Settings > General > Install App** when the option appears. The installed version can work offline after the app files have been cached.
+```text
+START Presentation Timer.bat
+```
 
-### Downloaded / standalone version
-Download and extract the entire ZIP. Keep the folder structure intact.
+The timer opens in your default browser.
 
-**Windows:** double-click **`START Presentation Timer.bat`**  
-**macOS / other systems:** double-click **`00_START_HERE.html`**
+You can also open:
 
-Do not move only `index.html`; the CSS and JavaScript files are required.
+```text
+00_START_HERE.html
+```
 
-## Main features
+### macOS / Linux
 
-- Customizable timed events, titles, messages, and bell counts
-- Add, delete, and reorder events
-- Skip alert-only events as countdown targets
-- Set one event as **Session End**
-- **Overtime starts automatically when Session End is reached**
-- Events after Session End can still ring bells and update the title/message
+Extract the ZIP and open:
+
+```text
+00_START_HERE.html
+```
+
+or:
+
+```text
+index.html
+```
+
+---
+
+A browser-based visual presentation timer for talks, Q&A sessions, breaks, and other timed sessions.
+
+This version focuses on a simple runtime view and a visual Edit Mode for building reusable timing templates.
+
+## Features
+
+- Visual timeline editor
+- Reusable templates
+- Up to 10 templates
+- Maximum 5 template buttons per row on desktop
 - Count Down / Count Up modes
-- Templates: **10 min Talk / 30 min Talk / Coffee Break** by default
-- Themes: Light / Dark / High Contrast / Paper / Matrix / Tokyo Night / Cyberpunk / Solarized
-- **Dark is the default theme**
+- Session End and overtime handling
+- Alert Bell and Event markers
+- Overtime Alert relative to Session End
+- Manual Ring button
+- Adjustable bell volume
+- Fullscreen presentation mode
+- Template switching in fullscreen
 - English / Japanese interface
-- Dynamic timeline and optional timeline control
-- Fullscreen, manual bell, keyboard shortcuts, and Wake Lock support
-- Browser-local auto-save
-- Settings export/import using JSON files
-- PWA installation and offline cache when served over HTTPS
-
-## Settings
-
-On wider screens, Settings are shown as three columns:
-
-**General | Templates | Schedule**
-
-On smaller screens they automatically stack to fit the display.
-
-- **General** — theme, language, browser auto-save, settings file save/load, app installation, restore/clear local data
-- **Templates** — edit, save, add, or delete timer templates (up to 6)
-- **Schedule** — count mode, timeline control, manual bell count, and timed events
+- Built-in default templates are localized with the selected language
+- Numeric global timer font size
+- Dark and light-oriented themes
+- Settings saved in the browser with localStorage
+- Save / Load settings as JSON
+- No server required
 
 ## Default templates
 
 ### 10 min Talk
-The original 10-minute talk timing is retained:
 
-- 9 min — 1st Bell (1 minute remaining)
-- 10 min — Q&A begins
-- 15 min — Session End
-- 18 min — OT Alert
+- 0:00 — Presentation
+- 9:00 — Bell 1 / 1 minute remaining
+- 10:00 — Q&A
+- 15:00 — Session End
+- +3:00 — Overtime Alert
 
 ### 30 min Talk
 
-- 25 min — 1st Bell (5 minutes remaining)
-- 29 min — 2nd Bell (1 minute remaining)
-- 30 min — Q&A begins
-- 40 min — Session End (10-minute Q&A)
+- 0:00 — Presentation
+- 25:00 — Bell 1 / 5 minutes remaining
+- 29:00 — Bell 2 / 1 minute remaining
+- 30:00 — Q&A
+- 40:00 — Session End
+- +3:00 — Overtime Alert
 
 ### Coffee Break
-A simple 10-minute break:
 
-- 0 min — Coffee Break starts
-- 10 min — Break End
+- 0:00 — Coffee Break
+- 10:00 — Coffee Break End
+- Overtime Alert disabled
 
-There are no 1st Bell or overtime-alert events in the Coffee Break template.
+## Quick start
 
-## Automatic overtime
+1. Open `index.html` in a modern browser.
+2. Select a template.
+3. Press **Start**.
+4. Use **Reset** to return to the beginning.
+5. Use **Ring** for a manual bell.
+6. Use **Fullscreen** for presentation use.
 
-There is no separate **Overtime** checkbox in Schedule.
+No installation or build step is required.
 
-The event marked **Session End** defines the scheduled end of the session. As soon as the timer reaches that time, overtime is determined automatically:
+## Editing templates
 
-- Count Down switches to `+00:00`, `+00:01`, ...
-- Count Up continues showing elapsed time and shows overtime as the secondary value
-- The title, message, and main timer use the overtime warning style automatically
+Press **Edit** below the template buttons.
 
-Later events such as an OT Alert can still ring or change the message, but overtime always remains measured from Session End.
+In Edit Mode you can:
 
-### Useful editing and safety tools
+- drag Alert Bell and Event markers
+- edit marker time, bell count, title, and message in the Schedule table
+- move the Session End boundary
+- configure an Overtime Alert relative to Session End
+- preview bell sounds
+- change Count Up / Count Down
+- change snap interval
+- change manual bell count and bell volume
 
-- **Duplicate Template** — copy any saved template and then edit the copy. Up to 6 templates can be stored.
-- **Bell Volume** — adjust the synthesized bell level for each template.
-- **Preview Event** — use the ▶ button in an event row to preview its title, message, and bell before saving the template.
-- **Safe template switching** — if the timer is running, switching to another template asks for confirmation before resetting the timer.
+Press **Save** to leave Edit Mode.
 
-## Documentation
+Changes are automatically stored in the browser while editing.
 
-Detailed behavior and configuration are separated into the `docs/` folder:
+For more detail, see [docs/USER_GUIDE.md](docs/USER_GUIDE.md).
 
-- [Features and defaults](docs/FEATURES.md)
-- [Event settings](docs/EVENT_SETTINGS.md)
-- [Timer behavior and timeline](docs/TIMER_BEHAVIOR.md)
-- [Saving, standalone use, PWA, and privacy](docs/SAVING_AND_OFFLINE.md)
+## General Settings
+
+Open **Settings** to configure global options.
+
+Current global options include:
+
+- Theme
+- Language
+- Timer Font Size (px)
+- Save Settings
+- Load Settings
+- Restore Defaults
+- Clear Local Data
+
+The default timer font size is **300 px**.
+
+The font-size setting applies to all templates and is also used by the Edit Mode preview.
+
+## Fullscreen behavior
+
+Fullscreen is intended for live presentation use.
+
+- Template buttons remain visible and selectable.
+- Template management controls are hidden.
+- The Fullscreen button changes to Exit Fullscreen.
+- Template switching remains available.
+- Fullscreen cannot be entered while Edit Mode is active.
+- The timer keeps the configured Timer Font Size in fullscreen.
+
+## Browser storage
+
+Settings and templates are stored locally in the browser.
+
+This means:
+
+- changes survive page reloads
+- different browsers have separate settings
+- clearing browser site data may remove saved templates
+
+Use **Save Settings** if you want a backup file.
+
+## GitHub Pages
+
+This repository is designed so that `index.html` is at the repository root.
+
+That means it can be published directly with GitHub Pages without a build step.
+
+See [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md).
 
 ## Project structure
 
 ```text
 presentation-timer/
-├─ START Presentation Timer.bat
-├─ 00_START_HERE.html
-├─ README.md
-├─ LICENSE
 ├─ index.html
-├─ manifest.webmanifest
-├─ service-worker.js
-├─ css/
-│  ├─ main.css
-│  └─ themes.css
-├─ js/
-│  ├─ app.js
-│  └─ pwa.js
-├─ icons/
-│  ├─ icon-192.png
-│  └─ icon-512.png
+├─ style.css
+├─ app.js
+├─ README.md
+├─ .gitignore
 └─ docs/
-   ├─ FEATURES.md
-   ├─ EVENT_SETTINGS.md
-   ├─ TIMER_BEHAVIOR.md
-   └─ SAVING_AND_OFFLINE.md
+   ├─ USER_GUIDE.md
+   ├─ TEMPLATE_GUIDE.md
+   ├─ GITHUB_PAGES.md
+   └─ CHANGELOG.md
 ```
 
-## Restore Defaults vs Clear Local Data
+## Notes
 
-**Restore Defaults** restores the built-in timer templates and settings while preserving the current theme and language.
+- The application is fully client-side.
+- No external server is required for normal use.
+- Audio playback may require the first user interaction before a browser allows sound.
+- Fullscreen behavior can vary slightly by browser.
 
-**Clear Local Data** removes Presentation Timer data stored in the current browser, including saved theme and templates, then reloads the built-in defaults with **Dark** theme.
+## Version
 
-## License
+Current packaged version: **v48**
 
-Released under the **MIT License**. See [LICENSE](LICENSE).
-
-## Author
-
-Shoya Sugimoto
+v48 is a documentation / GitHub packaging release based on the v47 application. The timer behavior and visual design are unchanged from v47.

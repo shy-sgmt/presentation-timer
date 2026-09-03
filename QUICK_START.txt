@@ -1,0 +1,54 @@
+Presentation Timer - Quick Start
+================================
+
+Windows
+-------
+1. Extract the ZIP file.
+2. Double-click:
+   START Presentation Timer.bat
+
+Alternative:
+- Open 00_START_HERE.html
+- Or open index.html directly
+
+macOS / Linux
+-------------
+1. Extract the ZIP file.
+2. Open:
+   00_START_HERE.html
+   or index.html
+
+No installation is required.
+
+Important
+---------
+Keep index.html, style.css, and app.js in the same folder.
+
+GitHub Pages
+------------
+See:
+docs/GITHUB_PAGES.md
+
+
+日本語
+======
+
+Windows
+-------
+1. ZIPを展開します。
+2. 「START Presentation Timer.bat」をダブルクリックします。
+
+別の方法:
+- 00_START_HERE.html を開く
+- または index.html を直接開く
+
+macOS / Linux
+-------------
+ZIPを展開して、
+00_START_HERE.html または index.html をブラウザで開いてください。
+
+インストールは不要です。
+
+注意
+----
+index.html / style.css / app.js は同じフォルダに置いてください。

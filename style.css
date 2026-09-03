@@ -1,0 +1,1557 @@
+*{box-sizing:border-box}:root{--bg:#fff;--text:#111;--muted:#666;--panel:#f5f5f5;--panel2:#eee;--border:#aaa;--input:#fff;--accent:#4aa3ff;--alert:#ffd166;--event:#75d98b;--danger:#ff6b6b;--segA:#e9edf2;--segB:#dde5ec;--play:#111}
+body.dark{--bg:#2b2b2b;--text:#fff;--muted:#bdbdbd;--panel:#353535;--panel2:#414141;--border:#666;--input:#333;--accent:#64b5f6;--segA:#3a4652;--segB:#333d47;--play:#fff}
+body.high-contrast{--bg:#000;--text:#fff;--muted:#ddd;--panel:#090909;--panel2:#151515;--border:#fff;--input:#000;--accent:#00ffff;--alert:#ffe600;--event:#00ff66;--segA:#111;--segB:#222;--play:#fff}
+body.paper{--bg:#f4efe3;--text:#2b2925;--muted:#777066;--panel:#ebe3d3;--panel2:#efe8da;--border:#a89d89;--input:#fbf7ee;--accent:#7a5b3a;--alert:#d9a441;--event:#6f9865;--segA:#e5dac5;--segB:#ddd0b9;--play:#2b2925}
+body.matrix{--bg:#030806;--text:#39ff78;--muted:#6bcf8c;--panel:#07110b;--panel2:#09150d;--border:#2bdc65;--input:#020603;--accent:#39ff78;--alert:#b8ff39;--event:#39ff78;--segA:#0a1d11;--segB:#0d2616;--play:#b8ff39;font-family:"Courier New",monospace}
+body.tokyo-night{--bg:#1a1b26;--text:#c0caf5;--muted:#737aa2;--panel:#24283b;--panel2:#2a2e43;--border:#565f89;--input:#1f2335;--accent:#7dcfff;--alert:#e0af68;--event:#9ece6a;--segA:#292e45;--segB:#22263a;--play:#7dcfff}
+body.cyberpunk{--bg:#08090d;--text:#f8f8f2;--muted:#a9a9b2;--panel:#14161d;--panel2:#181b23;--border:#f5e642;--input:#0e1016;--accent:#00f0ff;--alert:#f5e642;--event:#00ff9f;--segA:#1a1d26;--segB:#11141b;--play:#ff2a6d}
+body.solarized{--bg:#002b36;--text:#eee8d5;--muted:#839496;--panel:#073642;--panel2:#0b3b47;--border:#586e75;--input:#073642;--accent:#2aa198;--alert:#b58900;--event:#859900;--segA:#0a414c;--segB:#073946;--play:#268bd2}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;transition:.15s background,.15s color}button,input,select{font:inherit}button{cursor:pointer;border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:8px 13px;border-radius:4px}button:hover{filter:brightness(1.08)}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--accent);color:#07131d;border-color:transparent;font-weight:850}.app-shell{width:min(1260px,calc(100% - 28px));margin:auto;padding:14px 0 36px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.topbar h1{font-size:clamp(1.25rem,2.3vw,1.85rem);margin:0}.top-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.hidden{display:none!important}.settings-panel,.timeline-card,.timer-card,.marker-editor,.table-card,.toolbar,.template-editor{background:var(--panel);border:1px solid var(--border);border-radius:5px}.settings-panel{padding:13px;margin-bottom:10px}.settings-panel>h2{font-size:1rem;margin:0 0 10px}.general-grid{display:grid;grid-template-columns:repeat(2,minmax(190px,1fr));gap:10px}.settings-panel label,.template-editor label,.marker-editor label{display:grid;gap:5px;font-size:.8rem;color:var(--muted);font-weight:700}.settings-panel input,.settings-panel select,.template-editor input,.template-editor select,.marker-editor input{width:100%;padding:8px 9px;border:1px solid var(--border);border-radius:3px;background:var(--input);color:var(--text)}.setting-actions{display:flex;gap:7px;flex-wrap:wrap}.general-actions{margin-top:10px}.status-line{min-height:1.1em;margin-top:7px;font-size:.76rem;color:var(--muted)}.template-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:9px auto 10px}.template-bar button{min-width:130px}.template-bar button.active{outline:2px solid var(--accent);border-color:var(--accent)}.template-editor{padding:13px;margin-bottom:10px}.template-editor-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.template-editor-head h2{margin:2px 0 0;font-size:1.05rem}.eyebrow{font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:800;letter-spacing:.08em}.template-settings-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:9px}.toolbar{display:flex;align-items:center;gap:7px;padding:9px 11px;margin-bottom:10px;flex-wrap:wrap}.toolbar-label{font-weight:800}.toolbar-hint{color:var(--muted);font-size:.8rem;margin-left:auto}.tool.active{outline:2px solid var(--accent);border-color:var(--accent)}.timeline-card{padding:17px 18px 12px;margin-bottom:10px;overflow:hidden}.timeline-caption-row{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-bottom:4px}.timeline{position:relative;height:112px;touch-action:none;user-select:none}.segments{position:absolute;inset:29px 0 29px;overflow:hidden;display:flex;border-radius:2px}.segment:nth-child(odd){background:var(--segA)}.segment:nth-child(even){background:var(--segB)}.track-line{position:absolute;left:0;right:0;top:56px;height:3px;background:var(--muted)}.marker-layer{position:absolute;inset:0}.marker{position:absolute;top:0;transform:translateX(-50%);width:46px;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:grab;z-index:5;touch-action:none}.marker.dragging{cursor:grabbing;z-index:20}.marker::before{content:"";position:absolute;inset:8px 2px 14px;border:1px dashed var(--accent);opacity:0}.marker:hover::before,.marker.selected::before,.marker.dragging::before{opacity:.55}.marker-dot{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 0 1px color-mix(in srgb,var(--text) 20%,transparent);font-size:.85rem}.marker.alert .marker-dot{background:var(--alert);color:#241d00}.marker.event .marker-dot{background:var(--event);color:#06230f;border-radius:1px;width:9px}.marker-time{margin-top:6px;font-size:.74rem;font-weight:850;background:color-mix(in srgb,var(--bg) 90%,transparent);padding:2px 5px;border-radius:2px;white-space:nowrap}.marker.selected .marker-time{outline:2px solid var(--accent)}.playhead{position:absolute;top:22px;bottom:23px;width:2px;background:var(--play);opacity:0;z-index:4;pointer-events:none}.playhead::after{content:"";position:absolute;top:-4px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--play)}.phase-labels{position:relative;height:24px;color:var(--muted);font-size:.75rem}.phase-label{position:absolute;transform:translateX(-50%);white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}.marker-editor{padding:13px;margin:-1px 0 10px}.editor-head,.section-title-row{display:flex;justify-content:space-between;align-items:center;gap:10px}.editor-head h2,.section-title-row h2{font-size:1rem;margin:0}.icon-btn{width:32px;height:32px;padding:0}.editor-grid{display:grid;grid-template-columns:120px 140px 120px 1fr;gap:9px;margin-top:10px}.editor-grid .wide{grid-column:span 2}.editor-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:10px}.danger,.danger-soft{border-color:#8a3838;color:#ffb2b2}.timer-card{text-align:center;padding:23px 16px;margin-bottom:10px}.active-title{font-size:clamp(1.8rem,4.3vw,3.2rem);font-weight:900}.active-message{font-size:clamp(1rem,2vw,1.4rem);color:var(--muted);margin-top:4px;min-height:1.4em}.main-time{font-variant-numeric:tabular-nums;font-size:clamp(5.4rem,15vw,10.6rem);font-weight:950;letter-spacing:-.055em;line-height:.92;margin:17px 0 10px}.next-info{color:var(--muted)}.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:16px}.table-card{padding:13px}.section-title-row span{font-size:.78rem;color:var(--muted)}.table-wrap{overflow:auto;margin-top:8px}table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:8px 7px;border-bottom:1px solid var(--border);text-align:left}th{font-size:.72rem;color:var(--muted);text-transform:uppercase}.type-pill{display:inline-block;border-radius:2px;padding:3px 6px;font-size:.7rem;font-weight:800}.type-pill.alert{background:color-mix(in srgb,var(--alert) 18%,transparent);color:var(--alert)}.type-pill.event{background:color-mix(in srgb,var(--event) 16%,transparent);color:var(--event)}.type-pill.boundary{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}body.session-over .main-time,body.session-over .next-info{color:var(--danger)}
+body.session-over .main-time{font-weight:850}
+body:not(.timeline-control-enabled) .timeline{cursor:default}body.timeline-control-enabled:not(.editing) .timeline{cursor:pointer}
+:fullscreen body,:fullscreen{background:var(--bg)}:fullscreen .app-shell{width:min(1500px,calc(100% - 30px));padding-top:14px}:fullscreen .normal-ui{display:none!important}:fullscreen .template-bar{margin-top:0}:fullscreen .timeline-card{margin-top:10px}:fullscreen .timer-card{min-height:55vh;display:flex;flex-direction:column;justify-content:center}:fullscreen .main-time{font-size:clamp(7rem,19vw,15rem)}
+@media(max-width:940px){.template-settings-grid{grid-template-columns:repeat(2,minmax(150px,1fr))}.editor-grid{grid-template-columns:1fr 1fr}.editor-grid .wide{grid-column:1/-1}.toolbar-hint{flex-basis:100%;margin-left:0}}@media(max-width:650px){.app-shell{width:calc(100% - 14px);padding-top:8px}.topbar{align-items:flex-start}.top-actions button{padding:7px 9px}.general-grid,.template-settings-grid{grid-template-columns:1fr 1fr}.timeline-card{padding-inline:9px}.template-bar button{min-width:calc(50% - 5px)}.main-time{font-size:clamp(4.7rem,22vw,7.8rem)}.editor-actions button{flex:1}}@media(max-width:430px){.general-grid,.template-settings-grid{grid-template-columns:1fr}.template-bar button{min-width:100%}}
+/* v5: timer-first proportions and editable schedule */
+.timeline-card{padding:12px 16px 8px}
+.timeline{height:82px}
+.segments{inset:22px 0 22px}
+.track-line{top:41px}
+.playhead{top:15px;bottom:17px}
+.marker{width:44px}
+.marker-dot{width:27px;height:27px}
+.marker::before{inset:3px 2px 8px}
+.marker-time{margin-top:4px;font-size:.78rem}
+.phase-labels{height:22px;font-size:.8rem}
+.timer-card{padding:30px 16px 28px}
+.active-title{font-size:clamp(2rem,4.8vw,3.8rem);font-weight:900;letter-spacing:-.025em}
+.active-message{font-size:clamp(1.15rem,2.3vw,1.65rem);margin-top:5px}
+.main-time{font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-size:clamp(6.4rem,17vw,12.5rem);font-weight:800;letter-spacing:-.06em;line-height:.88;margin:22px 0 14px}
+.next-info{font-size:clamp(.9rem,1.4vw,1.08rem)}
+.table-card.hidden{display:none!important}
+.table-card input{width:100%;min-width:76px;padding:6px 7px;border:1px solid var(--border);border-radius:2px;background:var(--input);color:var(--text)}
+.table-card .table-title{min-width:150px}.table-card .table-message{min-width:210px}.table-card .table-bell{min-width:62px}
+tr.selected-row{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+tr.selected-row td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+:fullscreen .main-time{font-size:clamp(8rem,21vw,17rem)}
+@media(max-width:650px){.timeline{height:76px}.segments{inset:20px 0}.track-line{top:38px}.main-time{font-size:clamp(5.6rem,26vw,9rem)}}
+
+/* v7 compact template controls */
+.template-settings-grid.compact-settings{grid-template-columns:minmax(220px,1.35fr) minmax(130px,.7fr) minmax(240px,1.25fr) minmax(230px,1.2fr) minmax(130px,.65fr) minmax(190px,1fr);align-items:end}
+.inline-choice{margin:0;padding:0;border:0;min-width:0}.inline-choice legend{font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:6px}.inline-choice label{display:inline-flex;align-items:center;gap:5px;margin-right:12px;color:var(--text);font-size:.82rem;font-weight:700}.inline-choice input{width:auto;margin:0}
+.check-setting{display:flex!important;align-items:center;gap:8px!important;min-height:38px;color:var(--text)!important}.check-setting input{width:auto!important;margin:0}
+.marker.end .marker-dot{background:var(--danger);color:white;border-radius:2px;width:18px;height:18px;font-size:.65rem}
+.marker.end::before{border-color:var(--danger)}
+body.timeline-control-enabled:not(.editing) .timeline{cursor:grab}body.timeline-control-enabled:not(.editing).scrubbing .timeline{cursor:grabbing}.timeline-control-enabled:not(.editing) .playhead{pointer-events:none}
+@media(max-width:1100px){.template-settings-grid.compact-settings{grid-template-columns:repeat(3,minmax(170px,1fr))}}
+@media(max-width:700px){.template-settings-grid.compact-settings{grid-template-columns:repeat(2,minmax(145px,1fr))}.inline-choice label{margin-right:8px}}
+@media(max-width:430px){.template-settings-grid.compact-settings{grid-template-columns:1fr}}
+\n/* v8: distinct editor timeline vs. presentation timeline */
+.runtime-stage{display:block}
+.edit-bottom-stage{margin-top:10px}
+/* Presentation mode: compact, read-only timeline inspired by the classic timer. */
+body:not(.editing) .timeline-card{padding:7px 14px 5px;margin:4px 0 8px;background:transparent;border-color:color-mix(in srgb,var(--border) 70%,transparent)}
+body:not(.editing) .timeline-caption-row{font-size:.72rem;margin-bottom:1px}
+body:not(.editing) .timeline{height:52px}
+body:not(.editing) .segments{inset:21px 0 21px;border-radius:1px}
+body:not(.editing) .track-line{top:25px;height:2px}
+body:not(.editing) .marker{width:34px;height:52px;cursor:default}
+body:not(.editing) .marker::before{display:none}
+body:not(.editing) .marker-dot{width:20px;height:20px;font-size:.66rem;border-width:1px}
+body:not(.editing) .marker.event .marker-dot{width:6px;height:24px;border-radius:0}
+body:not(.editing) .marker-time{font-size:.64rem;margin-top:2px;padding:0 3px;background:transparent}
+body:not(.editing) .phase-labels{height:22px;font-size:.82rem;font-weight:700}
+body:not(.editing) .playhead{top:15px;bottom:15px}
+/* Edit mode: timeline becomes the large manipulation surface at the bottom. */
+body.editing .edit-bottom-stage .timeline-card{margin-top:10px;padding:14px 16px 9px;border-width:1px}
+body.editing .edit-bottom-stage .timeline{height:92px}
+body.editing .edit-bottom-stage .segments{inset:26px 0}
+body.editing .edit-bottom-stage .track-line{top:45px;height:3px}
+body.editing .edit-bottom-stage .marker{height:92px;width:48px;cursor:grab}
+body.editing .edit-bottom-stage .marker.dragging{cursor:grabbing}
+body.editing .edit-bottom-stage .timer-card{margin-top:10px;margin-bottom:0;padding:16px 14px}
+body.editing .edit-bottom-stage .main-time{font-size:clamp(4.2rem,10vw,7rem);margin:8px 0 5px}
+body.editing .edit-bottom-stage .active-title{font-size:clamp(1.3rem,2.4vw,2rem)}
+body.editing .edit-bottom-stage .active-message{font-size:.95rem}
+body.editing .edit-bottom-stage .controls{display:none}
+/* Schedule remains above the editor timeline; the time preview is deliberately last. */
+body.editing #scheduleCard{margin-bottom:0}
+@media(max-width:650px){
+ body:not(.editing) .timeline{height:48px}
+ body:not(.editing) .track-line{top:23px}
+ body:not(.editing) .segments{inset:20px 0}
+ body.editing .edit-bottom-stage .timeline{height:84px}
+ body.editing .edit-bottom-stage .track-line{top:41px}
+}
+
+
+/* v10: presentation timeline sits directly below the main timer */
+body:not(.editing) .runtime-stage{display:flex;flex-direction:column;gap:0}
+body:not(.editing) .timer-card{order:1;margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;padding-bottom:20px}
+body:not(.editing) .timeline-card{order:2;margin:0 0 10px;border-top:0;border-top-left-radius:0;border-top-right-radius:0;padding-top:4px}
+
+/* Fullscreen should use the available height instead of leaving a large empty lower half. */
+:fullscreen .app-shell{min-height:100vh;padding:8px 0 10px;display:flex;flex-direction:column}
+:fullscreen .template-bar{flex:0 0 auto;margin:4px auto 4px}
+:fullscreen .runtime-stage{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-height:0}
+:fullscreen .timer-card{min-height:0!important;flex:0 0 auto;padding:10px 16px 8px;margin:0}
+:fullscreen .active-title{font-size:clamp(2rem,4.2vw,4rem)}
+:fullscreen .active-message{font-size:clamp(1rem,2vw,1.55rem)}
+:fullscreen .main-time{font-size:clamp(7rem,18vw,14rem);margin:10px 0 6px;line-height:.86}
+:fullscreen .next-info{font-size:clamp(.85rem,1.3vw,1.05rem)}
+:fullscreen .controls{margin-top:9px}
+:fullscreen .timeline-card{flex:0 0 auto;margin:0;border-top:0;padding:3px 14px 3px}
+:fullscreen body:not(.editing) .timeline{height:44px}
+:fullscreen body:not(.editing) .track-line{top:21px}
+:fullscreen body:not(.editing) .segments{inset:18px 0}
+:fullscreen body:not(.editing) .marker{height:44px}
+:fullscreen body:not(.editing) .playhead{top:12px;bottom:12px}
+:fullscreen body:not(.editing) .phase-labels{height:16px}
+
+@media(max-height:700px){
+  :fullscreen .main-time{font-size:clamp(5.8rem,16vw,11rem);margin:6px 0 4px}
+  :fullscreen .active-title{font-size:clamp(1.7rem,3.5vw,3rem)}
+  :fullscreen .timer-card{padding-top:6px}
+  :fullscreen .template-bar{margin:2px auto}
+}
+
+/* v11: clearer controls and schedule-only marker editing */
+.topbar{justify-content:space-between}.topbar #settingsToggle{margin-left:auto}
+.template-switch-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 10px;flex-wrap:wrap}
+.template-switch-row .template-bar{margin:0}
+.template-edit-btn{white-space:nowrap}
+.table-actions{white-space:nowrap;min-width:128px}.mini-action{padding:5px 8px;font-size:.76rem;margin:2px}
+.timer-card .controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+#fullscreenBtn{margin-left:10px}
+@media(max-width:650px){.template-switch-row{align-items:stretch}.template-switch-row .template-bar{width:100%}.template-edit-btn{width:min(220px,100%)}#fullscreenBtn{margin-left:0}}
+
+
+/* v12: classic presentation-mode display + simple CSS bell */
+.simple-bell{position:relative;display:inline-block;width:12px;height:11px;border:1.7px solid currentColor;border-bottom:0;border-radius:7px 7px 2px 2px;box-sizing:border-box}
+.simple-bell::before{content:"";position:absolute;left:50%;bottom:-3px;width:14px;height:1.7px;background:currentColor;transform:translateX(-50%);border-radius:2px}
+.simple-bell::after{content:"";position:absolute;left:50%;bottom:-6px;width:3.5px;height:3.5px;background:currentColor;transform:translateX(-50%);border-radius:50%}
+.simple-end{display:block;width:8px;height:18px;background:currentColor;border-radius:0}
+
+/* Presentation mode should visually match the classic timer: timer first, minimal chrome. */
+body:not(.editing) .timer-card{
+  background:transparent;
+  border-color:transparent;
+  box-shadow:none;
+  padding:28px 12px 15px;
+}
+body:not(.editing) .active-title{font-size:clamp(2.1rem,4.7vw,3.8rem);line-height:1.05;font-weight:850}
+body:not(.editing) .active-message{font-size:clamp(1.05rem,2vw,1.45rem);margin-top:7px}
+body:not(.editing) .main-time{
+  font-family:Arial,Helvetica,sans-serif;
+  font-variant-numeric:tabular-nums;
+  font-size:clamp(7.2rem,19vw,14.5rem);
+  font-weight:700;
+  letter-spacing:.02em;
+  line-height:1;
+  margin:14px 0 16px;
+}
+body:not(.editing) .next-info{font-size:.9rem}
+body:not(.editing) .timeline-card{
+  background:transparent;
+  border-color:transparent;
+  box-shadow:none;
+  padding:0 18px 8px;
+  margin:0 0 8px;
+}
+body:not(.editing) .timeline-caption-row{font-size:.86rem;font-weight:700;margin-bottom:2px;padding:0 1px}
+body:not(.editing) .timeline{height:54px}
+body:not(.editing) .segments{inset:23px 0 23px;background:transparent;border-radius:0}
+body:not(.editing) .segment:nth-child(odd),body:not(.editing) .segment:nth-child(even){background:color-mix(in srgb,var(--text) 8%,transparent)}
+body:not(.editing) .track-line{top:27px;height:2px;background:color-mix(in srgb,var(--text) 42%,transparent)}
+body:not(.editing) .marker{width:30px;height:54px}
+body:not(.editing) .marker-dot{width:18px;height:18px;border:0;box-shadow:none;background:transparent!important;color:var(--text);font-size:0}
+body:not(.editing) .marker.alert .marker-dot{color:var(--text)}
+body:not(.editing) .marker.event .marker-dot{width:3px;height:22px;background:var(--text)!important;border:0}
+body:not(.editing) .marker.event .marker-dot::before,body:not(.editing) .marker.event .marker-dot::after{display:none}
+body:not(.editing) .marker-time{font-size:.78rem;font-weight:750;color:var(--muted);margin-top:4px;padding:0;background:transparent}
+body:not(.editing) .phase-labels{height:22px;font-size:.82rem;font-weight:700}
+body:not(.editing) .playhead{top:16px;bottom:13px;width:2px}
+
+/* Keep the edit timeline more explicit and manipulable. */
+body.editing .marker.alert .marker-dot{background:var(--alert);color:#241d00}
+body.editing .marker.alert .simple-bell{width:12px;height:11px}
+body.editing .marker.end .marker-dot{background:var(--accent);color:var(--bg)}
+
+:fullscreen body:not(.editing) .timer-card{padding:8px 12px 6px}
+:fullscreen body:not(.editing) .main-time{font-size:clamp(8rem,20vw,16rem);margin:12px 0 8px}
+:fullscreen body:not(.editing) .timeline-card{padding:0 20px 4px}
+:fullscreen body:not(.editing) .timeline{height:50px}
+:fullscreen body:not(.editing) .track-line{top:25px}
+
+@media(max-width:650px){
+  body:not(.editing) .timer-card{padding:22px 8px 12px}
+  body:not(.editing) .main-time{font-size:clamp(5.8rem,27vw,9.5rem);margin:17px 0 10px}
+  body:not(.editing) .timeline-card{padding-inline:8px}
+}
+
+/* v14: editable Session End boundary + relative overtime workspace */
+body.editing .timeline{--session-pct:75%}
+body.editing .segments{right:auto;width:var(--session-pct)}
+body.editing .track-line{right:auto;width:var(--session-pct)}
+body.editing .timeline::after{
+  content:"";
+  position:absolute;
+  left:var(--session-pct);
+  right:0;
+  top:45px;
+  border-top:2px dashed color-mix(in srgb,var(--danger) 48%,var(--muted));
+  opacity:.72;
+  pointer-events:none;
+}
+body.editing .marker.end{width:58px;z-index:12;cursor:ew-resize}
+body.editing .marker.end .marker-dot{
+  width:20px;height:34px;border:0;border-radius:2px;
+  background:var(--accent);color:var(--bg);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 25%,transparent);
+}
+body.editing .marker.end .simple-end{width:5px;height:24px;background:currentColor}
+body.editing .marker.end .marker-time{font-weight:900;color:var(--accent)}
+body.editing .marker.ot{width:52px;z-index:10;cursor:ew-resize}
+body.editing .marker.ot .marker-dot{background:transparent;color:var(--danger);border:0;box-shadow:none}
+body.editing .marker.ot .marker-time{color:var(--danger);font-weight:900}
+body.editing .marker.ot::before{border-color:var(--danger)}
+.type-pill.ot{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+body:not(.editing) .marker.ot{display:none}
+
+@media(max-width:650px){
+  body.editing .timeline::after{top:41px}
+}
+
+/* v15: production display typography closer to the classic Presentation Timer */
+:fullscreen body:not(.editing) .main-time{font-family:Arial,Helvetica,sans-serif;font-weight:700;letter-spacing:.02em;line-height:1}
+:fullscreen body:not(.editing) .timeline-caption-row{font-size:clamp(.9rem,1.4vw,1.15rem)}
+:fullscreen body:not(.editing) .marker-time{font-size:clamp(.8rem,1.2vw,1rem)}
+:fullscreen body:not(.editing) .phase-labels{font-size:clamp(.86rem,1.25vw,1.05rem)}
+
+/* v16: compact template management and title-free header */
+.topbar{min-height:38px;justify-content:flex-end}
+.template-switch-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
+.template-switch-row .template-bar{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin:0;flex:1 1 480px;max-width:900px}
+.template-actions{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;flex:0 1 auto}
+.template-count{font-size:.76rem;color:var(--muted);font-weight:700;min-width:34px;text-align:center}
+.template-manage-btn,.template-edit-btn{white-space:nowrap}
+.template-manage-btn{padding:7px 10px}
+@media(max-width:760px){
+  .template-switch-row{gap:8px}
+  .template-switch-row .template-bar{flex-basis:100%;max-width:none}
+  .template-actions{width:100%}
+  .template-actions button{flex:1 1 130px}
+  .template-count{flex:0 0 100%;margin-bottom:1px}
+}
+
+
+/* v17 — clearer visual hierarchy for template selection vs. management */
+.template-switcher,
+.template-buttons,
+#templateButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.template-switcher button,
+.template-buttons button,
+#templateButtons button {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+/* Template-management actions should look secondary, not like template choices. */
+.template-actions,
+.template-management,
+#templateActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+}
+
+#editTemplateBtn,
+#addTemplateBtn,
+#duplicateTemplateBtn,
+#deleteTemplateBtn,
+.template-actions button,
+.template-management button,
+#templateActions button {
+  min-height: 31px !important;
+  padding: 5px 9px !important;
+  font-size: 0.80rem !important;
+  font-weight: 600 !important;
+  opacity: 0.82;
+}
+
+#editTemplateBtn {
+  border-style: dashed;
+}
+
+#deleteTemplateBtn {
+  opacity: 0.68;
+}
+
+@media (max-width: 640px) {
+  .template-switcher button,
+  .template-buttons button,
+  #templateButtons button {
+    min-height: 42px;
+    padding: 9px 12px;
+    font-size: 0.92rem;
+  }
+
+  #editTemplateBtn,
+  #addTemplateBtn,
+  #duplicateTemplateBtn,
+  #deleteTemplateBtn,
+  .template-actions button,
+  .template-management button,
+  #templateActions button {
+    min-height: 30px !important;
+    padding: 5px 8px !important;
+    font-size: 0.76rem !important;
+  }
+}
+
+
+/* v17 refinement: template choices are primary; management actions are secondary. */
+.template-row {
+  align-items: center;
+}
+#mainTemplateButtons button {
+  min-height: 46px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.template-actions {
+  padding-left: 8px;
+  border-left: 1px solid var(--border, rgba(127,127,127,.28));
+}
+.template-actions button {
+  min-height: 30px !important;
+  padding: 5px 9px !important;
+  font-size: .78rem !important;
+  font-weight: 600 !important;
+  opacity: .78;
+}
+#editToggle {
+  border-style: dashed;
+}
+#deleteTemplate {
+  opacity: .62;
+}
+@media (max-width: 720px) {
+  .template-actions {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--border, rgba(127,127,127,.28));
+    padding-top: 7px;
+  }
+  .template-actions button {
+    flex: 0 1 auto !important;
+  }
+}
+
+
+/* v18: compact General layout */
+.settings-content-grid{
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) minmax(260px,1fr);
+  gap:20px;
+  align-items:start;
+}
+.settings-content-grid .general-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.settings-content-grid .general-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:0;
+}
+.settings-content-grid .general-actions button{
+  width:100%;
+}
+
+/* v18: runtime controls */
+.runtime-controls{
+  width:min(720px,100%);
+  margin:18px auto 0;
+}
+.controls-primary{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  width:100%;
+}
+.controls-primary button{
+  width:100%;
+}
+.ring-wide{
+  width:100%;
+  min-height:44px;
+  margin-top:10px;
+  font-weight:700;
+}
+
+/* fullscreen keeps the same visual structure */
+:fullscreen .runtime-controls,
+:-webkit-full-screen .runtime-controls{
+  width:min(820px,92vw);
+}
+
+@media (max-width:720px){
+  .settings-content-grid{
+    grid-template-columns:1fr;
+  }
+  .settings-content-grid .general-actions{
+    grid-template-columns:1fr 1fr;
+  }
+}
+@media (max-width:460px){
+  .settings-content-grid .general-actions{
+    grid-template-columns:1fr;
+  }
+  .controls-primary{
+    gap:6px;
+  }
+  .controls-primary button{
+    padding-left:6px;
+    padding-right:6px;
+    font-size:.86rem;
+  }
+}
+
+
+/* v19: compact and vertically consistent controls */
+
+/* Template selection buttons: match general Settings action height */
+#mainTemplateButtons button,
+.template-bar button,
+.template-switch-row nav button{
+  min-height:34px !important;
+  padding:5px 11px !important;
+  font-size:.84rem !important;
+  font-weight:650 !important;
+  line-height:1.15 !important;
+}
+
+/* Template management buttons stay slightly smaller/secondary */
+.template-actions button{
+  min-height:30px !important;
+  padding:4px 8px !important;
+  font-size:.76rem !important;
+}
+
+/* Runtime controls all share one exact width container */
+.runtime-controls{
+  width:min(500px, 90vw) !important;
+  margin:14px auto 0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+}
+.controls-primary{
+  display:grid !important;
+  grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+  gap:7px !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+.controls-primary button{
+  min-height:33px !important;
+  height:33px !important;
+  padding:4px 8px !important;
+  font-size:.79rem !important;
+  font-weight:600 !important;
+  line-height:1 !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+.ring-wide{
+  display:block !important;
+  width:100% !important;
+  max-width:none !important;
+  min-height:33px !important;
+  height:33px !important;
+  margin:7px 0 0 0 !important;
+  padding:4px 8px !important;
+  box-sizing:border-box !important;
+  font-size:.80rem !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+}
+
+/* Keep fullscreen exactly aligned too */
+:fullscreen .runtime-controls,
+:-webkit-full-screen .runtime-controls{
+  width:min(520px, 88vw) !important;
+}
+
+/* General settings buttons use the same compact height */
+.settings-content-grid .general-actions button{
+  min-height:34px !important;
+  padding:5px 10px !important;
+  font-size:.82rem !important;
+}
+
+@media (max-width:520px){
+  #mainTemplateButtons button,
+  .template-bar button,
+  .template-switch-row nav button{
+    min-height:33px !important;
+    padding:4px 9px !important;
+    font-size:.80rem !important;
+  }
+  .runtime-controls{
+    width:min(94vw, 460px) !important;
+  }
+  .controls-primary{
+    gap:5px !important;
+  }
+  .controls-primary button,
+  .ring-wide{
+    height:32px !important;
+    min-height:32px !important;
+    font-size:.75rem !important;
+  }
+}
+
+
+/* v20: fine alignment for General Settings */
+.settings-panel{
+  padding-top:14px !important;
+}
+.settings-content-grid{
+  grid-template-columns:minmax(240px,1fr) minmax(260px,1fr) !important;
+  gap:16px !important;
+  align-items:start !important;
+}
+.settings-content-grid .general-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:8px !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+.settings-content-grid .general-grid label{
+  display:grid !important;
+  grid-template-columns:92px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:10px !important;
+  min-height:34px !important;
+  margin:0 !important;
+}
+.settings-content-grid .general-grid label > span{
+  margin:0 !important;
+  line-height:1.1 !important;
+}
+.settings-content-grid .general-grid select{
+  width:100% !important;
+  height:34px !important;
+  min-height:34px !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+}
+.settings-content-grid .general-actions{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+  margin:0 !important;
+  padding:0 !important;
+  align-content:start !important;
+}
+.settings-content-grid .general-actions button{
+  height:34px !important;
+  min-height:34px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+#saveStatus{
+  margin-top:8px !important;
+}
+
+@media (max-width:720px){
+  .settings-content-grid{
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+  }
+  .settings-content-grid .general-grid label{
+    grid-template-columns:84px minmax(0,1fr) !important;
+  }
+}
+@media (max-width:430px){
+  .settings-content-grid .general-actions{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* v21: exact alignment for Start/Reset/Fullscreen row and Ring */
+.runtime-controls{
+  display:grid !important;
+  grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+  gap:7px !important;
+  width:min(500px, 90vw) !important;
+  margin:14px auto 0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+  align-items:stretch !important;
+}
+.controls-primary{
+  display:contents !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+.controls-primary button{
+  width:100% !important;
+  min-height:33px !important;
+  height:33px !important;
+  padding:4px 8px !important;
+  font-size:.79rem !important;
+  font-weight:600 !important;
+  line-height:1 !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+}
+.ring-wide{
+  grid-column:1 / -1 !important;
+  width:100% !important;
+  min-height:33px !important;
+  height:33px !important;
+  padding:4px 8px !important;
+  font-size:.80rem !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+  justify-self:stretch !important;
+}
+:fullscreen .runtime-controls,
+:-webkit-full-screen .runtime-controls{
+  width:min(520px, 88vw) !important;
+}
+@media (max-width:520px){
+  .runtime-controls{
+    width:min(94vw, 460px) !important;
+    gap:5px !important;
+  }
+  .controls-primary button,
+  .ring-wide{
+    min-height:32px !important;
+    height:32px !important;
+    font-size:.75rem !important;
+  }
+}
+
+
+/* v22: tighter controls, larger timer and runtime timeline labels */
+.runtime-controls{
+  width:min(430px, 86vw) !important;
+}
+.controls-primary button{
+  min-height:32px !important;
+  height:32px !important;
+  padding:4px 7px !important;
+  font-size:.76rem !important;
+  white-space:nowrap !important;
+}
+.ring-wide{
+  min-height:32px !important;
+  height:32px !important;
+  padding:4px 7px !important;
+  font-size:.77rem !important;
+  white-space:nowrap !important;
+}
+:fullscreen .runtime-controls,
+:-webkit-full-screen .runtime-controls{
+  width:min(450px, 84vw) !important;
+}
+
+/* Larger main timer */
+.main-time{
+  font-size:clamp(6.2rem, 17vw, 12.2rem) !important;
+  line-height:.88 !important;
+  margin:18px 0 12px !important;
+}
+
+/* Larger runtime timeline text */
+.runtime-stage .timeline-caption-row{
+  font-size:.92rem !important;
+  font-weight:700 !important;
+}
+.runtime-stage .marker-time{
+  font-size:.86rem !important;
+  font-weight:850 !important;
+}
+.runtime-stage .phase-labels,
+.runtime-stage .phase-label{
+  font-size:.86rem !important;
+  font-weight:700 !important;
+}
+.runtime-stage .next-info{
+  font-size:1rem !important;
+}
+.runtime-stage .active-message{
+  font-size:clamp(1.08rem, 2.2vw, 1.55rem) !important;
+}
+.runtime-stage .active-title{
+  font-size:clamp(2rem, 4.6vw, 3.5rem) !important;
+}
+
+@media (max-width:520px){
+  .runtime-controls{
+    width:min(88vw, 390px) !important;
+  }
+  .controls-primary button,
+  .ring-wide{
+    min-height:31px !important;
+    height:31px !important;
+    font-size:.72rem !important;
+    padding:3px 5px !important;
+  }
+  .main-time{
+    font-size:clamp(5.6rem, 24vw, 9rem) !important;
+  }
+  .runtime-stage .timeline-caption-row,
+  .runtime-stage .marker-time,
+  .runtime-stage .phase-labels,
+  .runtime-stage .phase-label{
+    font-size:.82rem !important;
+  }
+}
+
+
+/* v23: template switching while in Edit mode */
+.switch-modal{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;background:rgba(0,0,0,.52);padding:18px}
+.switch-modal-card{width:min(460px,calc(100vw - 36px));background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.switch-modal-card h2{margin:0 0 8px;font-size:1.05rem}
+.switch-modal-card p{margin:0 0 15px;color:var(--muted);line-height:1.45}
+.switch-modal-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.switch-modal-actions button{min-height:34px;padding:6px 8px;font-size:.8rem}
+body.editing #editToggle{outline:2px solid var(--accent);outline-offset:1px}
+@media(max-width:560px){.switch-modal-actions{grid-template-columns:1fr}.switch-modal-actions button{width:100%}}
+
+
+/* v24: Edit Mode autosave status */
+.edit-mode-status{
+  font-size:.72rem;
+  color:var(--muted);
+  font-weight:700;
+  white-space:nowrap;
+  padding:0 3px;
+}
+body.editing .template-bar button{
+  cursor:pointer;
+}
+@media(max-width:720px){
+  .edit-mode-status{
+    width:100%;
+    text-align:center;
+    order:-1;
+  }
+}
+
+
+/* v26: larger main timer display */
+.main-time{
+  font-size:clamp(6.8rem, 18vw, 13.5rem) !important;
+  line-height:.88 !important;
+  letter-spacing:-.045em !important;
+  margin:18px 0 12px !important;
+}
+
+:fullscreen .main-time,
+:-webkit-full-screen .main-time{
+  font-size:clamp(8rem, 21vw, 16rem) !important;
+}
+
+@media (max-width:700px){
+  .main-time{
+    font-size:clamp(5.6rem, 24vw, 9rem) !important;
+  }
+}
+
+@media (max-width:430px){
+  .main-time{
+    font-size:clamp(4.8rem, 26vw, 7.5rem) !important;
+  }
+}
+
+
+/* v27 — clearer top-level hierarchy */
+.topbar{
+  justify-content:flex-end !important;
+  min-height:34px;
+  margin-bottom:6px !important;
+}
+#settingsToggle{
+  min-height:32px;
+  padding:5px 11px;
+  font-size:.80rem;
+  font-weight:650;
+}
+
+.template-switch-row{
+  max-width:980px;
+  margin:0 auto 10px;
+}
+.template-section-head{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom:4px;
+}
+.template-section-label{
+  font-size:.72rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:800;
+}
+#mainTemplateButtons{
+  margin:4px auto 6px !important;
+}
+.template-actions{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:0 !important;
+  padding-top:5px;
+  border-top:1px solid color-mix(in srgb,var(--border) 70%,transparent);
+}
+.template-actions button{
+  min-height:28px !important;
+  height:28px !important;
+  padding:3px 8px !important;
+  font-size:.73rem !important;
+}
+.template-count{
+  font-size:.70rem !important;
+  color:var(--muted);
+}
+.edit-mode-status{
+  font-size:.69rem !important;
+}
+
+/* Global timer-size setting */
+body[data-timer-size="small"] .main-time{
+  font-size:clamp(5.2rem,14vw,9.2rem) !important;
+}
+body[data-timer-size="medium"] .main-time{
+  font-size:clamp(6.2rem,16vw,11rem) !important;
+}
+body[data-timer-size="large"] .main-time{
+  font-size:clamp(7.6rem,20vw,14.8rem) !important;
+}
+body[data-timer-size="xlarge"] .main-time{
+  font-size:clamp(9rem,23vw,17.5rem) !important;
+}
+
+body[data-timer-size="small"] .active-title{font-size:clamp(1.5rem,3.2vw,2.4rem)!important}
+body[data-timer-size="medium"] .active-title{font-size:clamp(1.7rem,3.8vw,2.8rem)!important}
+body[data-timer-size="large"] .active-title{font-size:clamp(2rem,4.5vw,3.4rem)!important}
+body[data-timer-size="xlarge"] .active-title{font-size:clamp(2.3rem,5vw,3.8rem)!important}
+
+body[data-timer-size="small"] .active-message{font-size:clamp(.92rem,1.6vw,1.15rem)!important}
+body[data-timer-size="medium"] .active-message{font-size:clamp(1rem,1.8vw,1.3rem)!important}
+body[data-timer-size="large"] .active-message{font-size:clamp(1.08rem,2vw,1.45rem)!important}
+body[data-timer-size="xlarge"] .active-message{font-size:clamp(1.18rem,2.2vw,1.6rem)!important}
+
+body[data-timer-size="large"] .runtime-timeline .marker-time,
+body[data-timer-size="large"] .timeline-caption-row,
+body[data-timer-size="large"] .phase-labels,
+body[data-timer-size="large"] .next-info{
+  font-size:1.02em !important;
+}
+body[data-timer-size="xlarge"] .runtime-timeline .marker-time,
+body[data-timer-size="xlarge"] .timeline-caption-row,
+body[data-timer-size="xlarge"] .phase-labels,
+body[data-timer-size="xlarge"] .next-info{
+  font-size:1.12em !important;
+}
+
+:fullscreen body[data-timer-size="large"] .main-time,
+:-webkit-full-screen body[data-timer-size="large"] .main-time{
+  font-size:clamp(9rem,23vw,17rem) !important;
+}
+:fullscreen body[data-timer-size="xlarge"] .main-time,
+:-webkit-full-screen body[data-timer-size="xlarge"] .main-time{
+  font-size:clamp(10.5rem,26vw,19rem) !important;
+}
+
+@media(max-width:600px){
+  .template-section-label{
+    font-size:.68rem;
+  }
+  .template-actions{
+    gap:5px;
+  }
+  body[data-timer-size="large"] .main-time{
+    font-size:clamp(6.2rem,29vw,10rem) !important;
+  }
+  body[data-timer-size="xlarge"] .main-time{
+    font-size:clamp(7rem,32vw,11rem) !important;
+  }
+}
+
+
+/* v28: template buttons first, compact management row directly underneath */
+.template-switch-row{
+  gap:4px !important;
+}
+#mainTemplateButtons{
+  margin:2px auto 4px !important;
+}
+.template-actions{
+  border-top:0 !important;
+  padding-top:0 !important;
+  margin-top:0 !important;
+  gap:5px !important;
+}
+.template-actions button{
+  min-height:26px !important;
+  height:26px !important;
+  padding:2px 7px !important;
+  font-size:.70rem !important;
+  font-weight:600 !important;
+  opacity:.78;
+}
+.template-count{
+  font-size:.66rem !important;
+}
+.edit-mode-status{
+  font-size:.66rem !important;
+}
+
+
+/* v29: template layout is identical in normal and Edit Mode */
+.template-switch-row{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  width:100% !important;
+  gap:4px !important;
+  margin:0 auto 10px !important;
+}
+#mainTemplateButtons{
+  width:100% !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:7px !important;
+  margin:0 auto 3px !important;
+}
+.template-actions{
+  width:100% !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:5px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+}
+
+/* Do not move or resize template controls when entering Edit Mode. */
+body.editing .template-switch-row,
+body.editing #mainTemplateButtons,
+body.editing .template-actions{
+  position:static !important;
+  transform:none !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+/* Edit becomes Save in place; management row stays where it was. */
+body.editing .template-actions{
+  display:flex !important;
+}
+
+
+/* v30: rebalance vertical spacing around template controls */
+.template-switch-row{
+  margin:0 auto 16px !important;
+  gap:5px !important;
+}
+#mainTemplateButtons{
+  margin:0 auto 5px !important;
+}
+.template-actions{
+  margin:0 !important;
+  padding:0 !important;
+}
+
+/* Keep normal-mode timer close, but not cramped. */
+.runtime-stage{
+  margin-top:6px !important;
+}
+.timer-card{
+  margin-top:0 !important;
+}
+
+/* Edit Mode gets slightly more breathing room before editor content. */
+body.editing .template-switch-row{
+  margin-bottom:12px !important;
+}
+body.editing #templateEditor{
+  margin-top:4px !important;
+}
+
+/* Mobile spacing */
+@media (max-width:700px){
+  .template-switch-row{
+    margin-bottom:12px !important;
+  }
+  .runtime-stage{
+    margin-top:4px !important;
+  }
+}
+
+
+/* v31: compact template area */
+.template-switch-row{
+  margin:0 auto 6px !important;
+  padding:0 !important;
+  gap:2px !important;
+}
+
+#mainTemplateButtons{
+  margin:0 auto 2px !important;
+  padding:0 !important;
+  gap:6px !important;
+}
+
+.template-actions{
+  margin:0 !important;
+  padding:0 !important;
+  gap:4px !important;
+  line-height:1 !important;
+}
+
+.template-actions button{
+  margin:0 !important;
+}
+
+.template-count,
+.edit-mode-status{
+  margin:0 2px !important;
+  line-height:1.15 !important;
+}
+
+/* Bring the timer immediately under template controls. */
+#runtimeStage,
+.runtime-stage{
+  margin-top:0 !important;
+  padding-top:0 !important;
+}
+
+.timer-card{
+  margin-top:0 !important;
+}
+
+body.editing .template-switch-row{
+  margin-bottom:5px !important;
+}
+
+body.editing #templateEditor{
+  margin-top:0 !important;
+}
+
+@media (max-width:700px){
+  .template-switch-row{
+    margin-bottom:5px !important;
+  }
+  #mainTemplateButtons{
+    margin-bottom:2px !important;
+  }
+}
+
+
+/* v32: fix legacy flex-basis creating huge vertical gap */
+.template-switch-row{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  margin:0 auto 6px !important;
+  padding:0 !important;
+  gap:3px !important;
+}
+
+.template-switch-row .template-bar,
+#mainTemplateButtons{
+  flex:0 0 auto !important;
+  flex-basis:auto !important;
+  width:auto !important;
+  max-width:100% !important;
+  min-height:0 !important;
+  height:auto !important;
+  margin:0 auto 3px !important;
+  padding:0 !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:6px !important;
+}
+
+.template-actions{
+  flex:0 0 auto !important;
+  width:auto !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:4px !important;
+}
+
+body.editing .template-switch-row .template-bar,
+body.editing #mainTemplateButtons,
+body.editing .template-actions{
+  flex:0 0 auto !important;
+  flex-basis:auto !important;
+  height:auto !important;
+  min-height:0 !important;
+}
+
+
+/* v33: template selector — max 5 columns, up to 10 templates = 2 rows */
+#mainTemplateButtons{
+  display:grid !important;
+  grid-template-columns:repeat(5, minmax(120px, 1fr)) !important;
+  gap:6px !important;
+  width:min(760px, 100%) !important;
+  max-width:760px !important;
+  margin:0 auto 3px !important;
+}
+
+#mainTemplateButtons button{
+  min-width:0 !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+@media (max-width:780px){
+  #mainTemplateButtons{
+    grid-template-columns:repeat(3, minmax(110px, 1fr)) !important;
+    width:min(100%, 620px) !important;
+  }
+}
+
+@media (max-width:520px){
+  #mainTemplateButtons{
+    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+    width:100% !important;
+    gap:5px !important;
+  }
+}
+
+
+/* v34: runtime controls are hidden while editing */
+body.editing .runtime-controls{
+  display:none !important;
+}
+
+
+/* v35: centered template rows, maximum 5 buttons per row */
+#mainTemplateButtons{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:6px !important;
+  width:min(760px, 100%) !important;
+  max-width:760px !important;
+  margin:0 auto 3px !important;
+}
+
+/* Each button is one-fifth of the row width on desktop.
+   With 1–5 buttons, the entire group remains centered.
+   With 6–10 buttons, wrapping creates a centered second row. */
+#mainTemplateButtons button{
+  flex:0 1 140px !important;
+  width:140px !important;
+  min-width:120px !important;
+  max-width:140px !important;
+  box-sizing:border-box !important;
+}
+
+@media (max-width:780px){
+  #mainTemplateButtons{
+    width:min(100%, 620px) !important;
+  }
+  #mainTemplateButtons button{
+    flex-basis:150px !important;
+    width:150px !important;
+    max-width:150px !important;
+  }
+}
+
+@media (max-width:520px){
+  #mainTemplateButtons{
+    width:100% !important;
+    gap:5px !important;
+  }
+  #mainTemplateButtons button{
+    flex:0 1 calc(50% - 5px) !important;
+    width:auto !important;
+    min-width:0 !important;
+    max-width:none !important;
+  }
+}
+
+
+/* v36: global Timer Size setting */
+body[data-timer-size="small"] .main-time{
+  font-size:clamp(5.2rem,14vw,9rem) !important;
+}
+body[data-timer-size="medium"] .main-time{
+  font-size:clamp(6.4rem,17vw,11.5rem) !important;
+}
+body[data-timer-size="large"] .main-time{
+  font-size:clamp(7.8rem,21vw,15rem) !important;
+}
+body[data-timer-size="xlarge"] .main-time{
+  font-size:clamp(9.4rem,24vw,18rem) !important;
+}
+
+body[data-timer-size="small"] .active-title{font-size:clamp(1.45rem,3vw,2.3rem)!important}
+body[data-timer-size="medium"] .active-title{font-size:clamp(1.7rem,3.7vw,2.8rem)!important}
+body[data-timer-size="large"] .active-title{font-size:clamp(2rem,4.4vw,3.4rem)!important}
+body[data-timer-size="xlarge"] .active-title{font-size:clamp(2.3rem,5vw,3.9rem)!important}
+
+body[data-timer-size="small"] .active-message{font-size:clamp(.9rem,1.5vw,1.1rem)!important}
+body[data-timer-size="medium"] .active-message{font-size:clamp(1rem,1.8vw,1.3rem)!important}
+body[data-timer-size="large"] .active-message{font-size:clamp(1.08rem,2vw,1.45rem)!important}
+body[data-timer-size="xlarge"] .active-message{font-size:clamp(1.18rem,2.2vw,1.6rem)!important}
+
+/* Edit-mode preview at the bottom should look like the runtime display */
+body.editing #editBottomStage .active-title,
+body.editing #editBottomStage .preview-title,
+body.editing #editBottomStage [data-preview="title"]{
+  font-family:inherit !important;
+  font-weight:900 !important;
+  text-align:center !important;
+}
+
+body.editing #editBottomStage .active-message,
+body.editing #editBottomStage .preview-message,
+body.editing #editBottomStage [data-preview="message"]{
+  font-family:inherit !important;
+  color:var(--muted) !important;
+  text-align:center !important;
+}
+
+body.editing #editBottomStage .main-time,
+body.editing #editBottomStage .preview-time,
+body.editing #editBottomStage [data-preview="time"]{
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-variant-numeric:tabular-nums !important;
+  font-weight:700 !important;
+  letter-spacing:-.045em !important;
+  line-height:.9 !important;
+  text-align:center !important;
+}
+
+/* If the edit preview reuses the main timer card, keep the same global size scaling. */
+body.editing[data-timer-size="small"] #editBottomStage .main-time,
+body.editing[data-timer-size="small"] #editBottomStage .preview-time{
+  font-size:clamp(5.2rem,14vw,9rem) !important;
+}
+body.editing[data-timer-size="medium"] #editBottomStage .main-time,
+body.editing[data-timer-size="medium"] #editBottomStage .preview-time{
+  font-size:clamp(6.4rem,17vw,11.5rem) !important;
+}
+body.editing[data-timer-size="large"] #editBottomStage .main-time,
+body.editing[data-timer-size="large"] #editBottomStage .preview-time{
+  font-size:clamp(7.8rem,21vw,15rem) !important;
+}
+body.editing[data-timer-size="xlarge"] #editBottomStage .main-time,
+body.editing[data-timer-size="xlarge"] #editBottomStage .preview-time{
+  font-size:clamp(9.4rem,24vw,18rem) !important;
+}
+
+@media(max-width:600px){
+  body[data-timer-size="large"] .main-time{
+    font-size:clamp(6.4rem,30vw,10.5rem) !important;
+  }
+  body[data-timer-size="xlarge"] .main-time{
+    font-size:clamp(7.2rem,33vw,11.8rem) !important;
+  }
+}
+
+
+/* v37: numeric global timer font size */
+:root{
+  --timer-font-size:300px;
+}
+
+.main-time{
+  font-size:min(var(--timer-font-size), 24vw) !important;
+  font-family:Arial, Helvetica, sans-serif !important;
+  font-variant-numeric:tabular-nums !important;
+  font-weight:700 !important;
+  letter-spacing:-.045em !important;
+  line-height:.9 !important;
+}
+
+/* Edit Mode preview uses exactly the same timer typography and chosen size. */
+body.editing #editBottomStage .main-time,
+body.editing #editBottomStage .preview-time,
+body.editing #editBottomStage [data-preview="time"]{
+  font-size:min(var(--timer-font-size), 24vw) !important;
+  font-family:Arial, Helvetica, sans-serif !important;
+  font-variant-numeric:tabular-nums !important;
+  font-weight:700 !important;
+  letter-spacing:-.045em !important;
+  line-height:.9 !important;
+}
+
+#timerSizeSelect{
+  width:100% !important;
+  height:34px !important;
+  min-height:34px !important;
+  box-sizing:border-box !important;
+}
+
+@media(max-width:600px){
+  .main-time,
+  body.editing #editBottomStage .main-time,
+  body.editing #editBottomStage .preview-time,
+  body.editing #editBottomStage [data-preview="time"]{
+    font-size:min(var(--timer-font-size), 29vw) !important;
+  }
+}
+
+
+/* v38 numeric timer font size — authoritative override */
+:root{--timer-font-size:300px;}
+.main-time{font-size:min(var(--timer-font-size),24vw)!important;}
+body.editing #editBottomStage .main-time,body.editing #editBottomStage .preview-time{font-size:min(var(--timer-font-size),24vw)!important;}
+#timerSizeSelect{height:34px!important;min-height:34px!important;width:100%!important;box-sizing:border-box!important;}
+@media(max-width:600px){.main-time,body.editing #editBottomStage .main-time,body.editing #editBottomStage .preview-time{font-size:min(var(--timer-font-size),29vw)!important;}}
+
+
+/* v40: remove the vertical separator before the Event tool button */
+#toolEvent,
+.tool-event,
+[data-tool="event"]{
+  border-left:none !important;
+}
+#toolEvent::before,
+.tool-event::before,
+[data-tool="event"]::before{
+  display:none !important;
+  content:none !important;
+}
+.tool-buttons > * + *{
+  /* individual button borders remain governed by their normal button style */
+}
+
+
+/* v43: Fullscreen lives under template management as a wide button */
+.template-fullscreen-row{
+  width:min(760px, 100%) !important;
+  margin:4px auto 8px !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+}
+
+.template-fullscreen-row #fullscreenBtn{
+  width:100% !important;
+  max-width:760px !important;
+  min-height:38px !important;
+  margin:0 !important;
+}
+
+/* Runtime controls are now Start / Reset / Ring in one equal-width row */
+.runtime-controls{
+  display:grid !important;
+  grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+  gap:8px !important;
+  width:min(520px, 100%) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+.runtime-controls .controls-primary{
+  display:contents !important;
+}
+
+.runtime-controls #startBtn,
+.runtime-controls #resetBtn,
+.runtime-controls #ringBtn{
+  width:100% !important;
+  grid-column:auto !important;
+  margin:0 !important;
+}
+
+/* Remove the old full-width Ring behavior */
+.runtime-controls #ringBtn{
+  grid-column:auto !important;
+}
+
+/* In Edit Mode, runtime controls remain hidden, while Fullscreen stays available */
+body.editing .runtime-controls{
+  display:none !important;
+}
+body.editing .template-fullscreen-row{
+  display:flex !important;
+}
+
+@media(max-width:520px){
+  .runtime-controls{
+    width:100% !important;
+    gap:6px !important;
+  }
+  .template-fullscreen-row{
+    width:100% !important;
+  }
+}
+
+
+/* v44: Fullscreen button width follows the template-row width */
+.template-fullscreen-row{
+  width:var(--template-row-width, auto) !important;
+  max-width:100% !important;
+  margin:4px auto 8px !important;
+  display:flex !important;
+  justify-content:center !important;
+}
+.template-fullscreen-row #fullscreenBtn{
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+
+/* Edit Mode: Fullscreen remains visible but cannot be used */
+body.editing #fullscreenBtn{
+  opacity:.45 !important;
+  cursor:not-allowed !important;
+  pointer-events:none !important;
+}
+
+/* Fullscreen: template selection remains visible and usable */
+:fullscreen #mainTemplateButtons,
+:-webkit-full-screen #mainTemplateButtons{
+  display:flex !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+/* Hide template management in fullscreen */
+:fullscreen .template-actions,
+:-webkit-full-screen .template-actions{
+  display:none !important;
+}
+
+/* Keep the fullscreen/exit-fullscreen button visible */
+:fullscreen .template-fullscreen-row,
+:-webkit-full-screen .template-fullscreen-row{
+  display:flex !important;
+}
+
+
+/* v45: keep the whole template switch area alive in fullscreen.
+   Earlier CSS hid every .normal-ui parent, which also hid the template buttons. */
+:fullscreen .template-switch-row.normal-ui,
+:-webkit-full-screen .template-switch-row.normal-ui{
+  display:flex !important;
+  flex-direction:column !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+/* Template choices stay interactive in fullscreen. */
+:fullscreen #mainTemplateButtons,
+:-webkit-full-screen #mainTemplateButtons{
+  display:flex !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+/* Only management controls are hidden in fullscreen. */
+:fullscreen .template-switch-row .template-actions,
+:-webkit-full-screen .template-switch-row .template-actions{
+  display:none !important;
+}
+
+/* Exit Fullscreen remains available. */
+:fullscreen .template-switch-row .template-fullscreen-row,
+:-webkit-full-screen .template-switch-row .template-fullscreen-row{
+  display:flex !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+
+/* v46: add a little more breathing room at the top in fullscreen */
+:fullscreen .template-switch-row.normal-ui,
+:-webkit-full-screen .template-switch-row.normal-ui{
+  padding-top:28px !important;
+}
+
+@media (max-width:700px){
+  :fullscreen .template-switch-row.normal-ui,
+  :-webkit-full-screen .template-switch-row.normal-ui{
+    padding-top:20px !important;
+  }
+}
+
+
+/* v47: keep the main timer number the same size in normal and fullscreen views */
+:fullscreen .main-time,
+:-webkit-full-screen .main-time{
+  font-size:min(var(--timer-font-size), 24vw) !important;
+  font-family:Arial, Helvetica, sans-serif !important;
+  font-variant-numeric:tabular-nums !important;
+  font-weight:700 !important;
+  letter-spacing:-.045em !important;
+  line-height:.9 !important;
+}
+
+/* Avoid fullscreen containers scaling the timer down. */
+:fullscreen .timer-card,
+:-webkit-full-screen .timer-card,
+:fullscreen .runtime-stage,
+:-webkit-full-screen .runtime-stage{
+  transform:none !important;
+  zoom:1 !important;
+}
+
+/* On wide fullscreen displays, the configured px value is used directly.
+   The viewport cap is only retained on genuinely narrow screens. */
+@media (min-width:1000px){
+  :fullscreen .main-time,
+  :-webkit-full-screen .main-time{
+    font-size:var(--timer-font-size) !important;
+  }
+}
+
+@media (max-width:600px){
+  :fullscreen .main-time,
+  :-webkit-full-screen .main-time{
+    font-size:min(var(--timer-font-size), 29vw) !important;
+  }
+}
