@@ -909,14 +909,14 @@
   let wakeLock = null;
   let language = 'en';
 
-  const SETTINGS_KEY = 'presentationTimerSettingsV37';
+  const SETTINGS_KEY = 'presentationTimerSettingsV38';
 
   const i18n = {
     en: {
       settings:'Settings', basic:'Basic', events:'Events', count:'Count:', down:'Down', up:'Up', theme:'Theme:', light:'Light', dark:'Dark', language:'Language:',
       save:'Save settings', timelineControl:'Enable timeline control', manualBell:'Manual bell count', clear:'Clear saved settings',
       timeCol:'Time (min)', bellCol:'Bell count', skipForCountdownCol:'Skip for Countdown', titleCol:'Title', messageCol:'Message', overtimeCol:'Overtime', sessionEndCol:'Session End', actionsCol:'Order', addEvent:'＋ Add Event',
-      hint:'Time is measured from the timer start. Skip for Countdown ignores an event as a countdown target. Session End sets the maximum time shown on the timeline; later overtime events still work but are not shown on the bar. Bell count 0 means no bell.', elapsed:'Elapsed', remaining:'Remaining', next:'Next', noMore:'No more scheduled events',
+      hint:'Time is measured from the timer start. Skip for Countdown ignores an event as a countdown target. Session End sets the maximum time shown on the timeline; later overtime events still work but are not shown on the bar. Bell count 0 means no bell.', elapsed:'Elapsed', remaining:'Remaining', overtimeTime:'Overtime', next:'Next', noMore:'No more scheduled events',
       start:'Start', pause:'Pause', reset:'Reset', fullscreen:'Fullscreen', exitFullscreen:'Exit Fullscreen', ring:'Ring', min:'min',
       defaultTitle:'Timer', defaultMessage:'Waiting for the first event'
     },
@@ -924,7 +924,7 @@
       settings:'設定', basic:'基本', events:'イベント', count:'表示:', down:'残り時間', up:'経過時間', theme:'テーマ:', light:'ライト', dark:'ダーク', language:'言語:',
       save:'設定を保存', timelineControl:'タイムライン操作を有効化', manualBell:'手動ベル回数', clear:'保存設定をクリア',
       timeCol:'時間（分）', bellCol:'ベル回数', skipForCountdownCol:'カウント対象外', titleCol:'タイトル', messageCol:'メッセージ', overtimeCol:'超過', sessionEndCol:'セッション終了', actionsCol:'順番', addEvent:'＋ イベントを追加',
-      hint:'時間はタイマー開始からの経過分です。カウント対象外はカウントダウン基準から除外します。セッション終了にチェックしたイベントがタイムラインの最大時刻になり、それ以降の超過イベントは動作しますがバーには表示しません。ベル回数を0にすると鳴りません。', elapsed:'経過', remaining:'残り', next:'次', noMore:'この先のイベントはありません',
+      hint:'時間はタイマー開始からの経過分です。カウント対象外はカウントダウン基準から除外します。セッション終了にチェックしたイベントがタイムラインの最大時刻になり、それ以降の超過イベントは動作しますがバーには表示しません。ベル回数を0にすると鳴りません。', elapsed:'経過', remaining:'残り', overtimeTime:'超過', next:'次', noMore:'この先のイベントはありません',
       start:'開始', pause:'一時停止', reset:'リセット', fullscreen:'全画面', exitFullscreen:'全画面を終了', ring:'ベルを鳴らす', min:'分',
       defaultTitle:'タイマー', defaultMessage:'最初のイベントを待っています'
     }
@@ -942,6 +942,21 @@
     const s = sortedEvents();
     const marked = s.find(ev => ev.sessionEnd);
     return marked ? num(marked.time)*60 : (s.length ? num(s[s.length-1].time)*60 : 0);
+  }
+
+  function normalizeSessionEnd(preferredId = null) {
+    if (!events.length) {
+      events.push({time:0,bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:true,id:makeId('fallback')});
+      return;
+    }
+    let chosen = preferredId ? events.find(ev => ev.id === preferredId) : null;
+    if (!chosen) chosen = events.find(ev => ev.sessionEnd);
+    if (!chosen) {
+      const sorted = sortedEvents();
+      chosen = sorted.find(ev => ev.overtime) || sorted[sorted.length - 1];
+    }
+    events.forEach(ev => { ev.sessionEnd = ev.id === chosen.id; });
+    chosen.skipForCountdown = false;
   }
 
   function renderEventRows() {
@@ -965,6 +980,7 @@
         </div></td>`;
       tr.querySelector('.move-up').disabled = index === 0;
       tr.querySelector('.move-down').disabled = index === events.length - 1;
+      tr.querySelector('.delete-event').disabled = events.length === 1;
       eventRows.appendChild(tr);
     });
     renderTimelineMarkers();
@@ -1070,7 +1086,10 @@
 
     if (mode === 'up') {
       timeDisplay.textContent = formatTime(elapsed);
-      if (elapsed < end && countdownTarget) {
+      if (end > 0 && elapsed >= end) {
+        secondaryLabel.textContent = t('overtimeTime');
+        secondaryDisplay.textContent = '+' + formatTime(elapsed - end);
+      } else if (countdownTarget) {
         secondaryLabel.textContent = t('remaining');
         secondaryDisplay.textContent = formatTime(num(countdownTarget.time)*60 - elapsed);
       } else {
@@ -1184,11 +1203,7 @@
       const st=JSON.parse(raw);
       if (Array.isArray(st.events) && st.events.length) {
         events=st.events.map((e,i)=>({time:num(e.time),bell:bellNum(e.bell),skipForCountdown:typeof e.skipForCountdown==='boolean'?e.skipForCountdown:false,title:String(e.title??''),message:String(e.message??''),overtime:!!e.overtime,sessionEnd:!!e.sessionEnd,id:makeId(i)}));
-        if (!events.some(e=>e.sessionEnd)) {
-          const firstOvertime = sortedEvents().find(e=>e.overtime);
-          const fallback = firstOvertime || sortedEvents()[sortedEvents().length-1];
-          if (fallback) fallback.sessionEnd = true;
-        }
+        normalizeSessionEnd(events.find(e=>e.sessionEnd)?.id || null);
       }
       if (st.countMode==='up'||st.countMode==='down') document.querySelector(`input[name="countMode"][value="${st.countMode}"]`).checked=true;
       if (st.language==='en'||st.language==='ja') { language=st.language; const r=document.querySelector(`input[name="languageMode"][value="${language}"]`); if(r)r.checked=true; }
@@ -1222,20 +1237,39 @@
   }
   function loop(){ update(); if(running)timerHandle=requestAnimationFrame(loop); }
 
-  eventRows.addEventListener('input', e => {
-    if (!e.target.matches('input')) return;
-    if (e.target.classList.contains('event-session-end') && e.target.checked) {
-      eventRows.querySelectorAll('.event-session-end').forEach(cb => { if (cb !== e.target) cb.checked = false; });
+  function enforceSessionEndUi(target) {
+    if (!target?.classList?.contains('event-session-end')) return;
+    const row = target.closest('.event-row');
+    if (target.checked) {
+      eventRows.querySelectorAll('.event-session-end').forEach(cb => { if (cb !== target) cb.checked = false; });
+      const skip = row?.querySelector('.event-skip-for-countdown');
+      if (skip) skip.checked = false;
+    } else if (![...eventRows.querySelectorAll('.event-session-end')].some(cb => cb.checked)) {
+      target.checked = true;
     }
-    syncEventsFromDom(); renderTimelineMarkers(); syncFiredForElapsed(getElapsed()); update(); persistSettings();
+  }
+
+  eventRows.addEventListener('input', e => {
+    if (!e.target.matches('input') || e.target.type === 'checkbox') return;
+    syncEventsFromDom();
+    renderTimelineMarkers();
+    syncFiredForElapsed(getElapsed()); update(); persistSettings();
   });
   eventRows.addEventListener('change', e => {
+    if (!e.target.matches('input')) return;
     if (e.target.classList.contains('event-bell')) e.target.value=bellNum(e.target.value);
     if (e.target.classList.contains('event-time')) e.target.value=num(e.target.value);
-    if (e.target.classList.contains('event-session-end') && e.target.checked) {
-      eventRows.querySelectorAll('.event-session-end').forEach(cb => { if (cb !== e.target) cb.checked = false; });
+    enforceSessionEndUi(e.target);
+    if (e.target.classList.contains('event-skip-for-countdown') && e.target.checked) {
+      const row = e.target.closest('.event-row');
+      const sessionEnd = row?.querySelector('.event-session-end');
+      if (sessionEnd?.checked) e.target.checked = false;
     }
-    syncEventsFromDom(); renderTimelineMarkers(); update(); persistSettings();
+    syncEventsFromDom();
+    normalizeSessionEnd(events.find(ev => ev.sessionEnd)?.id || null);
+    if (e.target.type === 'checkbox') renderEventRows();
+    else renderTimelineMarkers();
+    update(); persistSettings();
   });
   eventRows.addEventListener('click', e => {
     const btn=e.target.closest('button'); if(!btn)return;
@@ -1243,14 +1277,15 @@
     const row=btn.closest('.event-row'); const idx=events.findIndex(ev=>ev.id===row.dataset.id); if(idx<0)return;
     if(btn.classList.contains('move-up') && idx>0) [events[idx-1],events[idx]]=[events[idx],events[idx-1]];
     else if(btn.classList.contains('move-down') && idx<events.length-1) [events[idx+1],events[idx]]=[events[idx],events[idx+1]];
-    else if(btn.classList.contains('delete-event')) events.splice(idx,1);
+    else if(btn.classList.contains('delete-event') && events.length > 1) events.splice(idx,1);
     else return;
+    normalizeSessionEnd(events.find(ev => ev.sessionEnd)?.id || null);
     renderEventRows(); syncFiredForElapsed(getElapsed()); update(); persistSettings();
   });
   addEventBtn.addEventListener('click', () => {
     syncEventsFromDom();
-    const last=events.length?events[events.length-1]:null;
-    events.push({time:last?num(last.time)+1:0,bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
+    const maxTime = events.length ? Math.max(...events.map(ev => num(ev.time))) : -1;
+    events.push({time:maxTime+1,bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
     renderEventRows(); update(); persistSettings();
     eventRows.querySelector('tr:last-child .event-title')?.focus();
   });
@@ -1281,7 +1316,7 @@
   document.addEventListener('keydown',e=>{const tag=document.activeElement?.tagName;if(e.code==='Space'&&!['INPUT','BUTTON'].includes(tag)){e.preventDefault();startBtn.click();}if(e.key.toLowerCase()==='r'&&tag!=='INPUT')resetBtn.click();if(e.key.toLowerCase()==='f'&&tag!=='INPUT')fullscreenBtn.click();});
 
   clearSavedSettingsBtn.addEventListener('click',()=>{
-    try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem('presentationTimerSettingsV33');localStorage.removeItem('presentationTimerSettingsV32');localStorage.removeItem('presentationTimerSettingsV31');localStorage.removeItem('presentationTimerSettingsV30');localStorage.removeItem('presentationTimerSettingsV29');localStorage.removeItem('presentationTimerSettingsV28');}catch(_){}
+    try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem('presentationTimerSettingsV37');localStorage.removeItem('presentationTimerSettingsV36');localStorage.removeItem('presentationTimerSettingsV35');localStorage.removeItem('presentationTimerSettingsV34');localStorage.removeItem('presentationTimerSettingsV33');localStorage.removeItem('presentationTimerSettingsV32');localStorage.removeItem('presentationTimerSettingsV31');localStorage.removeItem('presentationTimerSettingsV30');localStorage.removeItem('presentationTimerSettingsV29');localStorage.removeItem('presentationTimerSettingsV28');}catch(_){}
     events=DEFAULT_EVENTS.map((e,i)=>({...e,id:makeId(i)}));
     document.querySelector('input[name="countMode"][value="down"]').checked=true;
     document.querySelector('input[name="languageMode"][value="en"]').checked=true;
@@ -1291,6 +1326,7 @@
 
   try{const savedTheme=localStorage.getItem('presentationTimerTheme');const theme=(savedTheme==='light'||savedTheme==='dark')?savedTheme:'dark';const r=document.querySelector(`input[name="themeMode"][value="${theme}"]`);if(r)r.checked=true;applyTheme(theme);}catch(_){applyTheme('dark');}
   restoreSettings();
+  normalizeSessionEnd(events.find(ev => ev.sessionEnd)?.id || null);
   renderEventRows();
   setTimelineEditable(false);
   setSettingsOpen(false);
