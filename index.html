@@ -816,7 +816,7 @@
               <table class="event-table" aria-label="Timer events">
                 <thead>
                   <tr>
-                    <th id="timeColumnLabel">Time (min)</th>
+                    <th id="timeColumnLabel">Time (min.sec)</th>
                     <th id="bellColumnLabel">Bell count</th>
                     <th id="skipForCountdownColumnLabel">Skip for Countdown</th>
                     <th id="titleColumnLabel">Title</th>
@@ -935,22 +935,22 @@
   let wakeLock = null;
   let language = 'en';
 
-  const SETTINGS_KEY = 'presentationTimerSettingsV38';
+  const SETTINGS_KEY = 'presentationTimerSettingsV39';
 
   const i18n = {
     en: {
       settings:'Settings', basic:'Basic', events:'Events', count:'Count:', down:'Down', up:'Up', theme:'Theme:', light:'Light', dark:'Dark', language:'Language:',
       save:'Save settings', timelineControl:'Enable timeline control', manualBell:'Manual bell count', clear:'Restore Defaults',
-      timeCol:'Time (min)', bellCol:'Bell count', skipForCountdownCol:'Skip for Countdown', titleCol:'Title', messageCol:'Message', overtimeCol:'Overtime', sessionEndCol:'Session End', actionsCol:'Order', addEvent:'＋ Add Event',
-      hint:'Time is measured from the timer start.<br>Skip for Countdown: the event still works, but is ignored as a countdown target.<br>Session End: sets the maximum time shown on the timeline. Later overtime events still work but are not shown on the bar.<br>Bell count 0 means no bell.', elapsed:'Elapsed', remaining:'Remaining', overtimeTime:'Overtime', next:'Next', noMore:'No more scheduled events',
+      timeCol:'Time (min.sec)', bellCol:'Bell count', skipForCountdownCol:'Skip for Countdown', titleCol:'Title', messageCol:'Message', overtimeCol:'Overtime', sessionEndCol:'Session End', actionsCol:'Order', addEvent:'＋ Add Event',
+      hint:'Time is measured from the timer start. Enter 1.30 for 1 min 30 sec. Arrow controls change the value by 1 minute.<br>Skip for Countdown: the event still works, but is ignored as a countdown target.<br>Session End: sets the maximum time shown on the timeline. Later overtime events still work but are not shown on the bar.<br>Bell count 0 means no bell.', elapsed:'Elapsed', remaining:'Remaining', overtimeTime:'Overtime', next:'Next', noMore:'No more scheduled events',
       start:'Start', pause:'Pause', reset:'Reset', fullscreen:'Fullscreen', exitFullscreen:'Exit Fullscreen', ring:'Ring', min:'min',
       defaultTitle:'Timer', defaultMessage:'Waiting for the first event'
     },
     ja: {
       settings:'設定', basic:'基本', events:'イベント', count:'表示:', down:'残り時間', up:'経過時間', theme:'テーマ:', light:'ライト', dark:'ダーク', language:'言語:',
       save:'設定を保存', timelineControl:'タイムライン操作を有効化', manualBell:'手動ベル回数', clear:'デフォルトに戻す',
-      timeCol:'時間（分）', bellCol:'ベル回数', skipForCountdownCol:'カウント対象外', titleCol:'タイトル', messageCol:'メッセージ', overtimeCol:'超過', sessionEndCol:'セッション終了', actionsCol:'順番', addEvent:'＋ イベントを追加',
-      hint:'時間はタイマー開始からの経過分です。<br>カウント対象外：イベント自体は動作しますが、カウントダウンの基準から除外します。<br>セッション終了：チェックしたイベントがタイムラインの最大時刻になります。それ以降の超過イベントは動作しますが、バーには表示しません。<br>ベル回数を0にすると鳴りません。', elapsed:'経過', remaining:'残り', overtimeTime:'超過', next:'次', noMore:'この先のイベントはありません',
+      timeCol:'時間（分.秒）', bellCol:'ベル回数', skipForCountdownCol:'カウント対象外', titleCol:'タイトル', messageCol:'メッセージ', overtimeCol:'超過', sessionEndCol:'セッション終了', actionsCol:'順番', addEvent:'＋ イベントを追加',
+      hint:'時間はタイマー開始からの経過時間です。1.30 と入力すると1分30秒です。矢印操作は1分単位です。<br>カウント対象外：イベント自体は動作しますが、カウントダウンの基準から除外します。<br>セッション終了：チェックしたイベントがタイムラインの最大時刻になります。それ以降の超過イベントは動作しますが、バーには表示しません。<br>ベル回数を0にすると鳴りません。', elapsed:'経過', remaining:'残り', overtimeTime:'超過', next:'次', noMore:'この先のイベントはありません',
       start:'開始', pause:'一時停止', reset:'リセット', fullscreen:'全画面', exitFullscreen:'全画面を終了', ring:'ベルを鳴らす', min:'分',
       defaultTitle:'タイマー', defaultMessage:'最初のイベントを待っています'
     }
@@ -960,14 +960,35 @@
   function makeId(seed='') { return 'ev_' + Date.now().toString(36) + '_' + seed + '_' + Math.random().toString(36).slice(2,8); }
   function num(v, fallback=0) { const n = Number(v); return Number.isFinite(n) ? Math.max(0, n) : fallback; }
   function bellNum(v) { return Math.max(0, Math.min(99, Math.floor(num(v, 0)))); }
+  // Event time uses M.SS notation: 1.30 = 1 minute 30 seconds.
+  function eventTimeToSeconds(v) {
+    const raw = String(v ?? '').trim();
+    if (!raw) return 0;
+    const match = raw.match(/^(\d+)(?:[.:](\d{0,2}))?$/);
+    if (!match) return 0;
+    let minutes = Number(match[1]) || 0;
+    let seconds = match[2] ? Number(match[2]) || 0 : 0;
+    if (seconds >= 60) { minutes += Math.floor(seconds / 60); seconds %= 60; }
+    return minutes * 60 + seconds;
+  }
+  function secondsToEventTime(seconds) {
+    const total = Math.max(0, Math.round(Number(seconds) || 0));
+    const minutes = Math.floor(total / 60);
+    const secs = total % 60;
+    return secs ? `${minutes}.${String(secs).padStart(2,'0')}` : String(minutes);
+  }
+  function eventTimeLabel(v) {
+    const sec = eventTimeToSeconds(v);
+    return sec % 60 === 0 ? `${Math.floor(sec/60)} ${t('min')}` : `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
+  }
   function getCountMode() { return document.querySelector('input[name="countMode"]:checked')?.value || 'down'; }
   function getElapsed() { return elapsedBeforeStart + (running ? (performance.now() - startedAt) / 1000 : 0); }
   function formatTime(seconds) { const s = Math.max(0, Math.floor(seconds)); return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); }
-  function sortedEvents() { return [...events].sort((a,b) => num(a.time)-num(b.time) || events.indexOf(a)-events.indexOf(b)); }
+  function sortedEvents() { return [...events].sort((a,b) => eventTimeToSeconds(a.time)-eventTimeToSeconds(b.time) || events.indexOf(a)-events.indexOf(b)); }
   function scheduleEndSeconds() {
     const s = sortedEvents();
     const marked = s.find(ev => ev.sessionEnd);
-    return marked ? num(marked.time)*60 : (s.length ? num(s[s.length-1].time)*60 : 0);
+    return marked ? eventTimeToSeconds(marked.time) : (s.length ? eventTimeToSeconds(s[s.length-1].time) : 0);
   }
 
   function normalizeSessionEnd(preferredId = null) {
@@ -992,7 +1013,7 @@
       tr.className = 'event-row';
       tr.dataset.id = ev.id;
       tr.innerHTML = `
-        <td><input class="event-time" type="number" min="0" step="0.1" inputmode="decimal" value="${escapeAttr(ev.time)}" aria-label="Time in minutes"></td>
+        <td><input class="event-time" type="number" min="0" step="1" inputmode="decimal" value="${escapeAttr(ev.time)}" aria-label="Time in minutes and seconds; 1.30 means 1 minute 30 seconds"></td>
         <td><input class="event-bell" type="number" min="0" max="99" step="1" inputmode="numeric" value="${escapeAttr(ev.bell)}" aria-label="Bell count"></td>
         <td class="event-skip-for-countdown-cell"><input class="event-skip-for-countdown" type="checkbox" ${ev.skipForCountdown ? 'checked' : ''} aria-label="Skip for countdown"></td>
         <td><input class="event-title" type="text" value="${escapeAttr(ev.title)}" aria-label="Title"></td>
@@ -1021,7 +1042,7 @@
     [...eventRows.querySelectorAll('.event-row')].forEach(row => {
       const ev = byId.get(row.dataset.id);
       if (!ev) return;
-      ev.time = num(row.querySelector('.event-time').value, 0);
+      ev.time = secondsToEventTime(eventTimeToSeconds(row.querySelector('.event-time').value));
       ev.bell = bellNum(row.querySelector('.event-bell').value);
       ev.skipForCountdown = row.querySelector('.event-skip-for-countdown').checked;
       ev.title = row.querySelector('.event-title').value;
@@ -1037,7 +1058,7 @@
     const end = scheduleEndSeconds();
     const denom = Math.max(end, 1);
     sortedEvents().forEach(ev => {
-      const sec = num(ev.time)*60;
+      const sec = eventTimeToSeconds(ev.time);
       if (sec > end + 1e-6) return;
       const pct = Math.min(100, Math.max(0, sec/denom*100));
       const marker = document.createElement('div');
@@ -1045,7 +1066,7 @@
         + (bellNum(ev.bell)>0 && !ev.skipForCountdown ? ' has-bell' : '')
         + (ev.skipForCountdown ? ' is-skipped' : '');
       marker.style.left = `${pct}%`;
-      marker.title = `${ev.time} min · ${ev.title || 'Event'} · ${ev.bell} bell(s)`;
+      marker.title = `${eventTimeLabel(ev.time)} · ${ev.title || 'Event'} · ${ev.bell} bell(s)`;
       eventMarkers.appendChild(marker);
 
       // Countdown targets get a normal time label on the bar and the event title below it.
@@ -1053,7 +1074,7 @@
         const timeLabel = document.createElement('div');
         timeLabel.className = 'timeline-event-time';
         timeLabel.style.left = `${pct}%`;
-        timeLabel.textContent = `${ev.time} ${t('min')}`;
+        timeLabel.textContent = eventTimeLabel(ev.time);
         eventMarkers.appendChild(timeLabel);
 
         if (ev.title) {
@@ -1070,7 +1091,7 @@
         const chip = document.createElement('div');
         chip.className = 'timeline-skip-chip';
         chip.style.left = `${pct}%`;
-        chip.innerHTML = `${escapeAttr(ev.time)} ${t('min')}${bellNum(ev.bell)>0 ? '<span class="bell-mini">🔔</span>' : ''}`;
+        chip.innerHTML = `${escapeAttr(eventTimeLabel(ev.time))}${bellNum(ev.bell)>0 ? '<span class="bell-mini">🔔</span>' : ''}`;
         chip.title = ev.title || 'Skipped countdown event';
         eventMarkers.appendChild(chip);
       }
@@ -1083,7 +1104,7 @@
     let nextEvent = null;
     let nextTarget = null;
     for (const ev of s) {
-      const sec = num(ev.time)*60;
+      const sec = eventTimeToSeconds(ev.time);
       if (sec <= elapsed + 1e-6) current = ev;
       else {
         if (!nextEvent) nextEvent = ev;
@@ -1100,7 +1121,7 @@
     const { current, nextEvent, nextTarget } = getState(elapsed);
     // Countdown targets never extend beyond Session End. Events after Session End
     // can still fire bells and update Title/Message, but they do not restart a countdown.
-    const countdownTarget = nextTarget && num(nextTarget.time) * 60 <= end + 1e-6 ? nextTarget : null;
+    const countdownTarget = nextTarget && eventTimeToSeconds(nextTarget.time) <= end + 1e-6 ? nextTarget : null;
 
     timerTitle.textContent = current?.title || t('defaultTitle');
     timerMessage.textContent = current?.message || t('defaultMessage');
@@ -1117,7 +1138,7 @@
         secondaryDisplay.textContent = '+' + formatTime(elapsed - end);
       } else if (countdownTarget) {
         secondaryLabel.textContent = t('remaining');
-        secondaryDisplay.textContent = formatTime(num(countdownTarget.time)*60 - elapsed);
+        secondaryDisplay.textContent = formatTime(eventTimeToSeconds(countdownTarget.time) - elapsed);
       } else {
         secondaryLabel.textContent = t('elapsed');
         secondaryDisplay.textContent = formatTime(elapsed);
@@ -1129,7 +1150,7 @@
       secondaryLabel.textContent = t('elapsed');
       secondaryDisplay.textContent = formatTime(elapsed);
     } else if (countdownTarget) {
-      timeDisplay.textContent = formatTime(num(countdownTarget.time)*60 - elapsed);
+      timeDisplay.textContent = formatTime(eventTimeToSeconds(countdownTarget.time) - elapsed);
       secondaryLabel.textContent = t('elapsed');
       secondaryDisplay.textContent = formatTime(elapsed);
     } else {
@@ -1139,7 +1160,7 @@
     }
 
     nextEventLabel.textContent = nextEvent
-      ? `${t('next')}: ${nextEvent.title || 'Event'} · ${nextEvent.time} ${t('min')}${nextEvent.bell > 0 ? ` · 🔔×${nextEvent.bell}` : ''}`
+      ? `${t('next')}: ${nextEvent.title || 'Event'} · ${eventTimeLabel(nextEvent.time)}${nextEvent.bell > 0 ? ` · 🔔×${nextEvent.bell}` : ''}`
       : t('noMore');
 
     const denom = Math.max(end, 1);
@@ -1151,13 +1172,13 @@
 
     timeDisplay.classList.remove('ending-soon');
     if (elapsed < end && countdownTarget) {
-      const remaining = num(countdownTarget.time)*60 - elapsed;
+      const remaining = eventTimeToSeconds(countdownTarget.time) - elapsed;
       if (remaining > 0 && remaining <= 5) timeDisplay.classList.add('ending-soon');
     }
 
     if (running) {
       for (const ev of sortedEvents()) {
-        const sec = num(ev.time)*60;
+        const sec = eventTimeToSeconds(ev.time);
         const key = ev.id;
         if (elapsed >= sec && !fired.has(key)) {
           fired.add(key);
@@ -1169,7 +1190,7 @@
 
   function syncFiredForElapsed(elapsed) {
     fired.clear();
-    sortedEvents().forEach(ev => { if (elapsed >= num(ev.time)*60) fired.add(ev.id); });
+    sortedEvents().forEach(ev => { if (elapsed >= eventTimeToSeconds(ev.time)) fired.add(ev.id); });
   }
 
   async function ensureAudio() {
@@ -1228,7 +1249,7 @@
       const raw=localStorage.getItem(SETTINGS_KEY); if (!raw) return;
       const st=JSON.parse(raw);
       if (Array.isArray(st.events) && st.events.length) {
-        events=st.events.map((e,i)=>({time:num(e.time),bell:bellNum(e.bell),skipForCountdown:typeof e.skipForCountdown==='boolean'?e.skipForCountdown:false,title:String(e.title??''),message:String(e.message??''),overtime:!!e.overtime,sessionEnd:!!e.sessionEnd,id:makeId(i)}));
+        events=st.events.map((e,i)=>({time:secondsToEventTime(eventTimeToSeconds(e.time)),bell:bellNum(e.bell),skipForCountdown:typeof e.skipForCountdown==='boolean'?e.skipForCountdown:false,title:String(e.title??''),message:String(e.message??''),overtime:!!e.overtime,sessionEnd:!!e.sessionEnd,id:makeId(i)}));
         normalizeSessionEnd(events.find(e=>e.sessionEnd)?.id || null);
       }
       if (st.countMode==='up'||st.countMode==='down') document.querySelector(`input[name="countMode"][value="${st.countMode}"]`).checked=true;
@@ -1286,7 +1307,7 @@
   eventRows.addEventListener('change', e => {
     if (!e.target.matches('input')) return;
     if (e.target.classList.contains('event-bell')) e.target.value=bellNum(e.target.value);
-    if (e.target.classList.contains('event-time')) e.target.value=num(e.target.value);
+    if (e.target.classList.contains('event-time')) e.target.value=secondsToEventTime(eventTimeToSeconds(e.target.value));
     enforceSessionEndUi(e.target);
     if (e.target.classList.contains('event-skip-for-countdown') && e.target.checked) {
       const row = e.target.closest('.event-row');
@@ -1312,8 +1333,8 @@
   });
   addEventBtn.addEventListener('click', () => {
     syncEventsFromDom();
-    const maxTime = events.length ? Math.max(...events.map(ev => num(ev.time))) : -1;
-    events.push({time:maxTime+1,bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
+    const maxTimeSeconds = events.length ? Math.max(...events.map(ev => eventTimeToSeconds(ev.time))) : -60;
+    events.push({time:secondsToEventTime(maxTimeSeconds + 60),bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
     renderEventRows(); update(); persistSettings();
     eventRows.querySelector('tr:last-child .event-title')?.focus();
   });
