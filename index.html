@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="Free online presentation timer for conferences, academic talks, seminars, and meetings with configurable bell alerts, Q&amp;A timing, overtime alerts, manual bells, fullscreen mode, and English/Japanese support.">
+<meta name="keywords" content="presentation timer, conference timer, academic presentation timer, presentation timer with bell, Q&amp;A timer, seminar timer, talk timer, speaker timer, overtime timer, bilingual presentation timer">
+<meta name="author" content="Shoya Sugimoto">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://shy-sgmt.github.io/presentation-timer/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Presentation Timer with Bell, Q&amp;A &amp; Overtime">
+<meta property="og:description" content="A free online conference and academic presentation timer with configurable bell alerts, Q&amp;A timing, overtime notifications, manual bells, fullscreen mode, and English/Japanese support.">
+<meta property="og:url" content="https://shy-sgmt.github.io/presentation-timer/">
+<meta property="og:site_name" content="Presentation Timer">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Presentation Timer with Bell, Q&amp;A &amp; Overtime">
+<meta name="twitter:description" content="Free online presentation timer for conferences and academic talks with bell alerts, Q&amp;A timing, overtime notifications, and bilingual support.">
+
+<title>Presentation Timer with Bell, Q&amp;A &amp; Overtime | Free Online Conference Timer</title>
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #ffffff;
+    --text: #111111;
+    --muted: #666666;
+    --secondary: #555555;
+    --control-bg: #f5f5f5;
+    --stepper-bg: #f7f7f7;
+    --hover-bg: #eaeaea;
+    --border: #aaaaaa;
+    --input-bg: #ffffff;
+  }
+  body.dark {
+    --bg: #2b2b2b;
+    --text: #ffffff;
+    --muted: #bdbdbd;
+    --secondary: #d0d0d0;
+    --control-bg: #3a3a3a;
+    --stepper-bg: #3a3a3a;
+    --hover-bg: #4a4a4a;
+    --border: #666666;
+    --input-bg: #333333;
+  }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background .2s ease, color .2s ease;
+  }
+  .page {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 28px 24px 34px;
+  }
+  .settings-shell {
+    width: min(860px, 96%);
+    margin: 0 auto 10px;
+  }
+  .settings-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 36px;
+    border-bottom: 1px solid var(--border);
+  }
+  .settings-toggle {
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 7px 12px;
+  }
+  .settings-toggle::after {
+    content: ' ▾';
+    display: inline-block;
+    transition: transform .16s ease;
+  }
+  .settings-shell.open .settings-toggle::after { transform: rotate(180deg); }
+  .settings-panel {
+    display: none;
+    padding-top: 10px;
+  }
+  .settings-shell.open .settings-panel { display: block; }
+  .settings-groups {
+    width: min(900px, 96%);
+    margin: 0 auto 8px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    align-items: start;
+  }
+  .settings-group {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--control-bg) 55%, transparent);
+    overflow: hidden;
+  }
+  .settings-group > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 9px 11px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    user-select: none;
+  }
+  .settings-group > summary::-webkit-details-marker { display: none; }
+  .settings-group > summary::after { content: ' ▾'; display: inline-block; transition: transform .16s ease; }
+  .settings-group[open] > summary::after { transform: rotate(180deg); }
+  .settings-group-body {
+    border-top: 1px solid var(--border);
+    padding: 10px;
+  }
+  .basic-body .compact-options { margin-bottom: 8px; }
+  .basic-body .settings-bottom-row { margin: 6px 0 0; gap: 16px; }
+  .time-settings { grid-template-columns: 1fr; }
+  .bell-group .bell-sidebar { border-left: 0; padding-left: 0; }
+  .settings {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 10px;
+    margin: 0;
+  }
+  .setting { text-align: center; }
+  .setting-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .stepper { display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .stepper button, .stepper input, .controls button { font: inherit; }
+  .stepper button {
+    width: 28px; height: 28px; border: 1px solid var(--border);
+    background: var(--stepper-bg); color: var(--text); border-radius: 4px;
+    font-size: 20px; cursor: pointer;
+  }
+  .stepper input {
+    width: 54px; height: 28px; border: 1px solid var(--border);
+    border-radius: 4px; background: var(--input-bg); color: var(--text);
+    text-align: center; font-size: 16px;
+  }
+  .bell-sidebar {
+    border-left: 1px solid var(--border);
+    padding-left: 16px;
+    min-width: 0;
+  }
+  .bell-sidebar-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    text-align: left;
+  }
+  .bell-sidebar .bell-counts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    margin: 0;
+    justify-content: stretch;
+  }
+  .bell-sidebar .bell-counts strong { display: none; }
+  .bell-sidebar .bell-counts label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .controls button { font: inherit; }
+  .compact-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin: 0 0 14px;
+    font-size: 14px;
+    color: var(--secondary);
+  }
+  .option-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-group strong { color: var(--text); }
+  .option-group label { white-space: nowrap; }
+
+  .settings-top-row {
+    margin-bottom: 10px;
+  }
+  .settings-bottom-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin: 8px 0 10px;
+    font-size: 14px;
+    color: var(--secondary);
+  }
+  .settings-bottom-row label { white-space: nowrap; }
+  .timer-area {
+    text-align: center;
+  }
+  .time-layout {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    margin-bottom: 10px;
+  }
+  .primary-panel {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .secondary-panel {
+    grid-column: 3;
+    justify-self: end;
+    text-align: left;
+    min-width: 165px;
+    padding-top: 20px;
+    color: var(--secondary);
+  }
+  .secondary-label {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+  .secondary-display {
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(22px, 3.4vw, 42px);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .timer-title {
+    font-size: 31px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .time {
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(112px, 21vw, 230px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin: 0 0 22px;
+  }
+  .timeline-wrap {
+    width: min(860px, 92%);
+    margin: 8px auto 28px;
+  }
+  .timeline-labels { position: relative; height: 24px; font-size: 15px; font-weight: 700; color: var(--secondary); }
+  .timeline-label { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+  .timeline-label.start { left: 0; transform: none; }
+  .timeline-label.end { right: 0; left: auto; transform: none; }
+  .timeline-bar { position: relative; display: flex; height: 18px; border: 2px solid var(--border); border-radius: 999px; overflow: visible; background: var(--control-bg); }
+  .timeline-presentation { height: 100%; background: color-mix(in srgb, var(--text) 24%, transparent); border-radius: 999px 0 0 999px; }
+  .timeline-qa { height: 100%; background: color-mix(in srgb, #b56a00 55%, transparent); border-radius: 0 999px 999px 0; }
+  .timeline-progress { position: absolute; left: 0; top: -2px; height: 18px; border-radius: 999px; background: var(--text); opacity: .45; pointer-events: none; }
+  .timeline-marker { position: absolute; top: 50%; width: 24px; height: 24px; border-radius: 50%; background: var(--text); border: 3px solid var(--bg); box-shadow: 0 0 0 2px var(--text); transform: translate(-50%, -50%); pointer-events: none; touch-action: none; user-select: none; }
+  .timeline-bar.timeline-editable { cursor: pointer; }
+  .timeline-bar.timeline-editable .timeline-marker { pointer-events: auto; cursor: grab; width: 28px; height: 28px; }
+  .timeline-bar.timeline-editable .timeline-marker:active { cursor: grabbing; }
+  .timeline-control-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-size: 13px;
+    color: var(--secondary);
+  }
+  .timeline-control-toggle label { cursor: pointer; white-space: nowrap; }
+  .timeline-control-toggle input { vertical-align: middle; }
+
+  .timeline-bell { position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%; background: var(--text); border: 2px solid var(--bg); box-shadow: 0 0 0 2px var(--text); transform: translate(-50%, -50%); pointer-events: none; z-index: 4; }
+  .sound-toggle {
+    margin: 0 auto 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 14px;
+    flex-wrap: wrap;
+    color: var(--secondary);
+    font-size: 13px;
+  }
+  .sound-toggle strong { color: var(--text); font-size: 13px; }
+  .sound-toggle label { white-space: nowrap; cursor: pointer; }
+  .bell-counts label { display: flex; align-items: center; gap: 6px; cursor: default; }
+  .bell-counts input {
+    width: 54px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--input-bg);
+    color: var(--text);
+    text-align: center;
+    font: inherit;
+  }
+  .bell-counts input:disabled { opacity: .45; cursor: not-allowed; }
+  .timeline-qa-inside { position: absolute; top: 50%; transform: translate(-50%, -50%); font-size: 12px; font-weight: 700; color: #5a3400; white-space: nowrap; pointer-events: none; z-index: 3; }
+  .timeline-phase { display: flex; justify-content: center; gap: 34px; margin-top: 14px; font-size: 20px; font-weight: 700; }
+  .timeline-phase .inactive { opacity: .35; }
+
+  .controls-wrap {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  .controls button {
+    min-width: 118px;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    background: var(--control-bg);
+    color: var(--text);
+    border-radius: 5px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .manual-ring-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 7px 18px;
+    border: 1px solid var(--border);
+    background: var(--control-bg);
+    color: var(--text);
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .controls button:hover,
+  .manual-ring-btn:hover,
+  .stepper button:hover { background: var(--hover-bg); }
+  .footer {
+    text-align: center;
+    margin-top: 44px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .overtime { color: #c40000; }
+  .qa-title { color: #b56a00; }
+  .ending-soon {
+    animation: endingPulse .8s ease-in-out infinite alternate;
+  }
+  @keyframes endingPulse {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: .55; transform: scale(1.025); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ending-soon { animation: none; text-decoration: underline; text-decoration-thickness: 4px; }
+  }
+
+  body.fullscreen .page {
+    max-width: none;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2vh 4vw;
+  }
+  body.fullscreen .settings-shell,
+  body.fullscreen .footer { display: none; }
+  body.fullscreen .time { font-size: min(31vw, 340px); }
+  body.fullscreen .timer-title { font-size: min(4.4vw, 58px); }
+  body.fullscreen .secondary-panel {
+    min-width: 220px;
+    padding-top: 2.7vh;
+  }
+  body.fullscreen .secondary-label { font-size: min(2vw, 26px); }
+  body.fullscreen .secondary-display { font-size: min(4vw, 54px); }
+  body.fullscreen .timeline-wrap { width: min(980px, 86%); margin-bottom: 3vh; }
+  body.fullscreen .timeline-labels { font-size: min(1.8vw, 24px); height: min(2.2vw, 30px); }
+  body.fullscreen .timeline-qa-inside { font-size: min(1.2vw, 16px); }
+  body.fullscreen .timeline-bell { width: 18px; height: 18px; }
+  body.fullscreen .timeline-phase { font-size: min(2.4vw, 30px); }
+
+  @media (max-width: 700px) {
+    .settings-groups { grid-template-columns: 1fr; gap: 8px; }
+    .bell-sidebar { border-left: 0; padding-left: 0; }
+    .bell-sidebar .bell-counts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .settings { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .setting-inline { font-size: 12px; gap: 6px; }
+    .setting-inline input { width: 54px; height: 30px; font-size: 16px; }
+    .compact-options { gap: 12px; margin-bottom: 10px; font-size: 13px; }
+    .time-layout {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .primary-panel,
+    .secondary-panel { grid-column: 1; justify-self: center; text-align: center; }
+    .secondary-panel {
+      min-width: 0;
+      padding-top: 0;
+      margin-top: -10px;
+      margin-bottom: 12px;
+    }
+    .time { font-size: 25vw; }
+    .timeline-wrap { width: 96%; }
+    .controls-wrap { width: 100%; }
+    .controls { gap: 8px; }
+    .controls button { min-width: 0; flex: 1 1 0; padding: 11px 10px; font-size: 15px; }
+  }
+
+  .settings-section-title { white-space: nowrap !important; min-width: max-content; }
+  .settings-section-header { cursor: default !important; }
+  .settings-section-toggle { display: none !important; }
+  .settings-section-content { display: block !important; }
+
+
+  /* v21: keep the middle Time Settings section stable and wide enough */
+  .settings-sections {
+    display: grid !important;
+    grid-template-columns: minmax(190px, 0.9fr) minmax(430px, 1.8fr) minmax(210px, 1fr) !important;
+    gap: 14px !important;
+    align-items: start !important;
+  }
+  .settings-section { min-width: 0; }
+  .settings-section.time-settings { min-width: 430px; }
+  .settings-section.time-settings .section-title,
+  .settings-section.time-settings .settings-section-title {
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+  .settings-section.time-settings .settings,
+  .settings-section.time-settings .time-settings-grid {
+    grid-template-columns: repeat(4, minmax(92px, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .settings-section.time-settings .setting-title {
+    white-space: nowrap !important;
+    font-size: 12px !important;
+  }
+  @media (max-width: 900px) {
+    .settings-sections { grid-template-columns: 1fr !important; }
+    .settings-section.time-settings { min-width: 0; }
+  }
+
+
+  /* v21b: balanced three-column settings; wider Time Settings */
+  .settings-groups {
+    width: min(1040px, 98%) !important;
+    grid-template-columns: minmax(220px, 0.9fr) minmax(500px, 1.9fr) minmax(220px, 0.9fr) !important;
+    gap: 12px !important;
+  }
+  .settings-group { min-width: 0; }
+  .settings-group:nth-child(2) > summary {
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+  .settings-group:nth-child(2) .time-settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px 12px !important;
+  }
+  .settings-group:nth-child(2) .setting-title {
+    white-space: nowrap !important;
+    font-size: 12px !important;
+  }
+  @media (max-width: 900px) {
+    .settings-groups { grid-template-columns: 1fr !important; width: min(760px, 98%) !important; }
+  }
+
+
+  .settings-group-heading {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    margin: 0 0 10px;
+    color: var(--text);
+  }
+
+  /* v23: center the three settings groups and remove the right-heavy layout */
+  .settings-shell {
+    width: min(1000px, 100%) !important;
+  }
+  .settings-panel {
+    width: 100%;
+  }
+  .settings-groups {
+    width: 100% !important;
+    margin: 0 auto 8px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+  .settings-group:nth-child(2) .time-settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px 12px !important;
+  }
+  .settings-group-heading {
+    padding-top: 10px;
+  }
+  @media (max-width: 900px) {
+    .settings-shell { width: min(760px, 100%) !important; }
+    .settings-groups { grid-template-columns: 1fr !important; width: 100% !important; }
+  }
+
+
+  /* v24 bilingual controls */
+  .basic-body .settings-top-row { flex-wrap: wrap; row-gap: 8px; }
+  .settings-group-heading { white-space: nowrap; }
+  @media (max-width: 900px) {
+    .basic-body .settings-top-row { justify-content: center; }
+  }
+
+
+  .clear-settings-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .clear-settings-btn {
+    font: inherit;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    background: var(--control-bg);
+    color: var(--text);
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .clear-settings-btn:hover { background: var(--hover-bg); }
+
+
+  .seo-info {
+    max-width: 820px;
+    margin: 28px auto 0;
+    padding: 0 12px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .seo-info h1 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--secondary);
+  }
+  .seo-info p { margin: 0; }
+  body.fullscreen .seo-info { display: none; }
+
+
+
+  /* v30: user-configurable event schedule */
+  .settings-groups {
+    grid-template-columns: minmax(260px, .8fr) minmax(620px, 2.2fr) !important;
+    align-items: start !important;
+  }
+  .event-group { min-width: 0; }
+  .event-table-wrap { overflow-x: auto; }
+  .event-table {
+    width: 100%;
+    min-width: 1140px;
+    border-collapse: separate;
+    border-spacing: 0 7px;
+    table-layout: fixed;
+  }
+  .event-table th {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--secondary);
+    text-align: left;
+    padding: 0 5px 2px;
+    white-space: nowrap;
+  }
+  .event-table th:nth-child(1) { width: 88px; }
+  .event-table th:nth-child(2) { width: 78px; }
+  .event-table th:nth-child(3) { width: 132px; text-align: center; white-space: normal; line-height: 1.15; }
+  .event-table th:nth-child(4) { width: 170px; }
+  .event-table th:nth-child(5) { width: 286px; }
+  .event-table th:nth-child(6) { width: 72px; text-align: center; }
+  .event-table th:nth-child(7) { width: 92px; text-align: center; white-space: normal; line-height: 1.15; }
+  .event-table th:nth-child(8) { width: 112px; text-align: center; }
+  .event-row td { padding: 0 4px; vertical-align: middle; }
+  .event-row input {
+    width: 100%;
+    height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--input-bg);
+    color: var(--text);
+    padding: 5px 7px;
+    font: inherit;
+    min-width: 0;
+  }
+  .event-row input[type="number"] { text-align: center; }
+  .event-row .event-overtime, .event-row .event-skip-for-countdown, .event-row .event-session-end { width: 20px; height: 20px; cursor: pointer; }
+  .event-row .event-overtime { accent-color: #c40000; }
+  .event-row .event-skip-for-countdown { accent-color: #2468d8; }
+  .event-row .event-session-end { accent-color: #2b8a3e; }
+  .event-overtime-cell, .event-skip-for-countdown-cell, .event-session-end-cell { text-align: center; }
+  .event-actions { display: flex; gap: 4px; justify-content: center; }
+  .event-actions button, .add-event-btn {
+    border: 1px solid var(--border);
+    background: var(--control-bg);
+    color: var(--text);
+    border-radius: 5px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .event-actions button { width: 32px; height: 32px; padding: 0; }
+  .event-actions button:hover, .add-event-btn:hover { background: var(--hover-bg); }
+  .event-actions .delete-event { width: 38px; }
+  .add-event-row { display: flex; justify-content: center; margin-top: 9px; }
+  .add-event-btn { padding: 8px 18px; }
+  .schedule-hint {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.35;
+  }
+  .manual-bell-setting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--secondary);
+  }
+  .manual-bell-setting input {
+    width: 58px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--input-bg);
+    color: var(--text);
+    text-align: center;
+    font: inherit;
+  }
+  .timer-message {
+    min-height: 28px;
+    margin: -4px 0 8px;
+    color: var(--secondary);
+    font-size: clamp(16px, 2vw, 24px);
+    font-weight: 600;
+  }
+  .next-event {
+    min-height: 24px;
+    margin: 0 0 12px;
+    color: var(--secondary);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .timeline-event-marker {
+    position: absolute;
+    top: 50%;
+    width: 3px;
+    height: 24px;
+    border-radius: 2px;
+    background: var(--text);
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    pointer-events: none;
+  }
+  .timeline-event-marker.has-bell::before {
+    content: '🔔';
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    font-size: 13px;
+    line-height: 1;
+    filter: grayscale(1);
+  }
+  .timeline-event-marker.is-skipped {
+    width: 2px;
+    height: 14px;
+    opacity: .65;
+  }
+  .timeline-event-time {
+    position: absolute;
+    top: 25px;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .timeline-event-label {
+    position: absolute;
+    top: 40px;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--secondary);
+    white-space: nowrap;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .timeline-skip-chip {
+    position: absolute;
+    bottom: 26px;
+    transform: translateX(-50%);
+    padding: 2px 5px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--secondary);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.15;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 6;
+  }
+  .timeline-skip-chip .bell-mini { margin-left: 3px; filter: grayscale(1); }
+  .timeline-wrap.custom-events { margin-bottom: 62px; }
+  .overtime-message { color: #c40000 !important; }
+  .timeline-bar.custom-event-bar { overflow: visible; }
+  body.fullscreen .timer-message { font-size: min(2.2vw, 30px); }
+  body.fullscreen .next-event { font-size: min(1.4vw, 20px); }
+  @media (max-width: 900px) {
+    .settings-groups { grid-template-columns: 1fr !important; }
+    .event-table { min-width: 1040px; }
+  }
+
+
+</style>
+</head>
+<body>
+<div class="page">
+  <div id="settingsShell" class="settings-shell">
+    <div class="settings-bar">
+      <button id="settingsToggle" class="settings-toggle" type="button" aria-expanded="false" aria-controls="settingsPanel">Settings</button>
+    </div>
+
+    <div id="settingsPanel" class="settings-panel">
+      <div class="settings-groups">
+        <div class="settings-group">
+          <div id="basicGroupHeading" class="settings-group-heading">Basic</div>
+          <div class="settings-group-body basic-body">
+            <div class="compact-options settings-top-row">
+              <div class="option-group">
+                <strong id="countLabel">Count:</strong>
+                <label><input type="radio" name="countMode" value="down" checked> <span id="countDownLabel">Down</span></label>
+                <label><input type="radio" name="countMode" value="up"> <span id="countUpLabel">Up</span></label>
+              </div>
+              <div class="option-group">
+                <strong id="themeLabel">Theme:</strong>
+                <label><input type="radio" name="themeMode" value="light"> <span id="lightLabel">Light</span></label>
+                <label><input type="radio" name="themeMode" value="dark" checked> <span id="darkLabel">Dark</span></label>
+              </div>
+              <div class="option-group">
+                <strong id="languageLabel">Language:</strong>
+                <label><input type="radio" name="languageMode" value="en" checked> English</label>
+                <label><input type="radio" name="languageMode" value="ja"> 日本語</label>
+              </div>
+            </div>
+            <div class="settings-bottom-row">
+              <label><input id="saveSettings" type="checkbox" checked> <span id="saveSettingsLabel">Save settings</span></label>
+              <label><input id="enableTimelineControl" type="checkbox"> <span id="timelineControlLabel">Enable timeline control</span></label>
+            </div>
+            <div class="manual-bell-setting">
+              <label for="manualBellCount" id="manualBellLabel">Manual bell count</label>
+              <input id="manualBellCount" type="number" min="1" max="99" step="1" value="4" inputmode="numeric">
+            </div>
+            <div class="clear-settings-row">
+              <button id="clearSavedSettingsBtn" class="clear-settings-btn" type="button">Clear saved settings</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group event-group">
+          <div id="eventsGroupHeading" class="settings-group-heading">Events</div>
+          <div class="settings-group-body">
+            <div class="event-table-wrap">
+              <table class="event-table" aria-label="Timer events">
+                <thead>
+                  <tr>
+                    <th id="timeColumnLabel">Time (min)</th>
+                    <th id="bellColumnLabel">Bell count</th>
+                    <th id="skipForCountdownColumnLabel">Skip for Countdown</th>
+                    <th id="titleColumnLabel">Title</th>
+                    <th id="messageColumnLabel">Message</th>
+                    <th id="overtimeColumnLabel">Overtime</th>
+                    <th id="sessionEndColumnLabel">Session End</th>
+                    <th id="actionsColumnLabel">Order</th>
+                  </tr>
+                </thead>
+                <tbody id="eventRows"></tbody>
+              </table>
+            </div>
+            <div class="add-event-row">
+              <button id="addEventBtn" class="add-event-btn" type="button">＋ Add Event</button>
+            </div>
+            <div id="scheduleHint" class="schedule-hint">Time is measured from the timer start. Bell count 0 means no bell.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main class="timer-area">
+    <div class="time-layout">
+      <div class="primary-panel">
+        <div id="timerTitle" class="timer-title">Presentation</div>
+        <div id="timerMessage" class="timer-message">Presentation in progress</div>
+        <div id="timeDisplay" class="time">09:00</div>
+      </div>
+      <div id="secondaryPanel" class="secondary-panel">
+        <div id="secondaryLabel" class="secondary-label">Elapsed</div>
+        <div id="secondaryDisplay" class="secondary-display">00:00</div>
+      </div>
+    </div>
+
+    <div class="timeline-wrap custom-events" aria-label="Presentation timeline">
+      <div id="nextEventLabel" class="next-event"></div>
+      <div class="timeline-labels">
+        <span id="startLabel" class="timeline-label start">0</span>
+        <span id="endLabel" class="timeline-label end">18 min</span>
+      </div>
+      <div id="timelineBar" class="timeline-bar custom-event-bar">
+        <div id="timelineProgress" class="timeline-progress"></div>
+        <div id="eventMarkers"></div>
+        <div id="timelineMarker" class="timeline-marker"></div>
+      </div>
+    </div>
+
+    <div class="controls-wrap">
+      <div class="controls">
+        <button id="startBtn" type="button">Start</button>
+        <button id="resetBtn" type="button">Reset</button>
+        <button id="fullscreenBtn" type="button">Fullscreen</button>
+      </div>
+      <button id="manualBellBtn" class="manual-ring-btn" type="button">Ring</button>
+    </div>
+  </main>
+
+  <div id="footerLabel" class="footer">Offline Presentation Timer</div>
+
+  <section class="seo-info" aria-label="About this presentation timer">
+    <h1>Free Online Presentation Timer for Conferences and Academic Talks</h1>
+    <p>
+      A configurable presentation timer with first-bell alerts, Q&amp;A timing, overtime notifications,
+      manual bell controls, fullscreen mode, and English/Japanese language support.
+    </p>
+  </section>
+
+</div>
+
+<script>
+(() => {
+  const timeDisplay = document.getElementById('timeDisplay');
+  const timerTitle = document.getElementById('timerTitle');
+  const timerMessage = document.getElementById('timerMessage');
+  const secondaryLabel = document.getElementById('secondaryLabel');
+  const secondaryDisplay = document.getElementById('secondaryDisplay');
+  const nextEventLabel = document.getElementById('nextEventLabel');
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const manualBellBtn = document.getElementById('manualBellBtn');
+  const manualBellCountInput = document.getElementById('manualBellCount');
+  const clearSavedSettingsBtn = document.getElementById('clearSavedSettingsBtn');
+  const eventRows = document.getElementById('eventRows');
+  const addEventBtn = document.getElementById('addEventBtn');
+  const timelineBar = document.getElementById('timelineBar');
+  const timelineProgress = document.getElementById('timelineProgress');
+  const timelineMarker = document.getElementById('timelineMarker');
+  const eventMarkers = document.getElementById('eventMarkers');
+  const startLabel = document.getElementById('startLabel');
+  const endLabel = document.getElementById('endLabel');
+  const enableTimelineControl = document.getElementById('enableTimelineControl');
+  const settingsShell = document.getElementById('settingsShell');
+  const settingsToggle = document.getElementById('settingsToggle');
+  const saveSettingsCheckbox = document.getElementById('saveSettings');
+  const countModeInputs = document.querySelectorAll('input[name="countMode"]');
+  const themeModeInputs = document.querySelectorAll('input[name="themeMode"]');
+  const languageModeInputs = document.querySelectorAll('input[name="languageMode"]');
+
+  const DEFAULT_EVENTS = [
+    { time: 0,  bell: 0, skipForCountdown: false, title: 'Presentation', message: 'Presentation in progress', overtime: false, sessionEnd: false },
+    { time: 9,  bell: 1, skipForCountdown: true,  title: '1st Bell', message: '1 minute remaining', overtime: false, sessionEnd: false },
+    { time: 10, bell: 2, skipForCountdown: false, title: 'Q&A', message: 'Q&A time', overtime: false, sessionEnd: false },
+    { time: 15, bell: 3, skipForCountdown: false, title: 'Overtime', message: 'Scheduled time is over', overtime: true, sessionEnd: true },
+    { time: 18, bell: 4, skipForCountdown: true,  title: 'OT Alert', message: '3 minutes overtime', overtime: true, sessionEnd: false }
+  ];
+
+  let events = DEFAULT_EVENTS.map((e, i) => ({ ...e, id: makeId(i) }));
+  let running = false;
+  let elapsedBeforeStart = 0;
+  let startedAt = null;
+  let timerHandle = null;
+  let fired = new Set();
+  let audioCtx = null;
+  let draggingTimeline = false;
+  let wakeLock = null;
+  let language = 'en';
+
+  const SETTINGS_KEY = 'presentationTimerSettingsV37';
+
+  const i18n = {
+    en: {
+      settings:'Settings', basic:'Basic', events:'Events', count:'Count:', down:'Down', up:'Up', theme:'Theme:', light:'Light', dark:'Dark', language:'Language:',
+      save:'Save settings', timelineControl:'Enable timeline control', manualBell:'Manual bell count', clear:'Clear saved settings',
+      timeCol:'Time (min)', bellCol:'Bell count', skipForCountdownCol:'Skip for Countdown', titleCol:'Title', messageCol:'Message', overtimeCol:'Overtime', sessionEndCol:'Session End', actionsCol:'Order', addEvent:'＋ Add Event',
+      hint:'Time is measured from the timer start. Skip for Countdown ignores an event as a countdown target. Session End sets the maximum time shown on the timeline; later overtime events still work but are not shown on the bar. Bell count 0 means no bell.', elapsed:'Elapsed', remaining:'Remaining', next:'Next', noMore:'No more scheduled events',
+      start:'Start', pause:'Pause', reset:'Reset', fullscreen:'Fullscreen', exitFullscreen:'Exit Fullscreen', ring:'Ring', min:'min',
+      defaultTitle:'Timer', defaultMessage:'Waiting for the first event'
+    },
+    ja: {
+      settings:'設定', basic:'基本', events:'イベント', count:'表示:', down:'残り時間', up:'経過時間', theme:'テーマ:', light:'ライト', dark:'ダーク', language:'言語:',
+      save:'設定を保存', timelineControl:'タイムライン操作を有効化', manualBell:'手動ベル回数', clear:'保存設定をクリア',
+      timeCol:'時間（分）', bellCol:'ベル回数', skipForCountdownCol:'カウント対象外', titleCol:'タイトル', messageCol:'メッセージ', overtimeCol:'超過', sessionEndCol:'セッション終了', actionsCol:'順番', addEvent:'＋ イベントを追加',
+      hint:'時間はタイマー開始からの経過分です。カウント対象外はカウントダウン基準から除外します。セッション終了にチェックしたイベントがタイムラインの最大時刻になり、それ以降の超過イベントは動作しますがバーには表示しません。ベル回数を0にすると鳴りません。', elapsed:'経過', remaining:'残り', next:'次', noMore:'この先のイベントはありません',
+      start:'開始', pause:'一時停止', reset:'リセット', fullscreen:'全画面', exitFullscreen:'全画面を終了', ring:'ベルを鳴らす', min:'分',
+      defaultTitle:'タイマー', defaultMessage:'最初のイベントを待っています'
+    }
+  };
+
+  function t(key) { return i18n[language][key] ?? i18n.en[key] ?? key; }
+  function makeId(seed='') { return 'ev_' + Date.now().toString(36) + '_' + seed + '_' + Math.random().toString(36).slice(2,8); }
+  function num(v, fallback=0) { const n = Number(v); return Number.isFinite(n) ? Math.max(0, n) : fallback; }
+  function bellNum(v) { return Math.max(0, Math.min(99, Math.floor(num(v, 0)))); }
+  function getCountMode() { return document.querySelector('input[name="countMode"]:checked')?.value || 'down'; }
+  function getElapsed() { return elapsedBeforeStart + (running ? (performance.now() - startedAt) / 1000 : 0); }
+  function formatTime(seconds) { const s = Math.max(0, Math.floor(seconds)); return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); }
+  function sortedEvents() { return [...events].sort((a,b) => num(a.time)-num(b.time) || events.indexOf(a)-events.indexOf(b)); }
+  function scheduleEndSeconds() {
+    const s = sortedEvents();
+    const marked = s.find(ev => ev.sessionEnd);
+    return marked ? num(marked.time)*60 : (s.length ? num(s[s.length-1].time)*60 : 0);
+  }
+
+  function renderEventRows() {
+    eventRows.innerHTML = '';
+    events.forEach((ev, index) => {
+      const tr = document.createElement('tr');
+      tr.className = 'event-row';
+      tr.dataset.id = ev.id;
+      tr.innerHTML = `
+        <td><input class="event-time" type="number" min="0" step="0.1" inputmode="decimal" value="${escapeAttr(ev.time)}" aria-label="Time in minutes"></td>
+        <td><input class="event-bell" type="number" min="0" max="99" step="1" inputmode="numeric" value="${escapeAttr(ev.bell)}" aria-label="Bell count"></td>
+        <td class="event-skip-for-countdown-cell"><input class="event-skip-for-countdown" type="checkbox" ${ev.skipForCountdown ? 'checked' : ''} aria-label="Skip for countdown"></td>
+        <td><input class="event-title" type="text" value="${escapeAttr(ev.title)}" aria-label="Title"></td>
+        <td><input class="event-message" type="text" value="${escapeAttr(ev.message)}" aria-label="Message"></td>
+        <td class="event-overtime-cell"><input class="event-overtime" type="checkbox" ${ev.overtime ? 'checked' : ''} aria-label="Overtime style"></td>
+        <td class="event-session-end-cell"><input class="event-session-end" type="checkbox" ${ev.sessionEnd ? 'checked' : ''} aria-label="Session end"></td>
+        <td><div class="event-actions">
+          <button type="button" class="move-up" title="Move up" aria-label="Move up">↑</button>
+          <button type="button" class="move-down" title="Move down" aria-label="Move down">↓</button>
+          <button type="button" class="delete-event" title="Delete" aria-label="Delete">×</button>
+        </div></td>`;
+      tr.querySelector('.move-up').disabled = index === 0;
+      tr.querySelector('.move-down').disabled = index === events.length - 1;
+      eventRows.appendChild(tr);
+    });
+    renderTimelineMarkers();
+  }
+
+  function escapeAttr(value) {
+    return String(value ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function syncEventsFromDom() {
+    const byId = new Map(events.map(e => [e.id, e]));
+    [...eventRows.querySelectorAll('.event-row')].forEach(row => {
+      const ev = byId.get(row.dataset.id);
+      if (!ev) return;
+      ev.time = num(row.querySelector('.event-time').value, 0);
+      ev.bell = bellNum(row.querySelector('.event-bell').value);
+      ev.skipForCountdown = row.querySelector('.event-skip-for-countdown').checked;
+      ev.title = row.querySelector('.event-title').value;
+      ev.message = row.querySelector('.event-message').value;
+      ev.overtime = row.querySelector('.event-overtime').checked;
+      ev.sessionEnd = row.querySelector('.event-session-end').checked;
+    });
+  }
+
+  function renderTimelineMarkers() {
+    if (!eventMarkers) return;
+    eventMarkers.innerHTML = '';
+    const end = scheduleEndSeconds();
+    const denom = Math.max(end, 1);
+    sortedEvents().forEach(ev => {
+      const sec = num(ev.time)*60;
+      if (sec > end + 1e-6) return;
+      const pct = Math.min(100, Math.max(0, sec/denom*100));
+      const marker = document.createElement('div');
+      marker.className = 'timeline-event-marker'
+        + (bellNum(ev.bell)>0 && !ev.skipForCountdown ? ' has-bell' : '')
+        + (ev.skipForCountdown ? ' is-skipped' : '');
+      marker.style.left = `${pct}%`;
+      marker.title = `${ev.time} min · ${ev.title || 'Event'} · ${ev.bell} bell(s)`;
+      eventMarkers.appendChild(marker);
+
+      // Countdown targets get a normal time label on the bar and the event title below it.
+      if (!ev.skipForCountdown && sec > 0 && sec < end) {
+        const timeLabel = document.createElement('div');
+        timeLabel.className = 'timeline-event-time';
+        timeLabel.style.left = `${pct}%`;
+        timeLabel.textContent = `${ev.time} ${t('min')}`;
+        eventMarkers.appendChild(timeLabel);
+
+        if (ev.title) {
+          const label = document.createElement('div');
+          label.className = 'timeline-event-label';
+          label.style.left = `${pct}%`;
+          label.textContent = ev.title;
+          eventMarkers.appendChild(label);
+        }
+      }
+
+      // Skipped events are intentionally lightweight: a small chip above the bar.
+      if (ev.skipForCountdown && sec > 0 && sec < end) {
+        const chip = document.createElement('div');
+        chip.className = 'timeline-skip-chip';
+        chip.style.left = `${pct}%`;
+        chip.innerHTML = `${escapeAttr(ev.time)} ${t('min')}${bellNum(ev.bell)>0 ? '<span class="bell-mini">🔔</span>' : ''}`;
+        chip.title = ev.title || 'Skipped countdown event';
+        eventMarkers.appendChild(chip);
+      }
+    });
+  }
+
+  function getState(elapsed) {
+    const s = sortedEvents();
+    let current = null;
+    let nextEvent = null;
+    let nextTarget = null;
+    for (const ev of s) {
+      const sec = num(ev.time)*60;
+      if (sec <= elapsed + 1e-6) current = ev;
+      else {
+        if (!nextEvent) nextEvent = ev;
+        if (!nextTarget && !ev.skipForCountdown) nextTarget = ev;
+      }
+    }
+    return { current, nextEvent, nextTarget, sorted:s };
+  }
+
+  function update() {
+    const elapsed = getElapsed();
+    const mode = getCountMode();
+    const end = scheduleEndSeconds();
+    const { current, nextEvent, nextTarget } = getState(elapsed);
+    // Countdown targets never extend beyond Session End. Events after Session End
+    // can still fire bells and update Title/Message, but they do not restart a countdown.
+    const countdownTarget = nextTarget && num(nextTarget.time) * 60 <= end + 1e-6 ? nextTarget : null;
+
+    timerTitle.textContent = current?.title || t('defaultTitle');
+    timerMessage.textContent = current?.message || t('defaultMessage');
+
+    const isOvertime = !!current?.overtime;
+    timerTitle.classList.toggle('overtime', isOvertime);
+    timeDisplay.classList.toggle('overtime', isOvertime);
+    timerMessage.classList.toggle('overtime-message', isOvertime);
+
+    if (mode === 'up') {
+      timeDisplay.textContent = formatTime(elapsed);
+      if (elapsed < end && countdownTarget) {
+        secondaryLabel.textContent = t('remaining');
+        secondaryDisplay.textContent = formatTime(num(countdownTarget.time)*60 - elapsed);
+      } else {
+        secondaryLabel.textContent = t('elapsed');
+        secondaryDisplay.textContent = formatTime(elapsed);
+      }
+    } else if (end > 0 && elapsed >= end) {
+      // Once Session End is reached, stay in overtime count-up forever.
+      // Later alert events never become countdown targets.
+      timeDisplay.textContent = '+' + formatTime(elapsed - end);
+      secondaryLabel.textContent = t('elapsed');
+      secondaryDisplay.textContent = formatTime(elapsed);
+    } else if (countdownTarget) {
+      timeDisplay.textContent = formatTime(num(countdownTarget.time)*60 - elapsed);
+      secondaryLabel.textContent = t('elapsed');
+      secondaryDisplay.textContent = formatTime(elapsed);
+    } else {
+      timeDisplay.textContent = formatTime(elapsed);
+      secondaryLabel.textContent = t('elapsed');
+      secondaryDisplay.textContent = formatTime(elapsed);
+    }
+
+    nextEventLabel.textContent = nextEvent
+      ? `${t('next')}: ${nextEvent.title || 'Event'} · ${nextEvent.time} ${t('min')}${nextEvent.bell > 0 ? ` · 🔔×${nextEvent.bell}` : ''}`
+      : t('noMore');
+
+    const denom = Math.max(end, 1);
+    const pct = Math.min(100, Math.max(0, elapsed/denom*100));
+    timelineProgress.style.width = `${pct}%`;
+    timelineMarker.style.left = `${pct}%`;
+    startLabel.textContent = '0';
+    endLabel.textContent = `${Math.round(end/60*10)/10} ${t('min')}`;
+
+    timeDisplay.classList.remove('ending-soon');
+    if (elapsed < end && countdownTarget) {
+      const remaining = num(countdownTarget.time)*60 - elapsed;
+      if (remaining > 0 && remaining <= 5) timeDisplay.classList.add('ending-soon');
+    }
+
+    if (running) {
+      for (const ev of sortedEvents()) {
+        const sec = num(ev.time)*60;
+        const key = ev.id;
+        if (elapsed >= sec && !fired.has(key)) {
+          fired.add(key);
+          if (bellNum(ev.bell) > 0) ring(bellNum(ev.bell));
+        }
+      }
+    }
+  }
+
+  function syncFiredForElapsed(elapsed) {
+    fired.clear();
+    sortedEvents().forEach(ev => { if (elapsed >= num(ev.time)*60) fired.add(ev.id); });
+  }
+
+  async function ensureAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state !== 'running') { try { await audioCtx.resume(); } catch (_) {} }
+    return audioCtx.state === 'running';
+  }
+
+  function bellStrike(start) {
+    const master = audioCtx.createGain();
+    master.gain.setValueAtTime(0.0001,start);
+    master.gain.exponentialRampToValueAtTime(0.62,start+0.004);
+    master.gain.exponentialRampToValueAtTime(0.0001,start+1.65);
+    master.connect(audioCtx.destination);
+    [
+      {f:740,g:.24,d:1.55},{f:1112,g:.17,d:1.18},{f:1493,g:.12,d:.92},{f:2058,g:.08,d:.66},{f:2785,g:.045,d:.42}
+    ].forEach(({f,g,d}) => {
+      const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+      osc.type='sine'; osc.frequency.setValueAtTime(f,start);
+      gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(g,start+.003); gain.gain.exponentialRampToValueAtTime(.0001,start+d);
+      osc.connect(gain).connect(master); osc.start(start); osc.stop(start+d+.04);
+    });
+    const click=audioCtx.createOscillator(), clickGain=audioCtx.createGain();
+    click.type='triangle'; click.frequency.setValueAtTime(3300,start); clickGain.gain.setValueAtTime(.11,start); clickGain.gain.exponentialRampToValueAtTime(.0001,start+.045);
+    click.connect(clickGain).connect(master); click.start(start); click.stop(start+.055);
+  }
+
+  async function ring(times) {
+    const ready = await ensureAudio();
+    if (!ready || times <= 0) return;
+    const base = audioCtx.currentTime + .04;
+    for (let i=0;i<times;i++) bellStrike(base + i*.25);
+  }
+
+  async function requestWakeLock() {
+    if (!('wakeLock' in navigator) || !running || document.visibilityState !== 'visible') return;
+    try { if (!wakeLock) { wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>wakeLock=null); } } catch(_){}
+  }
+  async function releaseWakeLock() { if (!wakeLock) return; try { await wakeLock.release(); } catch(_){} wakeLock=null; }
+
+  function collectSettings() {
+    syncEventsFromDom();
+    return { events: events.map(({time,bell,skipForCountdown,title,message,overtime,sessionEnd})=>({time,bell,skipForCountdown,title,message,overtime,sessionEnd})), countMode:getCountMode(), language, manualBellCount:bellNum(manualBellCountInput.value)||1 };
+  }
+  function persistSettings() {
+    try {
+      localStorage.setItem('presentationTimerSaveSettings', saveSettingsCheckbox.checked ? '1':'0');
+      if (saveSettingsCheckbox.checked) localStorage.setItem(SETTINGS_KEY, JSON.stringify(collectSettings()));
+      else localStorage.removeItem(SETTINGS_KEY);
+    } catch(_){}
+  }
+  function restoreSettings() {
+    try {
+      saveSettingsCheckbox.checked = localStorage.getItem('presentationTimerSaveSettings') !== '0';
+      if (!saveSettingsCheckbox.checked) return;
+      const raw=localStorage.getItem(SETTINGS_KEY); if (!raw) return;
+      const st=JSON.parse(raw);
+      if (Array.isArray(st.events) && st.events.length) {
+        events=st.events.map((e,i)=>({time:num(e.time),bell:bellNum(e.bell),skipForCountdown:typeof e.skipForCountdown==='boolean'?e.skipForCountdown:false,title:String(e.title??''),message:String(e.message??''),overtime:!!e.overtime,sessionEnd:!!e.sessionEnd,id:makeId(i)}));
+        if (!events.some(e=>e.sessionEnd)) {
+          const firstOvertime = sortedEvents().find(e=>e.overtime);
+          const fallback = firstOvertime || sortedEvents()[sortedEvents().length-1];
+          if (fallback) fallback.sessionEnd = true;
+        }
+      }
+      if (st.countMode==='up'||st.countMode==='down') document.querySelector(`input[name="countMode"][value="${st.countMode}"]`).checked=true;
+      if (st.language==='en'||st.language==='ja') { language=st.language; const r=document.querySelector(`input[name="languageMode"][value="${language}"]`); if(r)r.checked=true; }
+      if (Number.isFinite(st.manualBellCount)) manualBellCountInput.value=Math.max(1,bellNum(st.manualBellCount));
+    } catch(_){}
+  }
+
+  function applyTheme(theme) {
+    document.body.classList.toggle('dark', theme==='dark');
+    try { localStorage.setItem('presentationTimerTheme', theme); } catch(_){}
+  }
+  function applyLanguage(lang) {
+    language = lang==='ja' ? 'ja':'en';
+    document.documentElement.lang = language==='ja' ? 'ja':'en';
+    document.title = language==='ja' ? '発表タイマー':'Presentation Timer';
+    const set=(id,key)=>{ const el=document.getElementById(id); if(el)el.textContent=t(key); };
+    set('settingsToggle','settings'); set('basicGroupHeading','basic'); set('eventsGroupHeading','events'); set('countLabel','count'); set('countDownLabel','down'); set('countUpLabel','up');
+    set('themeLabel','theme'); set('lightLabel','light'); set('darkLabel','dark'); set('languageLabel','language'); set('saveSettingsLabel','save'); set('timelineControlLabel','timelineControl');
+    set('manualBellLabel','manualBell'); set('clearSavedSettingsBtn','clear'); set('timeColumnLabel','timeCol'); set('bellColumnLabel','bellCol'); set('skipForCountdownColumnLabel','skipForCountdownCol'); set('titleColumnLabel','titleCol'); set('messageColumnLabel','messageCol'); set('overtimeColumnLabel','overtimeCol'); set('sessionEndColumnLabel','sessionEndCol'); set('actionsColumnLabel','actionsCol'); set('addEventBtn','addEvent'); set('scheduleHint','hint');
+    startBtn.textContent=running?t('pause'):t('start'); resetBtn.textContent=t('reset'); fullscreenBtn.textContent=document.fullscreenElement?t('exitFullscreen'):t('fullscreen'); manualBellBtn.textContent=t('ring');
+    update(); persistSettings();
+  }
+
+  function setSettingsOpen(open) { settingsShell.classList.toggle('open',open); settingsToggle.setAttribute('aria-expanded',open?'true':'false'); }
+  function setTimelineEditable(enabled) { timelineBar.classList.toggle('timeline-editable',enabled); timelineMarker.setAttribute('aria-disabled',String(!enabled)); }
+  function seekTimelineFromClientX(clientX) {
+    if (!enableTimelineControl.checked) return;
+    const end=scheduleEndSeconds(); if(end<=0)return;
+    const rect=timelineBar.getBoundingClientRect(); const ratio=Math.min(1,Math.max(0,(clientX-rect.left)/rect.width)); const newElapsed=ratio*end;
+    elapsedBeforeStart=newElapsed; if(running)startedAt=performance.now(); syncFiredForElapsed(newElapsed); update();
+  }
+  function loop(){ update(); if(running)timerHandle=requestAnimationFrame(loop); }
+
+  eventRows.addEventListener('input', e => {
+    if (!e.target.matches('input')) return;
+    if (e.target.classList.contains('event-session-end') && e.target.checked) {
+      eventRows.querySelectorAll('.event-session-end').forEach(cb => { if (cb !== e.target) cb.checked = false; });
+    }
+    syncEventsFromDom(); renderTimelineMarkers(); syncFiredForElapsed(getElapsed()); update(); persistSettings();
+  });
+  eventRows.addEventListener('change', e => {
+    if (e.target.classList.contains('event-bell')) e.target.value=bellNum(e.target.value);
+    if (e.target.classList.contains('event-time')) e.target.value=num(e.target.value);
+    if (e.target.classList.contains('event-session-end') && e.target.checked) {
+      eventRows.querySelectorAll('.event-session-end').forEach(cb => { if (cb !== e.target) cb.checked = false; });
+    }
+    syncEventsFromDom(); renderTimelineMarkers(); update(); persistSettings();
+  });
+  eventRows.addEventListener('click', e => {
+    const btn=e.target.closest('button'); if(!btn)return;
+    syncEventsFromDom();
+    const row=btn.closest('.event-row'); const idx=events.findIndex(ev=>ev.id===row.dataset.id); if(idx<0)return;
+    if(btn.classList.contains('move-up') && idx>0) [events[idx-1],events[idx]]=[events[idx],events[idx-1]];
+    else if(btn.classList.contains('move-down') && idx<events.length-1) [events[idx+1],events[idx]]=[events[idx],events[idx+1]];
+    else if(btn.classList.contains('delete-event')) events.splice(idx,1);
+    else return;
+    renderEventRows(); syncFiredForElapsed(getElapsed()); update(); persistSettings();
+  });
+  addEventBtn.addEventListener('click', () => {
+    syncEventsFromDom();
+    const last=events.length?events[events.length-1]:null;
+    events.push({time:last?num(last.time)+1:0,bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
+    renderEventRows(); update(); persistSettings();
+    eventRows.querySelector('tr:last-child .event-title')?.focus();
+  });
+
+  startBtn.addEventListener('click', async()=>{
+    await ensureAudio();
+    if(!running){ running=true; startedAt=performance.now(); startBtn.textContent=t('pause'); requestWakeLock(); loop(); }
+    else { elapsedBeforeStart=getElapsed(); running=false; startedAt=null; cancelAnimationFrame(timerHandle); startBtn.textContent=t('start'); releaseWakeLock(); update(); }
+  });
+  resetBtn.addEventListener('click',()=>{ running=false; elapsedBeforeStart=0; startedAt=null; fired.clear(); cancelAnimationFrame(timerHandle); startBtn.textContent=t('start'); releaseWakeLock(); update(); });
+  manualBellBtn.addEventListener('click',()=>{ const n=Math.max(1,bellNum(manualBellCountInput.value)); manualBellCountInput.value=n; ring(n); });
+  manualBellCountInput.addEventListener('input',persistSettings);
+  saveSettingsCheckbox.addEventListener('change',persistSettings);
+  countModeInputs.forEach(i=>i.addEventListener('change',()=>{update();persistSettings();}));
+  themeModeInputs.forEach(i=>i.addEventListener('change',()=>{applyTheme(i.value);persistSettings();}));
+  languageModeInputs.forEach(i=>i.addEventListener('change',()=>applyLanguage(i.value)));
+  settingsToggle.addEventListener('click',()=>setSettingsOpen(!settingsShell.classList.contains('open')));
+  enableTimelineControl.addEventListener('change',()=>{setTimelineEditable(enableTimelineControl.checked);draggingTimeline=false;});
+
+  timelineBar.addEventListener('pointerdown',e=>{if(!enableTimelineControl.checked)return;draggingTimeline=true;if(timelineBar.setPointerCapture)timelineBar.setPointerCapture(e.pointerId);seekTimelineFromClientX(e.clientX);e.preventDefault();});
+  timelineBar.addEventListener('pointermove',e=>{if(!draggingTimeline||!enableTimelineControl.checked)return;seekTimelineFromClientX(e.clientX);e.preventDefault();});
+  const stopDrag=e=>{if(!draggingTimeline)return;draggingTimeline=false;if(e&&timelineBar.releasePointerCapture&&timelineBar.hasPointerCapture?.(e.pointerId))timelineBar.releasePointerCapture(e.pointerId);};
+  timelineBar.addEventListener('pointerup',stopDrag); timelineBar.addEventListener('pointercancel',stopDrag);
+
+  fullscreenBtn.addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen();}catch(_){}});
+  document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('fullscreen',!!document.fullscreenElement);fullscreenBtn.textContent=document.fullscreenElement?t('exitFullscreen'):t('fullscreen');});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&running)requestWakeLock();});
+  document.addEventListener('keydown',e=>{const tag=document.activeElement?.tagName;if(e.code==='Space'&&!['INPUT','BUTTON'].includes(tag)){e.preventDefault();startBtn.click();}if(e.key.toLowerCase()==='r'&&tag!=='INPUT')resetBtn.click();if(e.key.toLowerCase()==='f'&&tag!=='INPUT')fullscreenBtn.click();});
+
+  clearSavedSettingsBtn.addEventListener('click',()=>{
+    try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem('presentationTimerSettingsV33');localStorage.removeItem('presentationTimerSettingsV32');localStorage.removeItem('presentationTimerSettingsV31');localStorage.removeItem('presentationTimerSettingsV30');localStorage.removeItem('presentationTimerSettingsV29');localStorage.removeItem('presentationTimerSettingsV28');}catch(_){}
+    events=DEFAULT_EVENTS.map((e,i)=>({...e,id:makeId(i)}));
+    document.querySelector('input[name="countMode"][value="down"]').checked=true;
+    document.querySelector('input[name="languageMode"][value="en"]').checked=true;
+    document.querySelector('input[name="themeMode"][value="dark"]').checked=true;
+    manualBellCountInput.value=4; saveSettingsCheckbox.checked=true; elapsedBeforeStart=0; running=false; fired.clear(); startedAt=null; cancelAnimationFrame(timerHandle); applyTheme('dark'); renderEventRows(); applyLanguage('en'); update(); persistSettings();
+  });
+
+  try{const savedTheme=localStorage.getItem('presentationTimerTheme');const theme=(savedTheme==='light'||savedTheme==='dark')?savedTheme:'dark';const r=document.querySelector(`input[name="themeMode"][value="${theme}"]`);if(r)r.checked=true;applyTheme(theme);}catch(_){applyTheme('dark');}
+  restoreSettings();
+  renderEventRows();
+  setTimelineEditable(false);
+  setSettingsOpen(false);
+  applyLanguage(language);
+  update();
+})();
+</script>
+</body>
+</html>
