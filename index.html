@@ -778,7 +778,7 @@
               <input id="manualBellCount" type="number" min="1" max="99" step="1" value="4" inputmode="numeric">
             </div>
             <div class="clear-settings-row">
-              <button id="clearSavedSettingsBtn" class="clear-settings-btn" type="button">Clear saved settings</button>
+              <button id="clearSavedSettingsBtn" class="clear-settings-btn" type="button">Restore Defaults</button>
             </div>
           </div>
         </div>
@@ -914,7 +914,7 @@
   const i18n = {
     en: {
       settings:'Settings', basic:'Basic', events:'Events', count:'Count:', down:'Down', up:'Up', theme:'Theme:', light:'Light', dark:'Dark', language:'Language:',
-      save:'Save settings', timelineControl:'Enable timeline control', manualBell:'Manual bell count', clear:'Clear saved settings',
+      save:'Save settings', timelineControl:'Enable timeline control', manualBell:'Manual bell count', clear:'Restore Defaults',
       timeCol:'Time (min)', bellCol:'Bell count', skipForCountdownCol:'Skip for Countdown', titleCol:'Title', messageCol:'Message', overtimeCol:'Overtime', sessionEndCol:'Session End', actionsCol:'Order', addEvent:'＋ Add Event',
       hint:'Time is measured from the timer start. Skip for Countdown ignores an event as a countdown target. Session End sets the maximum time shown on the timeline; later overtime events still work but are not shown on the bar. Bell count 0 means no bell.', elapsed:'Elapsed', remaining:'Remaining', overtimeTime:'Overtime', next:'Next', noMore:'No more scheduled events',
       start:'Start', pause:'Pause', reset:'Reset', fullscreen:'Fullscreen', exitFullscreen:'Exit Fullscreen', ring:'Ring', min:'min',
@@ -922,7 +922,7 @@
     },
     ja: {
       settings:'設定', basic:'基本', events:'イベント', count:'表示:', down:'残り時間', up:'経過時間', theme:'テーマ:', light:'ライト', dark:'ダーク', language:'言語:',
-      save:'設定を保存', timelineControl:'タイムライン操作を有効化', manualBell:'手動ベル回数', clear:'保存設定をクリア',
+      save:'設定を保存', timelineControl:'タイムライン操作を有効化', manualBell:'手動ベル回数', clear:'デフォルトに戻す',
       timeCol:'時間（分）', bellCol:'ベル回数', skipForCountdownCol:'カウント対象外', titleCol:'タイトル', messageCol:'メッセージ', overtimeCol:'超過', sessionEndCol:'セッション終了', actionsCol:'順番', addEvent:'＋ イベントを追加',
       hint:'時間はタイマー開始からの経過分です。カウント対象外はカウントダウン基準から除外します。セッション終了にチェックしたイベントがタイムラインの最大時刻になり、それ以降の超過イベントは動作しますがバーには表示しません。ベル回数を0にすると鳴りません。', elapsed:'経過', remaining:'残り', overtimeTime:'超過', next:'次', noMore:'この先のイベントはありません',
       start:'開始', pause:'一時停止', reset:'リセット', fullscreen:'全画面', exitFullscreen:'全画面を終了', ring:'ベルを鳴らす', min:'分',
