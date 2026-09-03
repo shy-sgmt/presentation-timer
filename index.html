@@ -927,10 +927,10 @@
   ];
   const DEFAULT_EVENTS_JA = [
     { time: 0,  bell: 0, skipForCountdown: false, title: '発表', message: '発表中', overtime: false, sessionEnd: false },
-    { time: 9,  bell: 1, skipForCountdown: true,  title: '1ベル', message: '残り1分', overtime: false, sessionEnd: false },
+    { time: 9,  bell: 1, skipForCountdown: true,  title: '1ベル', message: '残りの発表時間は1分です', overtime: false, sessionEnd: false },
     { time: 10, bell: 2, skipForCountdown: false, title: '質疑応答', message: '質疑応答', overtime: false, sessionEnd: false },
-    { time: 15, bell: 3, skipForCountdown: false, title: '時間超過', message: '予定時間を超過しました', overtime: true, sessionEnd: true },
-    { time: 18, bell: 4, skipForCountdown: true,  title: '超過警告', message: '3分超過', overtime: true, sessionEnd: false }
+    { time: 15, bell: 3, skipForCountdown: false, title: '発表時間終了', message: '発表時間を超過しました', overtime: true, sessionEnd: true },
+    { time: 18, bell: 4, skipForCountdown: true,  title: '超過警告', message: '予定時間より3分超過しました。発表を終了してください。', overtime: true, sessionEnd: false }
   ];
   function defaultEventsFor(lang) { return lang === 'ja' ? DEFAULT_EVENTS_JA : DEFAULT_EVENTS_EN; }
   function freshDefaultEvents(lang) { return defaultEventsFor(lang).map((e, i) => ({ ...e, id: makeId(i) })); }
