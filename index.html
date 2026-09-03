@@ -653,6 +653,8 @@
     font-size: clamp(16px, 2vw, 24px);
     font-weight: 600;
   }
+  .timer-message:empty { display: none; }
+
   .next-event {
     min-height: 24px;
     margin: 0 0 12px;
@@ -916,15 +918,40 @@
   const themeModeInputs = document.querySelectorAll('input[name="themeMode"]');
   const languageModeInputs = document.querySelectorAll('input[name="languageMode"]');
 
-  const DEFAULT_EVENTS = [
+  const DEFAULT_EVENTS_EN = [
     { time: 0,  bell: 0, skipForCountdown: false, title: 'Presentation', message: 'Presentation in progress', overtime: false, sessionEnd: false },
     { time: 9,  bell: 1, skipForCountdown: true,  title: '1st Bell', message: '1 minute remaining', overtime: false, sessionEnd: false },
     { time: 10, bell: 2, skipForCountdown: false, title: 'Q&A', message: 'Q&A time', overtime: false, sessionEnd: false },
     { time: 15, bell: 3, skipForCountdown: false, title: 'Overtime', message: 'Scheduled time is over', overtime: true, sessionEnd: true },
     { time: 18, bell: 4, skipForCountdown: true,  title: 'OT Alert', message: '3 minutes overtime', overtime: true, sessionEnd: false }
   ];
+  const DEFAULT_EVENTS_JA = [
+    { time: 0,  bell: 0, skipForCountdown: false, title: '発表', message: '発表中', overtime: false, sessionEnd: false },
+    { time: 9,  bell: 1, skipForCountdown: true,  title: '1ベル', message: '残り1分', overtime: false, sessionEnd: false },
+    { time: 10, bell: 2, skipForCountdown: false, title: '質疑応答', message: '質疑応答', overtime: false, sessionEnd: false },
+    { time: 15, bell: 3, skipForCountdown: false, title: '時間超過', message: '予定時間を超過しました', overtime: true, sessionEnd: true },
+    { time: 18, bell: 4, skipForCountdown: true,  title: '超過警告', message: '3分超過', overtime: true, sessionEnd: false }
+  ];
+  function defaultEventsFor(lang) { return lang === 'ja' ? DEFAULT_EVENTS_JA : DEFAULT_EVENTS_EN; }
+  function freshDefaultEvents(lang) { return defaultEventsFor(lang).map((e, i) => ({ ...e, id: makeId(i) })); }
+  function matchesDefaultPreset(list, preset) {
+    if (!Array.isArray(list) || list.length !== preset.length) return false;
+    return list.every((ev, i) => {
+      const d = preset[i];
+      return eventTimeToSeconds(ev.time) === eventTimeToSeconds(d.time)
+        && bellNum(ev.bell) === bellNum(d.bell)
+        && !!ev.skipForCountdown === !!d.skipForCountdown
+        && String(ev.title ?? '') === d.title
+        && String(ev.message ?? '') === d.message
+        && !!ev.overtime === !!d.overtime
+        && !!ev.sessionEnd === !!d.sessionEnd;
+    });
+  }
+  function isUntouchedDefault(list = events) {
+    return matchesDefaultPreset(list, DEFAULT_EVENTS_EN) || matchesDefaultPreset(list, DEFAULT_EVENTS_JA);
+  }
 
-  let events = DEFAULT_EVENTS.map((e, i) => ({ ...e, id: makeId(i) }));
+  let events = freshDefaultEvents('en');
   let running = false;
   let elapsedBeforeStart = 0;
   let startedAt = null;
@@ -935,7 +962,7 @@
   let wakeLock = null;
   let language = 'en';
 
-  const SETTINGS_KEY = 'presentationTimerSettingsV39';
+  const SETTINGS_KEY = 'presentationTimerSettingsV41';
 
   const i18n = {
     en: {
@@ -1016,7 +1043,7 @@
         <td><input class="event-time" type="number" min="0" step="1" inputmode="decimal" value="${escapeAttr(ev.time)}" aria-label="Time in minutes and seconds; 1.30 means 1 minute 30 seconds"></td>
         <td><input class="event-bell" type="number" min="0" max="99" step="1" inputmode="numeric" value="${escapeAttr(ev.bell)}" aria-label="Bell count"></td>
         <td class="event-skip-for-countdown-cell"><input class="event-skip-for-countdown" type="checkbox" ${ev.skipForCountdown ? 'checked' : ''} aria-label="Skip for countdown"></td>
-        <td><input class="event-title" type="text" value="${escapeAttr(ev.title)}" aria-label="Title"></td>
+        <td><input class="event-title" type="text" value="${escapeAttr(ev.title)}" aria-label="Title" ${ev.id === sortedEvents()[0]?.id ? 'required placeholder="Required"' : 'placeholder="Optional — keeps previous title"'}></td>
         <td><input class="event-message" type="text" value="${escapeAttr(ev.message)}" aria-label="Message"></td>
         <td class="event-overtime-cell"><input class="event-overtime" type="checkbox" ${ev.overtime ? 'checked' : ''} aria-label="Overtime style"></td>
         <td class="event-session-end-cell"><input class="event-session-end" type="checkbox" ${ev.sessionEnd ? 'checked' : ''} aria-label="Session end"></td>
@@ -1050,6 +1077,16 @@
       ev.overtime = row.querySelector('.event-overtime').checked;
       ev.sessionEnd = row.querySelector('.event-session-end').checked;
     });
+  }
+
+  function ensureInitialTitle() {
+    const first = sortedEvents()[0];
+    if (!first) return;
+    if (!String(first.title ?? '').trim()) {
+      first.title = language === 'ja' ? 'プレゼンテーション' : 'Presentation';
+      const input = eventRows.querySelector(`.event-row[data-id="${first.id}"] .event-title`);
+      if (input) input.value = first.title;
+    }
   }
 
   function renderTimelineMarkers() {
@@ -1114,6 +1151,21 @@
     return { current, nextEvent, nextTarget, sorted:s };
   }
 
+  function getDisplayTitle(elapsed) {
+    // The first (earliest) event provides the initial title. Later events only
+    // replace it when their Title field is non-empty.
+    let title = '';
+    for (const ev of sortedEvents()) {
+      const sec = eventTimeToSeconds(ev.time);
+      if (sec > elapsed + 1e-6) break;
+      const candidate = String(ev.title ?? '').trim();
+      if (candidate) title = candidate;
+    }
+    if (title) return title;
+    const firstTitle = String(sortedEvents()[0]?.title ?? '').trim();
+    return firstTitle || t('defaultTitle');
+  }
+
   function update() {
     const elapsed = getElapsed();
     const mode = getCountMode();
@@ -1123,8 +1175,9 @@
     // can still fire bells and update Title/Message, but they do not restart a countdown.
     const countdownTarget = nextTarget && eventTimeToSeconds(nextTarget.time) <= end + 1e-6 ? nextTarget : null;
 
-    timerTitle.textContent = current?.title || t('defaultTitle');
-    timerMessage.textContent = current?.message || t('defaultMessage');
+    timerTitle.textContent = getDisplayTitle(elapsed);
+    // Messages are event-specific and are never inherited. Empty means hidden.
+    timerMessage.textContent = String(current?.message ?? '').trim();
 
     const isOvertime = !!current?.overtime;
     timerTitle.classList.toggle('overtime', isOvertime);
@@ -1315,6 +1368,7 @@
       if (sessionEnd?.checked) e.target.checked = false;
     }
     syncEventsFromDom();
+    ensureInitialTitle();
     normalizeSessionEnd(events.find(ev => ev.sessionEnd)?.id || null);
     if (e.target.type === 'checkbox') renderEventRows();
     else renderTimelineMarkers();
@@ -1334,7 +1388,7 @@
   addEventBtn.addEventListener('click', () => {
     syncEventsFromDom();
     const maxTimeSeconds = events.length ? Math.max(...events.map(ev => eventTimeToSeconds(ev.time))) : -60;
-    events.push({time:secondsToEventTime(maxTimeSeconds + 60),bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
+    events.push({time:secondsToEventTime(maxTimeSeconds + 60),bell:0,skipForCountdown:false,title:'',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
     renderEventRows(); update(); persistSettings();
     eventRows.querySelector('tr:last-child .event-title')?.focus();
   });
@@ -1350,7 +1404,18 @@
   saveSettingsCheckbox.addEventListener('change',persistSettings);
   countModeInputs.forEach(i=>i.addEventListener('change',()=>{update();persistSettings();}));
   themeModeInputs.forEach(i=>i.addEventListener('change',()=>{applyTheme(i.value);persistSettings();}));
-  languageModeInputs.forEach(i=>i.addEventListener('change',()=>applyLanguage(i.value)));
+  languageModeInputs.forEach(i=>i.addEventListener('change',()=>{
+    syncEventsFromDom();
+    const untouched = isUntouchedDefault(events);
+    const nextLang = i.value === 'ja' ? 'ja' : 'en';
+    if (untouched) {
+      events = freshDefaultEvents(nextLang);
+      normalizeSessionEnd(events.find(ev => ev.sessionEnd)?.id || null);
+      renderEventRows();
+      syncFiredForElapsed(getElapsed());
+    }
+    applyLanguage(nextLang);
+  }));
   settingsToggle.addEventListener('click',()=>setSettingsOpen(!settingsShell.classList.contains('open')));
   enableTimelineControl.addEventListener('change',()=>{setTimelineEditable(enableTimelineControl.checked);draggingTimeline=false;});
 
@@ -1365,16 +1430,25 @@
   document.addEventListener('keydown',e=>{const tag=document.activeElement?.tagName;if(e.code==='Space'&&!['INPUT','BUTTON'].includes(tag)){e.preventDefault();startBtn.click();}if(e.key.toLowerCase()==='r'&&tag!=='INPUT')resetBtn.click();if(e.key.toLowerCase()==='f'&&tag!=='INPUT')fullscreenBtn.click();});
 
   clearSavedSettingsBtn.addEventListener('click',()=>{
-    try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem('presentationTimerSettingsV37');localStorage.removeItem('presentationTimerSettingsV36');localStorage.removeItem('presentationTimerSettingsV35');localStorage.removeItem('presentationTimerSettingsV34');localStorage.removeItem('presentationTimerSettingsV33');localStorage.removeItem('presentationTimerSettingsV32');localStorage.removeItem('presentationTimerSettingsV31');localStorage.removeItem('presentationTimerSettingsV30');localStorage.removeItem('presentationTimerSettingsV29');localStorage.removeItem('presentationTimerSettingsV28');}catch(_){}
-    events=DEFAULT_EVENTS.map((e,i)=>({...e,id:makeId(i)}));
+    try{
+      localStorage.removeItem(SETTINGS_KEY);
+      ['V40','V39','V38','V37','V36','V35','V34','V33','V32','V31','V30','V29','V28'].forEach(v=>localStorage.removeItem('presentationTimerSettings'+v));
+    }catch(_){}
+    const selectedLanguage = document.querySelector('input[name="languageMode"]:checked')?.value === 'ja' ? 'ja' : 'en';
+    language = selectedLanguage;
+    events = freshDefaultEvents(language);
     document.querySelector('input[name="countMode"][value="down"]').checked=true;
-    document.querySelector('input[name="languageMode"][value="en"]').checked=true;
+    const langRadio = document.querySelector(`input[name="languageMode"][value="${language}"]`); if (langRadio) langRadio.checked=true;
     document.querySelector('input[name="themeMode"][value="dark"]').checked=true;
-    manualBellCountInput.value=4; saveSettingsCheckbox.checked=true; elapsedBeforeStart=0; running=false; fired.clear(); startedAt=null; cancelAnimationFrame(timerHandle); applyTheme('dark'); renderEventRows(); applyLanguage('en'); update(); persistSettings();
+    manualBellCountInput.value=4;
+    saveSettingsCheckbox.checked=true;
+    elapsedBeforeStart=0; running=false; fired.clear(); startedAt=null; cancelAnimationFrame(timerHandle);
+    applyTheme('dark'); normalizeSessionEnd(events.find(ev => ev.sessionEnd)?.id || null); renderEventRows(); applyLanguage(language); update(); persistSettings();
   });
 
   try{const savedTheme=localStorage.getItem('presentationTimerTheme');const theme=(savedTheme==='light'||savedTheme==='dark')?savedTheme:'dark';const r=document.querySelector(`input[name="themeMode"][value="${theme}"]`);if(r)r.checked=true;applyTheme(theme);}catch(_){applyTheme('dark');}
   restoreSettings();
+  ensureInitialTitle();
   normalizeSessionEnd(events.find(ev => ev.sessionEnd)?.id || null);
   renderEventRows();
   setTimelineEditable(false);
