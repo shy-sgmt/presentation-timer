@@ -555,6 +555,189 @@
   .seo-info p { margin: 0; }
   body.fullscreen .seo-info { display: none; }
 
+
+
+  /* v30: user-configurable event schedule */
+  .settings-groups {
+    grid-template-columns: minmax(260px, .8fr) minmax(620px, 2.2fr) !important;
+    align-items: start !important;
+  }
+  .event-group { min-width: 0; }
+  .event-table-wrap { overflow-x: auto; }
+  .event-table {
+    width: 100%;
+    min-width: 1140px;
+    border-collapse: separate;
+    border-spacing: 0 7px;
+    table-layout: fixed;
+  }
+  .event-table th {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--secondary);
+    text-align: left;
+    padding: 0 5px 2px;
+    white-space: nowrap;
+  }
+  .event-table th:nth-child(1) { width: 88px; }
+  .event-table th:nth-child(2) { width: 78px; }
+  .event-table th:nth-child(3) { width: 132px; text-align: center; white-space: normal; line-height: 1.15; }
+  .event-table th:nth-child(4) { width: 170px; }
+  .event-table th:nth-child(5) { width: 286px; }
+  .event-table th:nth-child(6) { width: 72px; text-align: center; }
+  .event-table th:nth-child(7) { width: 92px; text-align: center; white-space: normal; line-height: 1.15; }
+  .event-table th:nth-child(8) { width: 112px; text-align: center; }
+  .event-row td { padding: 0 4px; vertical-align: middle; }
+  .event-row input {
+    width: 100%;
+    height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--input-bg);
+    color: var(--text);
+    padding: 5px 7px;
+    font: inherit;
+    min-width: 0;
+  }
+  .event-row input[type="number"] { text-align: center; }
+  .event-row .event-overtime, .event-row .event-skip-for-countdown, .event-row .event-session-end { width: 20px; height: 20px; cursor: pointer; }
+  .event-row .event-overtime { accent-color: #c40000; }
+  .event-row .event-skip-for-countdown { accent-color: #2468d8; }
+  .event-row .event-session-end { accent-color: #2b8a3e; }
+  .event-overtime-cell, .event-skip-for-countdown-cell, .event-session-end-cell { text-align: center; }
+  .event-actions { display: flex; gap: 4px; justify-content: center; }
+  .event-actions button, .add-event-btn {
+    border: 1px solid var(--border);
+    background: var(--control-bg);
+    color: var(--text);
+    border-radius: 5px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .event-actions button { width: 32px; height: 32px; padding: 0; }
+  .event-actions button:hover, .add-event-btn:hover { background: var(--hover-bg); }
+  .event-actions .delete-event { width: 38px; }
+  .add-event-row { display: flex; justify-content: center; margin-top: 9px; }
+  .add-event-btn { padding: 8px 18px; }
+  .schedule-hint {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.35;
+  }
+  .manual-bell-setting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--secondary);
+  }
+  .manual-bell-setting input {
+    width: 58px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--input-bg);
+    color: var(--text);
+    text-align: center;
+    font: inherit;
+  }
+  .timer-message {
+    min-height: 28px;
+    margin: -4px 0 8px;
+    color: var(--secondary);
+    font-size: clamp(16px, 2vw, 24px);
+    font-weight: 600;
+  }
+  .next-event {
+    min-height: 24px;
+    margin: 0 0 12px;
+    color: var(--secondary);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .timeline-event-marker {
+    position: absolute;
+    top: 50%;
+    width: 3px;
+    height: 24px;
+    border-radius: 2px;
+    background: var(--text);
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    pointer-events: none;
+  }
+  .timeline-event-marker.has-bell::before {
+    content: '🔔';
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    font-size: 13px;
+    line-height: 1;
+    filter: grayscale(1);
+  }
+  .timeline-event-marker.is-skipped {
+    width: 2px;
+    height: 14px;
+    opacity: .65;
+  }
+  .timeline-event-time {
+    position: absolute;
+    top: 25px;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .timeline-event-label {
+    position: absolute;
+    top: 40px;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--secondary);
+    white-space: nowrap;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .timeline-skip-chip {
+    position: absolute;
+    bottom: 26px;
+    transform: translateX(-50%);
+    padding: 2px 5px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--secondary);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.15;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 6;
+  }
+  .timeline-skip-chip .bell-mini { margin-left: 3px; filter: grayscale(1); }
+  .timeline-wrap.custom-events { margin-bottom: 62px; }
+  .overtime-message { color: #c40000 !important; }
+  .timeline-bar.custom-event-bar { overflow: visible; }
+  body.fullscreen .timer-message { font-size: min(2.2vw, 30px); }
+  body.fullscreen .next-event { font-size: min(1.4vw, 20px); }
+  @media (max-width: 900px) {
+    .settings-groups { grid-template-columns: 1fr !important; }
+    .event-table { min-width: 1040px; }
+  }
+
+
 </style>
 </head>
 <body>
@@ -567,7 +750,7 @@
     <div id="settingsPanel" class="settings-panel">
       <div class="settings-groups">
         <div class="settings-group">
-          <div class="settings-group-heading">Basic</div>
+          <div id="basicGroupHeading" class="settings-group-heading">Basic</div>
           <div class="settings-group-body basic-body">
             <div class="compact-options settings-top-row">
               <div class="option-group">
@@ -590,76 +773,51 @@
               <label><input id="saveSettings" type="checkbox" checked> <span id="saveSettingsLabel">Save settings</span></label>
               <label><input id="enableTimelineControl" type="checkbox"> <span id="timelineControlLabel">Enable timeline control</span></label>
             </div>
-          </div>
-        
-      <div class="clear-settings-row">
-        <button id="clearSavedSettingsBtn" class="clear-settings-btn" type="button" data-i18n="clearSavedSettings">Clear saved settings</button>
-      </div>
-</div>
-
-        <div class="settings-group">
-<div id="timeGroupHeading" class="settings-group-heading">Time</div>
-          <div class="settings-group-body">
-            <section class="settings time-settings">
-              <div class="setting">
-                <div id="presentationSettingLabel" class="setting-title">Presentation (min)</div>
-                <div class="stepper">
-                  <button type="button" data-target="presentation" data-delta="-1">−</button>
-                  <input id="presentation" type="number" min="0" value="10">
-                  <button type="button" data-target="presentation" data-delta="1">＋</button>
-                </div>
-              </div>
-              <div class="setting">
-                <div id="qaSettingLabel" class="setting-title">Q&amp;A (min)</div>
-                <div class="stepper">
-                  <button type="button" data-target="qa" data-delta="-1">−</button>
-                  <input id="qa" type="number" min="0" value="5">
-                  <button type="button" data-target="qa" data-delta="1">＋</button>
-                </div>
-              </div>
-              <div class="setting">
-                <div id="firstBellSettingLabel" class="setting-title">1st Bell (min from start)</div>
-                <div class="stepper">
-                  <button type="button" data-target="firstBell" data-delta="-1">−</button>
-                  <input id="firstBell" type="number" min="0" value="9">
-                  <button type="button" data-target="firstBell" data-delta="1">＋</button>
-                </div>
-              </div>
-              <div class="setting">
-                <div id="otAlertSettingLabel" class="setting-title">OT Alert (min after)</div>
-                <div class="stepper">
-                  <button type="button" data-target="overtimeAlert" data-delta="-1">−</button>
-                  <input id="overtimeAlert" type="number" min="0" value="3">
-                  <button type="button" data-target="overtimeAlert" data-delta="1">＋</button>
-                </div>
-              </div>
-            </section>
+            <div class="manual-bell-setting">
+              <label for="manualBellCount" id="manualBellLabel">Manual bell count</label>
+              <input id="manualBellCount" type="number" min="1" max="99" step="1" value="4" inputmode="numeric">
+            </div>
+            <div class="clear-settings-row">
+              <button id="clearSavedSettingsBtn" class="clear-settings-btn" type="button">Clear saved settings</button>
+            </div>
           </div>
         </div>
 
-        <div class="settings-group bell-group">
-          <div id="bellGroupHeading" class="settings-group-heading">Bell Count</div>
+        <div class="settings-group event-group">
+          <div id="eventsGroupHeading" class="settings-group-heading">Events</div>
           <div class="settings-group-body">
-            <aside class="bell-sidebar" aria-label="Bell count settings">
-              <div class="sound-toggle bell-counts">
-                <strong id="bellCountLabel">Bell count:</strong>
-                <label><span id="bellFirstLabel">1st</span> <input id="bellCountFirst" type="number" min="0" max="99" step="1" value="1" inputmode="numeric"></label>
-                <label><span id="bellQALabel">Q&amp;A</span> <input id="bellCountQA" type="number" min="0" max="99" step="1" value="2" inputmode="numeric"></label>
-                <label><span id="bellOverLabel">Overtime</span> <input id="bellCountOver" type="number" min="0" max="99" step="1" value="3" inputmode="numeric"></label>
-                <label><span id="bellOTAlertLabel">OT Alert</span> <input id="bellCountOverAlert" type="number" min="0" max="99" step="1" value="4" inputmode="numeric"></label>
-                <label><span id="bellManualLabel">Manual</span> <input id="manualBellCount" type="number" min="1" step="1" value="4" inputmode="numeric"></label>
-              </div>
-            </aside>
+            <div class="event-table-wrap">
+              <table class="event-table" aria-label="Timer events">
+                <thead>
+                  <tr>
+                    <th id="timeColumnLabel">Time (min)</th>
+                    <th id="bellColumnLabel">Bell count</th>
+                    <th id="skipForCountdownColumnLabel">Skip for Countdown</th>
+                    <th id="titleColumnLabel">Title</th>
+                    <th id="messageColumnLabel">Message</th>
+                    <th id="overtimeColumnLabel">Overtime</th>
+                    <th id="sessionEndColumnLabel">Session End</th>
+                    <th id="actionsColumnLabel">Order</th>
+                  </tr>
+                </thead>
+                <tbody id="eventRows"></tbody>
+              </table>
+            </div>
+            <div class="add-event-row">
+              <button id="addEventBtn" class="add-event-btn" type="button">＋ Add Event</button>
+            </div>
+            <div id="scheduleHint" class="schedule-hint">Time is measured from the timer start. Bell count 0 means no bell.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-<main class="timer-area">
+  <main class="timer-area">
     <div class="time-layout">
       <div class="primary-panel">
-        <div id="timerTitle" class="timer-title">Remaining Time</div>
-        <div id="timeDisplay" class="time">10:00</div>
+        <div id="timerTitle" class="timer-title">Presentation</div>
+        <div id="timerMessage" class="timer-message">Presentation in progress</div>
+        <div id="timeDisplay" class="time">09:00</div>
       </div>
       <div id="secondaryPanel" class="secondary-panel">
         <div id="secondaryLabel" class="secondary-label">Elapsed</div>
@@ -667,23 +825,16 @@
       </div>
     </div>
 
-    <div class="timeline-wrap" aria-label="Presentation timeline">
+    <div class="timeline-wrap custom-events" aria-label="Presentation timeline">
+      <div id="nextEventLabel" class="next-event"></div>
       <div class="timeline-labels">
         <span id="startLabel" class="timeline-label start">0</span>
-        <span id="qaBoundaryLabel" class="timeline-label">10 min</span>
-        <span id="endLabel" class="timeline-label end">15 min</span>
+        <span id="endLabel" class="timeline-label end">18 min</span>
       </div>
-      <div id="timelineBar" class="timeline-bar">
-        <div id="presentationSegment" class="timeline-presentation"></div>
-        <div id="qaSegment" class="timeline-qa"></div>
+      <div id="timelineBar" class="timeline-bar custom-event-bar">
         <div id="timelineProgress" class="timeline-progress"></div>
-        <div id="firstBellTick" class="timeline-bell" aria-label="First bell marker"></div>
-        <div id="qaInsideLabel" class="timeline-qa-inside">Q&amp;A</div>
+        <div id="eventMarkers"></div>
         <div id="timelineMarker" class="timeline-marker"></div>
-      </div>
-      <div class="timeline-phase">
-        <span id="presentationLabel">Presentation</span>
-        <span id="qaLabel" class="inactive">Q&amp;A</span>
       </div>
     </div>
 
@@ -711,47 +862,43 @@
 
 <script>
 (() => {
-  const presentationInput = document.getElementById('presentation');
-  const qaInput = document.getElementById('qa');
-  const firstBellInput = document.getElementById('firstBell');
-  const overtimeAlertInput = document.getElementById('overtimeAlert');
   const timeDisplay = document.getElementById('timeDisplay');
   const timerTitle = document.getElementById('timerTitle');
+  const timerMessage = document.getElementById('timerMessage');
   const secondaryLabel = document.getElementById('secondaryLabel');
   const secondaryDisplay = document.getElementById('secondaryDisplay');
+  const nextEventLabel = document.getElementById('nextEventLabel');
   const startBtn = document.getElementById('startBtn');
   const resetBtn = document.getElementById('resetBtn');
   const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const manualBellBtn = document.getElementById('manualBellBtn');
+  const manualBellCountInput = document.getElementById('manualBellCount');
   const clearSavedSettingsBtn = document.getElementById('clearSavedSettingsBtn');
-  const presentationLabel = document.getElementById('presentationLabel');
-  const qaLabel = document.getElementById('qaLabel');
-  const startLabel = document.getElementById('startLabel');
-  const qaBoundaryLabel = document.getElementById('qaBoundaryLabel');
-  const endLabel = document.getElementById('endLabel');
-  const qaInsideLabel = document.getElementById('qaInsideLabel');
-  const presentationSegment = document.getElementById('presentationSegment');
-  const qaSegment = document.getElementById('qaSegment');
+  const eventRows = document.getElementById('eventRows');
+  const addEventBtn = document.getElementById('addEventBtn');
+  const timelineBar = document.getElementById('timelineBar');
   const timelineProgress = document.getElementById('timelineProgress');
   const timelineMarker = document.getElementById('timelineMarker');
-  const timelineBar = document.getElementById('timelineBar');
+  const eventMarkers = document.getElementById('eventMarkers');
+  const startLabel = document.getElementById('startLabel');
+  const endLabel = document.getElementById('endLabel');
   const enableTimelineControl = document.getElementById('enableTimelineControl');
-  const firstBellTick = document.getElementById('firstBellTick');
+  const settingsShell = document.getElementById('settingsShell');
+  const settingsToggle = document.getElementById('settingsToggle');
+  const saveSettingsCheckbox = document.getElementById('saveSettings');
   const countModeInputs = document.querySelectorAll('input[name="countMode"]');
   const themeModeInputs = document.querySelectorAll('input[name="themeMode"]');
   const languageModeInputs = document.querySelectorAll('input[name="languageMode"]');
-  const settingsShell = document.getElementById('settingsShell');
-  const settingsToggle = document.getElementById('settingsToggle');
-  const settingsPanel = document.getElementById('settingsPanel');
-  const saveSettingsCheckbox = document.getElementById('saveSettings');
 
-  const manualBellBtn = document.getElementById('manualBellBtn');
-  const manualBellCountInput = document.getElementById('manualBellCount');
-  const bellCountFirstInput = document.getElementById('bellCountFirst');
-  const bellCountQAInput = document.getElementById('bellCountQA');
-  const bellCountOverInput = document.getElementById('bellCountOver');
-  const bellCountOverAlertInput = document.getElementById('bellCountOverAlert');
-  const soundModeInputs = document.querySelectorAll('input[name="soundMode"]');
+  const DEFAULT_EVENTS = [
+    { time: 0,  bell: 0, skipForCountdown: false, title: 'Presentation', message: 'Presentation in progress', overtime: false, sessionEnd: false },
+    { time: 9,  bell: 1, skipForCountdown: true,  title: '1st Bell', message: '1 minute remaining', overtime: false, sessionEnd: false },
+    { time: 10, bell: 2, skipForCountdown: false, title: 'Q&A', message: 'Q&A time', overtime: false, sessionEnd: false },
+    { time: 15, bell: 3, skipForCountdown: false, title: 'Overtime', message: 'Scheduled time is over', overtime: true, sessionEnd: true },
+    { time: 18, bell: 4, skipForCountdown: false, title: 'OT Alert', message: '3 minutes overtime', overtime: true, sessionEnd: false }
+  ];
 
+  let events = DEFAULT_EVENTS.map((e, i) => ({ ...e, id: makeId(i) }));
   let running = false;
   let elapsedBeforeStart = 0;
   let startedAt = null;
@@ -760,600 +907,390 @@
   let audioCtx = null;
   let draggingTimeline = false;
   let wakeLock = null;
-
-
   let language = 'en';
+
+  const SETTINGS_KEY = 'presentationTimerSettingsV34';
 
   const i18n = {
     en: {
-      settings: 'Settings', basic: 'Basic', time: 'Time', bellCountHeading: 'Bell Count',
-      count: 'Count:', down: 'Down', up: 'Up', theme: 'Theme:', light: 'Light', dark: 'Dark', language: 'Language:',
-      save: 'Save settings', timelineControl: 'Enable timeline control',
-      presentationMin: 'Presentation (min)', qaMin: 'Q&A (min)', firstBellMin: '1st Bell (min from start)', otAlertMin: 'OT Alert (min after)',
-      bellCount: 'Bell count:', first: '1st', qa: 'Q&A', overtime: 'Overtime', otAlert: 'OT Alert', manual: 'Manual',
-      remainingTime: 'Remaining Time', presentationTime: 'Presentation Time', remaining: 'Remaining', elapsed: 'Elapsed',
-      qaTime: 'Q&A Time', qaRemaining: 'Q&A Remaining', totalElapsed: 'Total Elapsed', presentation: 'Presentation',
-      start: 'Start', pause: 'Pause', reset: 'Reset', fullscreen: 'Fullscreen', exitFullscreen: 'Exit Fullscreen', ring: 'Ring',
-      clearSavedSettings: 'Clear saved settings',
-      footer: 'Offline Presentation Timer', min: 'min'
+      settings:'Settings', basic:'Basic', events:'Events', count:'Count:', down:'Down', up:'Up', theme:'Theme:', light:'Light', dark:'Dark', language:'Language:',
+      save:'Save settings', timelineControl:'Enable timeline control', manualBell:'Manual bell count', clear:'Clear saved settings',
+      timeCol:'Time (min)', bellCol:'Bell count', skipForCountdownCol:'Skip for Countdown', titleCol:'Title', messageCol:'Message', overtimeCol:'Overtime', sessionEndCol:'Session End', actionsCol:'Order', addEvent:'＋ Add Event',
+      hint:'Time is measured from the timer start. Skip for Countdown ignores an event as a countdown target. Session End sets the maximum time shown on the timeline; later overtime events still work but are not shown on the bar. Bell count 0 means no bell.', elapsed:'Elapsed', remaining:'Remaining', next:'Next', noMore:'No more scheduled events',
+      start:'Start', pause:'Pause', reset:'Reset', fullscreen:'Fullscreen', exitFullscreen:'Exit Fullscreen', ring:'Ring', min:'min',
+      defaultTitle:'Timer', defaultMessage:'Waiting for the first event'
     },
     ja: {
-      settings: '設定', basic: '基本', time: '時間', bellCountHeading: 'ベル回数',
-      count: '表示:', down: '残り時間', up: '経過時間', theme: 'テーマ:', light: 'ライト', dark: 'ダーク', language: '言語:',
-      save: '設定を保存', timelineControl: 'タイムライン操作を有効化',
-      presentationMin: '発表時間（分）', qaMin: '質疑応答（分）', firstBellMin: '1stベル（開始から・分）', otAlertMin: '超過警告（超過後・分）',
-      bellCount: 'ベル回数:', first: '1st', qa: '質疑', overtime: '時間超過', otAlert: '超過警告', manual: '手動',
-      remainingTime: '残り時間', presentationTime: '発表経過時間', remaining: '残り', elapsed: '経過',
-      qaTime: '質疑応答時間', qaRemaining: '質疑応答 残り', totalElapsed: '総経過時間', presentation: '発表',
-      start: '開始', pause: '一時停止', reset: 'リセット', fullscreen: '全画面', exitFullscreen: '全画面を終了', ring: 'ベルを鳴らす',
-      footer: 'オフライン発表タイマー', min: '分'
+      settings:'設定', basic:'基本', events:'イベント', count:'表示:', down:'残り時間', up:'経過時間', theme:'テーマ:', light:'ライト', dark:'ダーク', language:'言語:',
+      save:'設定を保存', timelineControl:'タイムライン操作を有効化', manualBell:'手動ベル回数', clear:'保存設定をクリア',
+      timeCol:'時間（分）', bellCol:'ベル回数', skipForCountdownCol:'カウント対象外', titleCol:'タイトル', messageCol:'メッセージ', overtimeCol:'超過', sessionEndCol:'セッション終了', actionsCol:'順番', addEvent:'＋ イベントを追加',
+      hint:'時間はタイマー開始からの経過分です。カウント対象外はカウントダウン基準から除外します。セッション終了にチェックしたイベントがタイムラインの最大時刻になり、それ以降の超過イベントは動作しますがバーには表示しません。ベル回数を0にすると鳴りません。', elapsed:'経過', remaining:'残り', next:'次', noMore:'この先のイベントはありません',
+      start:'開始', pause:'一時停止', reset:'リセット', fullscreen:'全画面', exitFullscreen:'全画面を終了', ring:'ベルを鳴らす', min:'分',
+      defaultTitle:'タイマー', defaultMessage:'最初のイベントを待っています'
     }
   };
 
   function t(key) { return i18n[language][key] ?? i18n.en[key] ?? key; }
-
-  function applyLanguage(lang) {
-    language = lang === 'ja' ? 'ja' : 'en';
-    document.documentElement.lang = language === 'ja' ? 'ja' : 'en';
-    document.title = language === 'ja' ? '発表タイマー' : 'Presentation Timer';
-    const text = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t(key); };
-    text('settingsToggle', 'settings');
-    const heads = document.querySelectorAll('.settings-group-heading');
-    if (heads[0]) heads[0].textContent = t('basic');
-    text('timeGroupHeading', 'time');
-    text('bellGroupHeading', 'bellCountHeading');
-    text('countLabel', 'count'); text('countDownLabel', 'down'); text('countUpLabel', 'up');
-    text('themeLabel', 'theme'); text('lightLabel', 'light'); text('darkLabel', 'dark'); text('languageLabel', 'language');
-    text('saveSettingsLabel', 'save'); text('timelineControlLabel', 'timelineControl');
-    text('presentationSettingLabel', 'presentationMin'); text('qaSettingLabel', 'qaMin');
-    text('firstBellSettingLabel', 'firstBellMin'); text('otAlertSettingLabel', 'otAlertMin');
-    text('bellCountLabel', 'bellCount'); text('bellFirstLabel', 'first'); text('bellQALabel', 'qa');
-    text('bellOverLabel', 'overtime'); text('bellOTAlertLabel', 'otAlert'); text('bellManualLabel', 'manual');
-    text('qaInsideLabel', 'qa'); text('presentationLabel', 'presentation'); text('qaLabel', 'qa');
-    text('resetBtn', 'reset'); text('manualBellBtn', 'ring'); text('footerLabel', 'footer');
-    fullscreenBtn.textContent = document.fullscreenElement ? t('exitFullscreen') : t('fullscreen');
-    startBtn.textContent = running ? t('pause') : t('start');
-    update();
-    persistSettings();
+  function makeId(seed='') { return 'ev_' + Date.now().toString(36) + '_' + seed + '_' + Math.random().toString(36).slice(2,8); }
+  function num(v, fallback=0) { const n = Number(v); return Number.isFinite(n) ? Math.max(0, n) : fallback; }
+  function bellNum(v) { return Math.max(0, Math.min(99, Math.floor(num(v, 0)))); }
+  function getCountMode() { return document.querySelector('input[name="countMode"]:checked')?.value || 'down'; }
+  function getElapsed() { return elapsedBeforeStart + (running ? (performance.now() - startedAt) / 1000 : 0); }
+  function formatTime(seconds) { const s = Math.max(0, Math.floor(seconds)); return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); }
+  function sortedEvents() { return [...events].sort((a,b) => num(a.time)-num(b.time) || events.indexOf(a)-events.indexOf(b)); }
+  function scheduleEndSeconds() {
+    const s = sortedEvents();
+    const marked = s.find(ev => ev.sessionEnd);
+    return marked ? num(marked.time)*60 : (s.length ? num(s[s.length-1].time)*60 : 0);
   }
 
-  function setSettingsOpen(open) {
-    settingsShell.classList.toggle('open', open);
-    settingsToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-  }
-
-  async function requestWakeLock() {
-    if (!('wakeLock' in navigator) || !running || document.visibilityState !== 'visible') return;
-    try {
-      if (!wakeLock) {
-        wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => { wakeLock = null; });
-      }
-    } catch (_) {}
-  }
-
-  async function releaseWakeLock() {
-    if (!wakeLock) return;
-    try { await wakeLock.release(); } catch (_) {}
-    wakeLock = null;
-  }
-
-  const SETTINGS_KEY = 'presentationTimerSettingsV29';
-
-  function collectSettings() {
-    return {
-      presentation: value(presentationInput),
-      qa: value(qaInput),
-      firstBell: value(firstBellInput),
-      overtimeAlert: value(overtimeAlertInput),
-      bellCountFirst: getBellCount(bellCountFirstInput),
-      bellCountQA: getBellCount(bellCountQAInput),
-      bellCountOver: getBellCount(bellCountOverInput),
-      bellCountOverAlert: getBellCount(bellCountOverAlertInput),
-      countMode: getCountMode(),
-      language,
-      manualBellCount: getManualBellCount()
-    };
-  }
-
-  function persistSettings() {
-    try {
-      localStorage.setItem('presentationTimerSaveSettings', saveSettingsCheckbox.checked ? '1' : '0');
-      if (saveSettingsCheckbox.checked) localStorage.setItem(SETTINGS_KEY, JSON.stringify(collectSettings()));
-      else localStorage.removeItem(SETTINGS_KEY);
-    } catch (_) {}
-  }
-
-  function restoreSettings() {
-    try {
-      const savedPreference = localStorage.getItem('presentationTimerSaveSettings');
-      saveSettingsCheckbox.checked = savedPreference !== '0';
-      if (!saveSettingsCheckbox.checked) return;
-      const raw = localStorage.getItem(SETTINGS_KEY);
-      if (!raw) return;
-      const st = JSON.parse(raw);
-      if (Number.isFinite(st.presentation)) presentationInput.value = st.presentation;
-      if (Number.isFinite(st.qa)) qaInput.value = st.qa;
-      if (Number.isFinite(st.firstBell)) firstBellInput.value = st.firstBell;
-      if (Number.isFinite(st.overtimeAlert)) overtimeAlertInput.value = st.overtimeAlert;
-      if (Number.isFinite(st.bellCountFirst)) bellCountFirstInput.value = clampBellCount(st.bellCountFirst);
-      else if (typeof st.soundFirst === 'boolean') bellCountFirstInput.value = st.soundFirst ? 1 : 0;
-      if (Number.isFinite(st.bellCountQA)) bellCountQAInput.value = clampBellCount(st.bellCountQA);
-      else if (typeof st.soundQA === 'boolean') bellCountQAInput.value = st.soundQA ? 2 : 0;
-      if (Number.isFinite(st.bellCountOver)) bellCountOverInput.value = clampBellCount(st.bellCountOver);
-      else if (typeof st.soundOver === 'boolean') bellCountOverInput.value = st.soundOver ? 3 : 0;
-      if (Number.isFinite(st.bellCountOverAlert)) bellCountOverAlertInput.value = clampBellCount(st.bellCountOverAlert);
-      else if (typeof st.soundOverAlert === 'boolean') bellCountOverAlertInput.value = st.soundOverAlert ? 4 : 0;
-      if (st.countMode === 'down' || st.countMode === 'up') {
-        const r = document.querySelector(`input[name="countMode"][value="${st.countMode}"]`);
-        if (r) r.checked = true;
-      }
-      if (st.language === 'en' || st.language === 'ja') {
-        const lr = document.querySelector(`input[name="languageMode"][value="${st.language}"]`);
-        if (lr) lr.checked = true;
-        language = st.language;
-      }
-      if (Number.isFinite(st.manualBellCount)) manualBellCountInput.value = Math.max(1, Math.min(99, Math.floor(st.manualBellCount)));
-    } catch (_) {}
-  }
-
-
-  function applyTheme(theme) {
-    document.body.classList.toggle('dark', theme === 'dark');
-    try { localStorage.setItem('presentationTimerTheme', theme); } catch (_) {}
-  }
-
-  try {
-    const savedTheme = localStorage.getItem('presentationTimerTheme');
-    if (savedTheme === 'light' || savedTheme === 'dark') {
-      const radio = document.querySelector(`input[name="themeMode"][value="${savedTheme}"]`);
-      if (radio) radio.checked = true;
-      applyTheme(savedTheme);
-    } else {
-      applyTheme('dark');
-    }
-  } catch (_) {
-    applyTheme('dark');
-  }
-
-  function value(el) {
-    return Math.max(0, Number(el.value) || 0);
-  }
-
-  function getElapsed() {
-    return elapsedBeforeStart + (running ? (performance.now() - startedAt) / 1000 : 0);
-  }
-
-  function formatTime(seconds) {
-    const s = Math.max(0, Math.floor(seconds));
-    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
-  }
-
-  async function ensureAudio() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state !== 'running') {
-      try { await audioCtx.resume(); } catch (_) {}
-    }
-    return audioCtx.state === 'running';
-  }
-
-  // Synthesized metal bell — no MP3/WAV required.
-  // Several slightly inharmonic sine partials with different decay times
-  // create a short "ding" followed by a natural metallic ring.
-  function bellStrike(start) {
-    const master = audioCtx.createGain();
-    master.gain.setValueAtTime(0.0001, start);
-    master.gain.exponentialRampToValueAtTime(0.62, start + 0.004);
-    master.gain.exponentialRampToValueAtTime(0.0001, start + 1.65);
-    master.connect(audioCtx.destination);
-
-    const partials = [
-      { f: 740,  g: 0.24, d: 1.55 },
-      { f: 1112, g: 0.17, d: 1.18 },
-      { f: 1493, g: 0.12, d: 0.92 },
-      { f: 2058, g: 0.08, d: 0.66 },
-      { f: 2785, g: 0.045, d: 0.42 }
-    ];
-
-    partials.forEach(({ f, g, d }) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(f, start);
-      gain.gain.setValueAtTime(0.0001, start);
-      gain.gain.exponentialRampToValueAtTime(g, start + 0.003);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + d);
-      osc.connect(gain).connect(master);
-      osc.start(start);
-      osc.stop(start + d + 0.04);
+  function renderEventRows() {
+    eventRows.innerHTML = '';
+    events.forEach((ev, index) => {
+      const tr = document.createElement('tr');
+      tr.className = 'event-row';
+      tr.dataset.id = ev.id;
+      tr.innerHTML = `
+        <td><input class="event-time" type="number" min="0" step="0.1" inputmode="decimal" value="${escapeAttr(ev.time)}" aria-label="Time in minutes"></td>
+        <td><input class="event-bell" type="number" min="0" max="99" step="1" inputmode="numeric" value="${escapeAttr(ev.bell)}" aria-label="Bell count"></td>
+        <td class="event-skip-for-countdown-cell"><input class="event-skip-for-countdown" type="checkbox" ${ev.skipForCountdown ? 'checked' : ''} aria-label="Skip for countdown"></td>
+        <td><input class="event-title" type="text" value="${escapeAttr(ev.title)}" aria-label="Title"></td>
+        <td><input class="event-message" type="text" value="${escapeAttr(ev.message)}" aria-label="Message"></td>
+        <td class="event-overtime-cell"><input class="event-overtime" type="checkbox" ${ev.overtime ? 'checked' : ''} aria-label="Overtime style"></td>
+        <td class="event-session-end-cell"><input class="event-session-end" type="checkbox" ${ev.sessionEnd ? 'checked' : ''} aria-label="Session end"></td>
+        <td><div class="event-actions">
+          <button type="button" class="move-up" title="Move up" aria-label="Move up">↑</button>
+          <button type="button" class="move-down" title="Move down" aria-label="Move down">↓</button>
+          <button type="button" class="delete-event" title="Delete" aria-label="Delete">×</button>
+        </div></td>`;
+      tr.querySelector('.move-up').disabled = index === 0;
+      tr.querySelector('.move-down').disabled = index === events.length - 1;
+      eventRows.appendChild(tr);
     });
-
-    // Very short high-frequency attack to mimic the bell's striker.
-    const click = audioCtx.createOscillator();
-    const clickGain = audioCtx.createGain();
-    click.type = 'triangle';
-    click.frequency.setValueAtTime(3300, start);
-    clickGain.gain.setValueAtTime(0.11, start);
-    clickGain.gain.exponentialRampToValueAtTime(0.0001, start + 0.045);
-    click.connect(clickGain).connect(master);
-    click.start(start);
-    click.stop(start + 0.055);
+    renderTimelineMarkers();
   }
 
-  async function ring(times) {
-    const ready = await ensureAudio();
-    if (!ready || times <= 0) return;
-    const base = audioCtx.currentTime + 0.04;
-    // All repeated bells use a fixed 4 Hz cadence (0.25 s between strikes).
-    const interval = 0.25;
-    for (let i = 0; i < times; i++) bellStrike(base + i * interval);
+  function escapeAttr(value) {
+    return String(value ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  function getCountMode() {
-    return document.querySelector('input[name="countMode"]:checked').value;
+  function syncEventsFromDom() {
+    const byId = new Map(events.map(e => [e.id, e]));
+    [...eventRows.querySelectorAll('.event-row')].forEach(row => {
+      const ev = byId.get(row.dataset.id);
+      if (!ev) return;
+      ev.time = num(row.querySelector('.event-time').value, 0);
+      ev.bell = bellNum(row.querySelector('.event-bell').value);
+      ev.skipForCountdown = row.querySelector('.event-skip-for-countdown').checked;
+      ev.title = row.querySelector('.event-title').value;
+      ev.message = row.querySelector('.event-message').value;
+      ev.overtime = row.querySelector('.event-overtime').checked;
+      ev.sessionEnd = row.querySelector('.event-session-end').checked;
+    });
   }
 
-  function setPhaseState(inPresentation, inQA, qaExists) {
-    presentationLabel.classList.toggle('inactive', !inPresentation);
-    qaLabel.classList.toggle('inactive', !inQA);
-    if (!qaExists) {
-      presentationLabel.classList.remove('inactive');
-      qaLabel.classList.add('inactive');
+  function renderTimelineMarkers() {
+    if (!eventMarkers) return;
+    eventMarkers.innerHTML = '';
+    const end = scheduleEndSeconds();
+    const denom = Math.max(end, 1);
+    sortedEvents().forEach(ev => {
+      const sec = num(ev.time)*60;
+      if (sec > end + 1e-6) return;
+      const pct = Math.min(100, Math.max(0, sec/denom*100));
+      const marker = document.createElement('div');
+      marker.className = 'timeline-event-marker'
+        + (bellNum(ev.bell)>0 && !ev.skipForCountdown ? ' has-bell' : '')
+        + (ev.skipForCountdown ? ' is-skipped' : '');
+      marker.style.left = `${pct}%`;
+      marker.title = `${ev.time} min · ${ev.title || 'Event'} · ${ev.bell} bell(s)`;
+      eventMarkers.appendChild(marker);
+
+      // Countdown targets get a normal time label on the bar and the event title below it.
+      if (!ev.skipForCountdown && sec > 0 && sec < end) {
+        const timeLabel = document.createElement('div');
+        timeLabel.className = 'timeline-event-time';
+        timeLabel.style.left = `${pct}%`;
+        timeLabel.textContent = `${ev.time} ${t('min')}`;
+        eventMarkers.appendChild(timeLabel);
+
+        if (ev.title) {
+          const label = document.createElement('div');
+          label.className = 'timeline-event-label';
+          label.style.left = `${pct}%`;
+          label.textContent = ev.title;
+          eventMarkers.appendChild(label);
+        }
+      }
+
+      // Skipped events are intentionally lightweight: a small chip above the bar.
+      if (ev.skipForCountdown && sec > 0 && sec < end) {
+        const chip = document.createElement('div');
+        chip.className = 'timeline-skip-chip';
+        chip.style.left = `${pct}%`;
+        chip.innerHTML = `${escapeAttr(ev.time)} ${t('min')}${bellNum(ev.bell)>0 ? '<span class="bell-mini">🔔</span>' : ''}`;
+        chip.title = ev.title || 'Skipped countdown event';
+        eventMarkers.appendChild(chip);
+      }
+    });
+  }
+
+  function getState(elapsed) {
+    const s = sortedEvents();
+    let current = null;
+    let nextEvent = null;
+    let nextTarget = null;
+    for (const ev of s) {
+      const sec = num(ev.time)*60;
+      if (sec <= elapsed + 1e-6) current = ev;
+      else {
+        if (!nextEvent) nextEvent = ev;
+        if (!nextTarget && !ev.skipForCountdown) nextTarget = ev;
+      }
     }
+    return { current, nextEvent, nextTarget, sorted:s };
   }
 
   function update() {
     const elapsed = getElapsed();
     const mode = getCountMode();
-    const p = value(presentationInput) * 60;
-    const q = value(qaInput) * 60;
-    const b1 = value(firstBellInput) * 60;
-    const overAlertDelay = value(overtimeAlertInput) * 60;
-    const total = p + q;
-    const overAlertAt = total + overAlertDelay;
+    const end = scheduleEndSeconds();
+    const { current, nextEvent, nextTarget } = getState(elapsed);
 
-    const qaPct = total > 0 ? (p / total) * 100 : 100;
-    const qaMidPct = total > 0 && q > 0 ? (p + q / 2) / total * 100 : 100;
-    const progressPct = total > 0 ? Math.min(100, Math.max(0, elapsed / total * 100)) : 0;
-    presentationSegment.style.width = `${qaPct}%`;
-    qaSegment.style.width = `${Math.max(0, 100 - qaPct)}%`;
-    startLabel.textContent = '0';
-    qaBoundaryLabel.textContent = `${Math.round(p / 60)} ${t('min')}`;
-    endLabel.textContent = `${Math.round(total / 60)} ${t('min')}`;
-    qaBoundaryLabel.style.left = `${qaPct}%`;
-    qaBoundaryLabel.style.display = q > 0 ? 'block' : 'none';
-    qaInsideLabel.style.left = `${qaMidPct}%`;
-    qaInsideLabel.style.display = q > 0 ? 'block' : 'none';
-    timelineProgress.style.width = `${progressPct}%`;
-    timelineMarker.style.left = `${progressPct}%`;
-    const bellPct = total > 0 ? Math.min(100, Math.max(0, b1 / total * 100)) : 0;
-    firstBellTick.style.left = `${bellPct}%`;
-    const showBell = b1 > 0 && b1 < total;
-    firstBellTick.style.display = showBell ? 'block' : 'none';
+    timerTitle.textContent = current?.title || t('defaultTitle');
+    timerMessage.textContent = current?.message || t('defaultMessage');
 
-    timerTitle.classList.remove('qa-title', 'overtime');
-    timeDisplay.classList.remove('overtime');
-    secondaryDisplay.classList.remove('overtime');
-    timeDisplay.classList.remove('ending-soon');
+    const isOvertime = !!current?.overtime;
+    timerTitle.classList.toggle('overtime', isOvertime);
+    timeDisplay.classList.toggle('overtime', isOvertime);
+    timerMessage.classList.toggle('overtime-message', isOvertime);
 
-    // Visual warning during the final 5 seconds before the presentation ends
-    // and during the final 5 seconds before the overall scheduled end.
-    const presentationEndingSoon = p > 0 && q > 0 && elapsed >= Math.max(0, p - 5) && elapsed < p;
-    const overallEndingSoon = total > 0 && elapsed >= Math.max(0, total - 5) && elapsed < total;
-    if (presentationEndingSoon || overallEndingSoon) {
-      timeDisplay.classList.add('ending-soon');
-    }
-
-    if (elapsed < p || (p === 0 && elapsed === 0)) {
-      setPhaseState(true, false, q > 0);
-      if (mode === 'up') {
-        timerTitle.textContent = t('presentationTime');
+    if (mode === 'up') {
+      timeDisplay.textContent = formatTime(elapsed);
+      if (nextTarget) {
         secondaryLabel.textContent = t('remaining');
-        timeDisplay.textContent = formatTime(elapsed);
-        secondaryDisplay.textContent = formatTime(Math.max(0, p - elapsed));
+        secondaryDisplay.textContent = formatTime(num(nextTarget.time)*60 - elapsed);
       } else {
-        timerTitle.textContent = t('remainingTime');
         secondaryLabel.textContent = t('elapsed');
-        timeDisplay.textContent = formatTime(Math.max(0, p - elapsed));
         secondaryDisplay.textContent = formatTime(elapsed);
       }
-    } else if (q > 0 && elapsed < total) {
-      setPhaseState(false, true, true);
-      timerTitle.classList.add('qa-title');
-      if (mode === 'up') {
-        timerTitle.textContent = t('qaTime');
-        secondaryLabel.textContent = t('remaining');
-        timeDisplay.textContent = formatTime(elapsed - p);
-        secondaryDisplay.textContent = formatTime(Math.max(0, total - elapsed));
-      } else {
-        timerTitle.textContent = t('qaRemaining');
-        secondaryLabel.textContent = t('elapsed');
-        timeDisplay.textContent = formatTime(Math.max(0, total - elapsed));
-        secondaryDisplay.textContent = formatTime(elapsed - p);
-      }
+    } else if (nextTarget) {
+      timeDisplay.textContent = formatTime(num(nextTarget.time)*60 - elapsed);
+      secondaryLabel.textContent = t('elapsed');
+      secondaryDisplay.textContent = formatTime(elapsed);
+    } else if (end > 0) {
+      timeDisplay.textContent = '+' + formatTime(Math.max(0, elapsed - end));
+      secondaryLabel.textContent = t('elapsed');
+      secondaryDisplay.textContent = formatTime(elapsed);
     } else {
-      setPhaseState(q <= 0, q > 0, q > 0);
-      timerTitle.textContent = t('overtime');
-      timerTitle.classList.add('overtime');
-      const over = Math.max(0, elapsed - total);
-      timeDisplay.textContent = (mode === 'down' ? '-' : '+') + formatTime(over);
-      timeDisplay.classList.add('overtime');
-      secondaryLabel.textContent = t('totalElapsed');
+      timeDisplay.textContent = formatTime(elapsed);
+      secondaryLabel.textContent = t('elapsed');
       secondaryDisplay.textContent = formatTime(elapsed);
     }
 
-    if (running && b1 > 0 && elapsed >= b1 && !fired.has('b1')) {
-      fired.add('b1');
-      const n = getBellCount(bellCountFirstInput);
-      if (n > 0) ring(n);
+    nextEventLabel.textContent = nextEvent
+      ? `${t('next')}: ${nextEvent.title || 'Event'} · ${nextEvent.time} ${t('min')}${nextEvent.bell > 0 ? ` · 🔔×${nextEvent.bell}` : ''}`
+      : t('noMore');
+
+    const denom = Math.max(end, 1);
+    const pct = Math.min(100, Math.max(0, elapsed/denom*100));
+    timelineProgress.style.width = `${pct}%`;
+    timelineMarker.style.left = `${pct}%`;
+    startLabel.textContent = '0';
+    endLabel.textContent = `${Math.round(end/60*10)/10} ${t('min')}`;
+
+    timeDisplay.classList.remove('ending-soon');
+    if (nextTarget) {
+      const remaining = num(nextTarget.time)*60 - elapsed;
+      if (remaining > 0 && remaining <= 5) timeDisplay.classList.add('ending-soon');
     }
 
-    if (running && q > 0 && elapsed >= p && !fired.has('qa')) {
-      fired.add('qa');
-      const n = getBellCount(bellCountQAInput);
-      if (n > 0) ring(n);
-    }
-
-    if (running && elapsed >= total && total > 0 && !fired.has('over')) {
-      fired.add('over');
-      const n = getBellCount(bellCountOverInput);
-      if (n > 0) ring(n);
-    }
-
-    if (running && overAlertDelay > 0 && elapsed >= overAlertAt && total > 0 && !fired.has('overAlert')) {
-      fired.add('overAlert');
-      const n = getBellCount(bellCountOverAlertInput);
-      if (n > 0) ring(n);
+    if (running) {
+      for (const ev of sortedEvents()) {
+        const sec = num(ev.time)*60;
+        const key = ev.id;
+        if (elapsed >= sec && !fired.has(key)) {
+          fired.add(key);
+          if (bellNum(ev.bell) > 0) ring(bellNum(ev.bell));
+        }
+      }
     }
   }
 
   function syncFiredForElapsed(elapsed) {
-    const p = value(presentationInput) * 60;
-    const q = value(qaInput) * 60;
-    const b1 = value(firstBellInput) * 60;
-    const overAlertDelay = value(overtimeAlertInput) * 60;
-    const total = p + q;
     fired.clear();
-    if (b1 > 0 && elapsed >= b1) fired.add('b1');
-    if (q > 0 && elapsed >= p) fired.add('qa');
-    if (total > 0 && elapsed >= total) fired.add('over');
-    if (total > 0 && overAlertDelay > 0 && elapsed >= total + overAlertDelay) fired.add('overAlert');
+    sortedEvents().forEach(ev => { if (elapsed >= num(ev.time)*60) fired.add(ev.id); });
   }
 
+  async function ensureAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state !== 'running') { try { await audioCtx.resume(); } catch (_) {} }
+    return audioCtx.state === 'running';
+  }
+
+  function bellStrike(start) {
+    const master = audioCtx.createGain();
+    master.gain.setValueAtTime(0.0001,start);
+    master.gain.exponentialRampToValueAtTime(0.62,start+0.004);
+    master.gain.exponentialRampToValueAtTime(0.0001,start+1.65);
+    master.connect(audioCtx.destination);
+    [
+      {f:740,g:.24,d:1.55},{f:1112,g:.17,d:1.18},{f:1493,g:.12,d:.92},{f:2058,g:.08,d:.66},{f:2785,g:.045,d:.42}
+    ].forEach(({f,g,d}) => {
+      const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+      osc.type='sine'; osc.frequency.setValueAtTime(f,start);
+      gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(g,start+.003); gain.gain.exponentialRampToValueAtTime(.0001,start+d);
+      osc.connect(gain).connect(master); osc.start(start); osc.stop(start+d+.04);
+    });
+    const click=audioCtx.createOscillator(), clickGain=audioCtx.createGain();
+    click.type='triangle'; click.frequency.setValueAtTime(3300,start); clickGain.gain.setValueAtTime(.11,start); clickGain.gain.exponentialRampToValueAtTime(.0001,start+.045);
+    click.connect(clickGain).connect(master); click.start(start); click.stop(start+.055);
+  }
+
+  async function ring(times) {
+    const ready = await ensureAudio();
+    if (!ready || times <= 0) return;
+    const base = audioCtx.currentTime + .04;
+    for (let i=0;i<times;i++) bellStrike(base + i*.25);
+  }
+
+  async function requestWakeLock() {
+    if (!('wakeLock' in navigator) || !running || document.visibilityState !== 'visible') return;
+    try { if (!wakeLock) { wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>wakeLock=null); } } catch(_){}
+  }
+  async function releaseWakeLock() { if (!wakeLock) return; try { await wakeLock.release(); } catch(_){} wakeLock=null; }
+
+  function collectSettings() {
+    syncEventsFromDom();
+    return { events: events.map(({time,bell,skipForCountdown,title,message,overtime,sessionEnd})=>({time,bell,skipForCountdown,title,message,overtime,sessionEnd})), countMode:getCountMode(), language, manualBellCount:bellNum(manualBellCountInput.value)||1 };
+  }
+  function persistSettings() {
+    try {
+      localStorage.setItem('presentationTimerSaveSettings', saveSettingsCheckbox.checked ? '1':'0');
+      if (saveSettingsCheckbox.checked) localStorage.setItem(SETTINGS_KEY, JSON.stringify(collectSettings()));
+      else localStorage.removeItem(SETTINGS_KEY);
+    } catch(_){}
+  }
+  function restoreSettings() {
+    try {
+      saveSettingsCheckbox.checked = localStorage.getItem('presentationTimerSaveSettings') !== '0';
+      if (!saveSettingsCheckbox.checked) return;
+      const raw=localStorage.getItem(SETTINGS_KEY) || localStorage.getItem('presentationTimerSettingsV33'); if (!raw) return;
+      const st=JSON.parse(raw);
+      if (Array.isArray(st.events) && st.events.length) {
+        events=st.events.map((e,i)=>({time:num(e.time),bell:bellNum(e.bell),skipForCountdown:typeof e.skipForCountdown==='boolean'?e.skipForCountdown:false,title:String(e.title??''),message:String(e.message??''),overtime:!!e.overtime,sessionEnd:!!e.sessionEnd,id:makeId(i)}));
+        if (!events.some(e=>e.sessionEnd)) {
+          const firstOvertime = sortedEvents().find(e=>e.overtime);
+          const fallback = firstOvertime || sortedEvents()[sortedEvents().length-1];
+          if (fallback) fallback.sessionEnd = true;
+        }
+      }
+      if (st.countMode==='up'||st.countMode==='down') document.querySelector(`input[name="countMode"][value="${st.countMode}"]`).checked=true;
+      if (st.language==='en'||st.language==='ja') { language=st.language; const r=document.querySelector(`input[name="languageMode"][value="${language}"]`); if(r)r.checked=true; }
+      if (Number.isFinite(st.manualBellCount)) manualBellCountInput.value=Math.max(1,bellNum(st.manualBellCount));
+    } catch(_){}
+  }
+
+  function applyTheme(theme) {
+    document.body.classList.toggle('dark', theme==='dark');
+    try { localStorage.setItem('presentationTimerTheme', theme); } catch(_){}
+  }
+  function applyLanguage(lang) {
+    language = lang==='ja' ? 'ja':'en';
+    document.documentElement.lang = language==='ja' ? 'ja':'en';
+    document.title = language==='ja' ? '発表タイマー':'Presentation Timer';
+    const set=(id,key)=>{ const el=document.getElementById(id); if(el)el.textContent=t(key); };
+    set('settingsToggle','settings'); set('basicGroupHeading','basic'); set('eventsGroupHeading','events'); set('countLabel','count'); set('countDownLabel','down'); set('countUpLabel','up');
+    set('themeLabel','theme'); set('lightLabel','light'); set('darkLabel','dark'); set('languageLabel','language'); set('saveSettingsLabel','save'); set('timelineControlLabel','timelineControl');
+    set('manualBellLabel','manualBell'); set('clearSavedSettingsBtn','clear'); set('timeColumnLabel','timeCol'); set('bellColumnLabel','bellCol'); set('skipForCountdownColumnLabel','skipForCountdownCol'); set('titleColumnLabel','titleCol'); set('messageColumnLabel','messageCol'); set('overtimeColumnLabel','overtimeCol'); set('sessionEndColumnLabel','sessionEndCol'); set('actionsColumnLabel','actionsCol'); set('addEventBtn','addEvent'); set('scheduleHint','hint');
+    startBtn.textContent=running?t('pause'):t('start'); resetBtn.textContent=t('reset'); fullscreenBtn.textContent=document.fullscreenElement?t('exitFullscreen'):t('fullscreen'); manualBellBtn.textContent=t('ring');
+    update(); persistSettings();
+  }
+
+  function setSettingsOpen(open) { settingsShell.classList.toggle('open',open); settingsToggle.setAttribute('aria-expanded',open?'true':'false'); }
+  function setTimelineEditable(enabled) { timelineBar.classList.toggle('timeline-editable',enabled); timelineMarker.setAttribute('aria-disabled',String(!enabled)); }
   function seekTimelineFromClientX(clientX) {
     if (!enableTimelineControl.checked) return;
-    const p = value(presentationInput) * 60;
-    const q = value(qaInput) * 60;
-    const total = p + q;
-    if (total <= 0) return;
-
-    const rect = timelineBar.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-    const newElapsed = ratio * total;
-
-    elapsedBeforeStart = newElapsed;
-    if (running) startedAt = performance.now();
-    syncFiredForElapsed(newElapsed);
-    update();
+    const end=scheduleEndSeconds(); if(end<=0)return;
+    const rect=timelineBar.getBoundingClientRect(); const ratio=Math.min(1,Math.max(0,(clientX-rect.left)/rect.width)); const newElapsed=ratio*end;
+    elapsedBeforeStart=newElapsed; if(running)startedAt=performance.now(); syncFiredForElapsed(newElapsed); update();
   }
+  function loop(){ update(); if(running)timerHandle=requestAnimationFrame(loop); }
 
-  function setTimelineEditable(enabled) {
-    timelineBar.classList.toggle('timeline-editable', enabled);
-    timelineMarker.setAttribute('aria-disabled', String(!enabled));
-  }
+  eventRows.addEventListener('input', e => {
+    if (!e.target.matches('input')) return;
+    if (e.target.classList.contains('event-session-end') && e.target.checked) {
+      eventRows.querySelectorAll('.event-session-end').forEach(cb => { if (cb !== e.target) cb.checked = false; });
+    }
+    syncEventsFromDom(); renderTimelineMarkers(); syncFiredForElapsed(getElapsed()); update(); persistSettings();
+  });
+  eventRows.addEventListener('change', e => {
+    if (e.target.classList.contains('event-bell')) e.target.value=bellNum(e.target.value);
+    if (e.target.classList.contains('event-time')) e.target.value=num(e.target.value);
+    if (e.target.classList.contains('event-session-end') && e.target.checked) {
+      eventRows.querySelectorAll('.event-session-end').forEach(cb => { if (cb !== e.target) cb.checked = false; });
+    }
+    syncEventsFromDom(); renderTimelineMarkers(); update(); persistSettings();
+  });
+  eventRows.addEventListener('click', e => {
+    const btn=e.target.closest('button'); if(!btn)return;
+    syncEventsFromDom();
+    const row=btn.closest('.event-row'); const idx=events.findIndex(ev=>ev.id===row.dataset.id); if(idx<0)return;
+    if(btn.classList.contains('move-up') && idx>0) [events[idx-1],events[idx]]=[events[idx],events[idx-1]];
+    else if(btn.classList.contains('move-down') && idx<events.length-1) [events[idx+1],events[idx]]=[events[idx],events[idx+1]];
+    else if(btn.classList.contains('delete-event')) events.splice(idx,1);
+    else return;
+    renderEventRows(); syncFiredForElapsed(getElapsed()); update(); persistSettings();
+  });
+  addEventBtn.addEventListener('click', () => {
+    syncEventsFromDom();
+    const last=events.length?events[events.length-1]:null;
+    events.push({time:last?num(last.time)+1:0,bell:0,skipForCountdown:false,title:'New Event',message:'',overtime:false,sessionEnd:false,id:makeId(events.length)});
+    renderEventRows(); update(); persistSettings();
+    eventRows.querySelector('tr:last-child .event-title')?.focus();
+  });
 
-  function loop() {
-    update();
-    if (running) timerHandle = requestAnimationFrame(loop);
-  }
-
-  startBtn.addEventListener('click', async () => {
-    // Resume/prime Web Audio directly from the user's Start click so the
-    // first automatic bell is not lost to browser autoplay restrictions.
+  startBtn.addEventListener('click', async()=>{
     await ensureAudio();
-    if (!running) {
-      running = true;
-      startedAt = performance.now();
-      startBtn.textContent = t('pause');
-      requestWakeLock();
-      loop();
-    } else {
-      elapsedBeforeStart = getElapsed();
-      running = false;
-      startedAt = null;
-      cancelAnimationFrame(timerHandle);
-      startBtn.textContent = t('start');
-      releaseWakeLock();
-      update();
-    }
+    if(!running){ running=true; startedAt=performance.now(); startBtn.textContent=t('pause'); requestWakeLock(); loop(); }
+    else { elapsedBeforeStart=getElapsed(); running=false; startedAt=null; cancelAnimationFrame(timerHandle); startBtn.textContent=t('start'); releaseWakeLock(); update(); }
+  });
+  resetBtn.addEventListener('click',()=>{ running=false; elapsedBeforeStart=0; startedAt=null; fired.clear(); cancelAnimationFrame(timerHandle); startBtn.textContent=t('start'); releaseWakeLock(); update(); });
+  manualBellBtn.addEventListener('click',()=>{ const n=Math.max(1,bellNum(manualBellCountInput.value)); manualBellCountInput.value=n; ring(n); });
+  manualBellCountInput.addEventListener('input',persistSettings);
+  saveSettingsCheckbox.addEventListener('change',persistSettings);
+  countModeInputs.forEach(i=>i.addEventListener('change',()=>{update();persistSettings();}));
+  themeModeInputs.forEach(i=>i.addEventListener('change',()=>{applyTheme(i.value);persistSettings();}));
+  languageModeInputs.forEach(i=>i.addEventListener('change',()=>applyLanguage(i.value)));
+  settingsToggle.addEventListener('click',()=>setSettingsOpen(!settingsShell.classList.contains('open')));
+  enableTimelineControl.addEventListener('change',()=>{setTimelineEditable(enableTimelineControl.checked);draggingTimeline=false;});
+
+  timelineBar.addEventListener('pointerdown',e=>{if(!enableTimelineControl.checked)return;draggingTimeline=true;if(timelineBar.setPointerCapture)timelineBar.setPointerCapture(e.pointerId);seekTimelineFromClientX(e.clientX);e.preventDefault();});
+  timelineBar.addEventListener('pointermove',e=>{if(!draggingTimeline||!enableTimelineControl.checked)return;seekTimelineFromClientX(e.clientX);e.preventDefault();});
+  const stopDrag=e=>{if(!draggingTimeline)return;draggingTimeline=false;if(e&&timelineBar.releasePointerCapture&&timelineBar.hasPointerCapture?.(e.pointerId))timelineBar.releasePointerCapture(e.pointerId);};
+  timelineBar.addEventListener('pointerup',stopDrag); timelineBar.addEventListener('pointercancel',stopDrag);
+
+  fullscreenBtn.addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen();}catch(_){}});
+  document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('fullscreen',!!document.fullscreenElement);fullscreenBtn.textContent=document.fullscreenElement?t('exitFullscreen'):t('fullscreen');});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&running)requestWakeLock();});
+  document.addEventListener('keydown',e=>{const tag=document.activeElement?.tagName;if(e.code==='Space'&&!['INPUT','BUTTON'].includes(tag)){e.preventDefault();startBtn.click();}if(e.key.toLowerCase()==='r'&&tag!=='INPUT')resetBtn.click();if(e.key.toLowerCase()==='f'&&tag!=='INPUT')fullscreenBtn.click();});
+
+  clearSavedSettingsBtn.addEventListener('click',()=>{
+    try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem('presentationTimerSettingsV33');localStorage.removeItem('presentationTimerSettingsV32');localStorage.removeItem('presentationTimerSettingsV31');localStorage.removeItem('presentationTimerSettingsV30');localStorage.removeItem('presentationTimerSettingsV29');localStorage.removeItem('presentationTimerSettingsV28');}catch(_){}
+    events=DEFAULT_EVENTS.map((e,i)=>({...e,id:makeId(i)}));
+    document.querySelector('input[name="countMode"][value="down"]').checked=true;
+    document.querySelector('input[name="languageMode"][value="en"]').checked=true;
+    document.querySelector('input[name="themeMode"][value="dark"]').checked=true;
+    manualBellCountInput.value=4; saveSettingsCheckbox.checked=true; elapsedBeforeStart=0; running=false; fired.clear(); startedAt=null; cancelAnimationFrame(timerHandle); applyTheme('dark'); renderEventRows(); applyLanguage('en'); update(); persistSettings();
   });
 
-  resetBtn.addEventListener('click', () => {
-    running = false;
-    elapsedBeforeStart = 0;
-    startedAt = null;
-    fired.clear();
-    cancelAnimationFrame(timerHandle);
-    startBtn.textContent = t('start');
-    releaseWakeLock();
-  
-  if (clearSavedSettingsBtn) {
-    clearSavedSettingsBtn.addEventListener('click', () => {
-      try {
-        localStorage.removeItem('presentationTimerSettingsV28');
-        localStorage.removeItem('presentationTimerSettingsV29');
-      } catch (_) {}
-
-      presentationInput.value = 10;
-      qaInput.value = 5;
-      firstBellInput.value = 9;
-      if (typeof otAlertInput !== 'undefined' && otAlertInput) otAlertInput.value = 3;
-
-      const enRadio = document.querySelector('input[name="languageMode"][value="en"]');
-      if (enRadio) enRadio.checked = true;
-
-      const darkRadio = document.querySelector('input[name="themeMode"][value="dark"]');
-      if (darkRadio) darkRadio.checked = true;
-      if (typeof applyTheme === 'function') applyTheme('dark');
-
-      if (typeof applyLanguage === 'function') applyLanguage('en');
-      else if (typeof updateLanguage === 'function') updateLanguage('en');
-
-      if (typeof saveSettingsInput !== 'undefined' && saveSettingsInput) saveSettingsInput.checked = true;
-
-      elapsedBeforeStart = 0;
-      startedAt = null;
-      running = false;
-      fired.clear();
-      if (timerHandle) cancelAnimationFrame(timerHandle);
-      startBtn.textContent = 'Start';
-      update();
-    });
-  }
-
-  update();
-  });
-
-  document.querySelectorAll('[data-target]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const input = document.getElementById(btn.dataset.target);
-      input.value = Math.max(0, value(input) + Number(btn.dataset.delta));
-      syncBellCountsToTimes(input);
-      if (!running && elapsedBeforeStart === 0) update();
-      persistSettings();
-    });
-  });
-
-  [presentationInput, qaInput, firstBellInput, overtimeAlertInput].forEach(input => {
-    input.addEventListener('input', () => {
-      syncBellCountsToTimes(input);
-      if (!running) update();
-      persistSettings();
-    });
-  });
-
-  countModeInputs.forEach(input => input.addEventListener('change', () => { update(); persistSettings(); }));
-  themeModeInputs.forEach(input => input.addEventListener('change', () => { applyTheme(input.value); persistSettings(); }));
-  languageModeInputs.forEach(input => input.addEventListener('change', () => applyLanguage(input.value)));
-  soundModeInputs.forEach(input => input.addEventListener('change', () => {
-    if (input.checked && input.value === 'on') ensureAudio();
-  }));
-  [bellCountFirstInput, bellCountQAInput, bellCountOverInput, bellCountOverAlertInput].forEach(input => {
-    input.addEventListener('input', () => { sanitizeBellCountInput(input); persistSettings(); });
-    input.addEventListener('change', () => { sanitizeBellCountInput(input); persistSettings(); });
-  });
-  manualBellCountInput.addEventListener('change', persistSettings);
-  manualBellCountInput.addEventListener('input', persistSettings);
-  saveSettingsCheckbox.addEventListener('change', persistSettings);
-
-  enableTimelineControl.addEventListener('change', () => {
-    setTimelineEditable(enableTimelineControl.checked);
-    draggingTimeline = false;
-  });
-
-  timelineBar.addEventListener('pointerdown', (e) => {
-    if (!enableTimelineControl.checked) return;
-    draggingTimeline = true;
-    if (timelineBar.setPointerCapture) timelineBar.setPointerCapture(e.pointerId);
-    seekTimelineFromClientX(e.clientX);
-    e.preventDefault();
-  });
-
-  timelineBar.addEventListener('pointermove', (e) => {
-    if (!draggingTimeline || !enableTimelineControl.checked) return;
-    seekTimelineFromClientX(e.clientX);
-    e.preventDefault();
-  });
-
-  const stopTimelineDrag = (e) => {
-    if (!draggingTimeline) return;
-    draggingTimeline = false;
-    if (e && timelineBar.releasePointerCapture && timelineBar.hasPointerCapture?.(e.pointerId)) {
-      timelineBar.releasePointerCapture(e.pointerId);
-    }
-  };
-  timelineBar.addEventListener('pointerup', stopTimelineDrag);
-  timelineBar.addEventListener('pointercancel', stopTimelineDrag);
-
-
-  function clampBellCount(n) {
-    n = Math.floor(Number(n));
-    return Number.isFinite(n) ? Math.max(0, Math.min(99, n)) : 0;
-  }
-
-  function getBellCount(input) {
-    return clampBellCount(input.value);
-  }
-
-  function sanitizeBellCountInput(input) {
-    input.value = getBellCount(input);
-  }
-
-  function syncBellCountsToTimes(sourceInput = null) {
-    // Empty input means "still editing": never change a bell count.
-    // Only an explicitly entered numeric zero temporarily sets the directly
-    // corresponding automatic bell count to 0. Entering a positive time later
-    // does not restore the bell count automatically; the user stays in control.
-    if (!sourceInput) return;
-    const raw = String(sourceInput.value ?? '').trim();
-    if (raw === '') return;
-    const n = Number(raw);
-    if (!Number.isFinite(n) || n !== 0) return;
-
-    if (sourceInput === qaInput) bellCountQAInput.value = 0;
-    else if (sourceInput === firstBellInput) bellCountFirstInput.value = 0;
-    else if (sourceInput === overtimeAlertInput) bellCountOverAlertInput.value = 0;
-  }
-
-  function getManualBellCount() {
-    const n = Math.floor(Number(manualBellCountInput.value));
-    const count = Number.isFinite(n) ? Math.max(1, Math.min(99, n)) : 4;
-    manualBellCountInput.value = count;
-    return count;
-  }
-
-  manualBellBtn.addEventListener('click', () => {
-    ensureAudio();
-    ring(getManualBellCount());
-  });
-
-  settingsToggle.addEventListener('click', () => {
-    setSettingsOpen(!settingsShell.classList.contains('open'));
-  });
-
-
-
-  fullscreenBtn.addEventListener('click', async () => {
-    try {
-      if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
-      else await document.exitFullscreen();
-    } catch (_) {}
-  });
-
-  document.addEventListener('fullscreenchange', () => {
-    document.body.classList.toggle('fullscreen', !!document.fullscreenElement);
-    fullscreenBtn.textContent = document.fullscreenElement ? t('exitFullscreen') : t('fullscreen');
-  });
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && running) requestWakeLock();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && !['INPUT','BUTTON'].includes(document.activeElement.tagName)) {
-      e.preventDefault(); startBtn.click();
-    }
-    if (e.key.toLowerCase() === 'r' && document.activeElement.tagName !== 'INPUT') resetBtn.click();
-    if (e.key.toLowerCase() === 'f' && document.activeElement.tagName !== 'INPUT') fullscreenBtn.click();
-  });
-
+  try{const savedTheme=localStorage.getItem('presentationTimerTheme');const theme=(savedTheme==='light'||savedTheme==='dark')?savedTheme:'dark';const r=document.querySelector(`input[name="themeMode"][value="${theme}"]`);if(r)r.checked=true;applyTheme(theme);}catch(_){applyTheme('dark');}
   restoreSettings();
-  const initialLanguageRadio = document.querySelector('input[name="languageMode"]:checked');
-  language = initialLanguageRadio ? initialLanguageRadio.value : 'en';
-  syncBellCountsToTimes();
+  renderEventRows();
   setTimelineEditable(false);
   setSettingsOpen(false);
   applyLanguage(language);
+  update();
 })();
 </script>
 </body>
