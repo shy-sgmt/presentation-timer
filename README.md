@@ -196,3 +196,18 @@ v48 is a documentation / GitHub packaging release based on the v47 application. 
 This includes legacy keys such as older Visual Timeline Timer versions, preventing old templates/settings from being restored after a reload.
 
 It does **not** clear storage belonging to unrelated applications.
+
+
+## Full reset behavior
+
+Both reset actions now have explicit behavior:
+
+- **Restore Defaults** → restores the complete application defaults:
+  - Theme: **Dark**
+  - Language: **English**
+  - Timer Font Size: **300 px**
+  - Default 3 templates
+  - Default alert/event/session settings
+- **Clear Local Data** → removes current and legacy Presentation Timer browser data and reloads into the same complete defaults.
+
+A previous bug caused the page-unload handler to save the old state again immediately after Clear Local Data. This is fixed in v52.

@@ -14,6 +14,7 @@ const i18n={
 };
 function hydrate(t){const x=structuredClone(t);x.isDefault=!!x.isDefault;x.start=0;x.timelineControl=!!x.timelineControl;x.manualBellCount=x.manualBellCount??4;x.volume=x.volume??100;x.snap=x.snap||30;x.endMeta=x.endMeta||{bell:3,title:'Session End',message:'Session finished'};x.overtimeAlert={enabled:false,offset:180,bell:4,title:'OT Alert',message:'3 minutes overtime',...(x.overtimeAlert||{})};x.markers=(x.markers||[]).filter(m=>m.type!=='end').map(m=>({...m,id:m.id||uid()}));return x}
 function freshStore(lang='en',theme='dark'){return {theme,language:lang,timerSize:300,selected:'10 min Talk',templates:Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,hydrate(v)]))}}
+let suppressPagehideSave=false;
 let store=freshStore();try{let raw=localStorage.getItem(KEY);if(!raw)raw=localStorage.getItem('presentationTimer.visual.v14');const s=JSON.parse(raw);if(s?.templates)store={...store,...s};store.timerSize=Number(store.timerSize)||300}catch{};Object.keys(store.templates||{}).forEach(name=>{
   const tpl=store.templates[name];
   if(['10 min Talk','30 min Talk','Coffee Break'].includes(name)&&tpl.isDefault===undefined)tpl.isDefault=true;
@@ -275,17 +276,36 @@ document.addEventListener('pointerdown',e=>{if(els.settings.classList.contains('
 els.fullscreen.onclick=async()=>{if(document.body.classList.contains('editing'))return;try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch{}};
 $('#saveFile').onclick=()=>{saveStore();const blob=new Blob([JSON.stringify({app:'Presentation Timer',version:16,savedAt:new Date().toISOString(),data:store},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`presentation-timer-settings-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);els.saveStatus.textContent=tr('saveOk')};
 $('#loadFile').onclick=()=>els.loadFileInput.click();els.loadFileInput.onchange=async()=>{const f=els.loadFileInput.files?.[0];if(!f)return;try{const j=JSON.parse(await f.text()),d=j.data||j;if(!d?.templates)throw 0;store={...freshStore(d.language||'en',d.theme||'dark'),...d};if(!store.templates[store.selected])store.selected=Object.keys(store.templates)[0];state=hydrate(store.templates[store.selected]);saveStore();syncControls();applyLanguage();render();els.saveStatus.textContent=tr('loadOk')}catch{els.saveStatus.textContent=tr('badFile')}finally{els.loadFileInput.value=''}};
-$('#restoreDefaults').onclick=()=>{if(confirm(tr('confirmRestore'))){const lang=store.language||'en',theme=store.theme||'dark';store=freshStore(lang,theme);state=hydrate(store.templates[store.selected]);saveStore();syncControls();applyLanguage();render()}};
-$('#clearData').onclick=()=>{if(confirm(tr('confirmClear'))){
+$('#restoreDefaults').onclick=()=>{if(confirm(tr('confirmRestore'))){
   const keys=[];
   for(let i=0;i<localStorage.length;i++){
     const k=localStorage.key(i);
     if(k && k.startsWith('presentationTimer.'))keys.push(k);
   }
   keys.forEach(k=>localStorage.removeItem(k));
+  store=freshStore('en','dark');
+  state=hydrate(store.templates[store.selected]);
+  applyTheme('dark');
+  applyTimerSize(300);
+  store.language='en';
+  saveStore();
+  syncControls();
+  applyLanguage();
+  render();
+}};
+$('#clearData').onclick=()=>{if(confirm(tr('confirmClear'))){
+  suppressPagehideSave=true;
+  const keys=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k && k.startsWith('presentationTimer.'))keys.push(k);
+  }
+  keys.forEach(k=>localStorage.removeItem(k));
+  store=freshStore('en','dark');
+  state=hydrate(store.templates[store.selected]);
   location.reload();
 }};
-document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;if(e.code==='Space'){e.preventDefault();els.startPause.click()}if(e.key.toLowerCase()==='r')els.reset.click();if(e.key.toLowerCase()==='f')els.fullscreen.click()});window.addEventListener('pagehide',()=>{if(!edit)saveStore()});
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;if(e.code==='Space'){e.preventDefault();els.startPause.click()}if(e.key.toLowerCase()==='r')els.reset.click();if(e.key.toLowerCase()==='f')els.fullscreen.click()});window.addEventListener('pagehide',()=>{if(!edit&&!suppressPagehideSave)saveStore()});
 syncControls();applyLanguage();localizeDefaultTemplates(store.language||'en');
 render();
 })();

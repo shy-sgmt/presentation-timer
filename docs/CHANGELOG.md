@@ -1,5 +1,19 @@
 # Changelog
 
+## v52
+
+Complete reset fix.
+
+- Fixed the real **Clear Local Data** bug: the `pagehide` handler was re-saving the old state during reload after storage had been cleared.
+- Clear Local Data now suppresses that automatic save and reloads into a clean state.
+- **Restore Defaults** now resets everything, including Theme and Language.
+- Full defaults are now:
+  - Dark theme
+  - English
+  - Timer Font Size 300 px
+  - Built-in 10 min Talk / 30 min Talk / Coffee Break templates
+- Legacy `presentationTimer.*` storage keys are removed during a full reset.
+
 ## v51
 
 - Fixed **Clear Local Data**.
