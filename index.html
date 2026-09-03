@@ -1248,7 +1248,9 @@
     const set=(id,key)=>{ const el=document.getElementById(id); if(el)el.textContent=t(key); };
     set('settingsToggle','settings'); set('basicGroupHeading','basic'); set('eventsGroupHeading','events'); set('countLabel','count'); set('countDownLabel','down'); set('countUpLabel','up');
     set('themeLabel','theme'); set('lightLabel','light'); set('darkLabel','dark'); set('languageLabel','language'); set('saveSettingsLabel','save'); set('timelineControlLabel','timelineControl');
-    set('manualBellLabel','manualBell'); set('clearSavedSettingsBtn','clear'); set('timeColumnLabel','timeCol'); set('bellColumnLabel','bellCol'); set('skipForCountdownColumnLabel','skipForCountdownCol'); set('titleColumnLabel','titleCol'); set('messageColumnLabel','messageCol'); set('overtimeColumnLabel','overtimeCol'); set('sessionEndColumnLabel','sessionEndCol'); set('actionsColumnLabel','actionsCol'); set('addEventBtn','addEvent'); set('scheduleHint','hint');
+    set('manualBellLabel','manualBell'); set('clearSavedSettingsBtn','clear'); set('timeColumnLabel','timeCol'); set('bellColumnLabel','bellCol'); set('skipForCountdownColumnLabel','skipForCountdownCol'); set('titleColumnLabel','titleCol'); set('messageColumnLabel','messageCol'); set('overtimeColumnLabel','overtimeCol'); set('sessionEndColumnLabel','sessionEndCol'); set('actionsColumnLabel','actionsCol'); set('addEventBtn','addEvent');
+    const hintEl = document.getElementById('scheduleHint');
+    if (hintEl) hintEl.innerHTML = t('hint');
     startBtn.textContent=running?t('pause'):t('start'); resetBtn.textContent=t('reset'); fullscreenBtn.textContent=document.fullscreenElement?t('exitFullscreen'):t('fullscreen'); manualBellBtn.textContent=t('ring');
     update(); persistSettings();
   }
