@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="Free online presentation timer for conferences, academic talks, seminars, and meetings with configurable bell alerts, Q&amp;A timing, automatic overtime, manual bells, fullscreen mode, and English/Japanese support.">
+<meta name="keywords" content="presentation timer, conference timer, academic presentation timer, presentation timer with bell, Q&amp;A timer, seminar timer, talk timer, speaker timer, overtime timer, bilingual presentation timer">
+<meta name="author" content="Shoya Sugimoto">
+<meta name="theme-color" content="#15171c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Presentation Timer">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://shy-sgmt.github.io/presentation-timer/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Presentation Timer with Bell, Q&amp;A &amp; Automatic Overtime">
+<meta property="og:description" content="A free online conference and academic presentation timer with configurable bell alerts, Q&amp;A timing, automatic overtime, manual bells, fullscreen mode, and English/Japanese support.">
+<meta property="og:url" content="https://shy-sgmt.github.io/presentation-timer/">
+<meta property="og:site_name" content="Presentation Timer">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Presentation Timer with Bell, Q&amp;A &amp; Automatic Overtime">
+<meta name="twitter:description" content="Free online presentation timer for conferences and academic talks with bell alerts, Q&amp;A timing, overtime notifications, and bilingual support.">
+
+<title>Presentation Timer with Bell, Q&amp;A &amp; Automatic Overtime | Free Online Conference Timer</title>
+<link rel="stylesheet" href="./css/themes.css">
+<link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<div class="page">
+  <div id="settingsShell" class="settings-shell">
+    <div class="settings-bar">
+      <button id="settingsToggle" class="settings-toggle" type="button" aria-expanded="false" aria-controls="settingsPanel">Settings</button>
+    </div>
+
+    <div id="settingsPanel" class="settings-panel">
+      <div class="settings-groups">
+        <div class="settings-group">
+          <div id="basicGroupHeading" class="settings-group-heading">General</div>
+          <div class="settings-group-body basic-body">
+            <div class="compact-options settings-top-row">
+              <div class="option-group">
+                <strong id="themeLabel">Theme:</strong>
+                <label><input type="radio" name="themeMode" value="light"> <span id="lightLabel">Light</span></label>
+                <label><input type="radio" name="themeMode" value="dark" checked> <span id="darkLabel">Dark</span></label>
+                <label><input type="radio" name="themeMode" value="high-contrast"> <span id="highContrastLabel">High Contrast</span></label>
+                <label><input type="radio" name="themeMode" value="paper"> <span id="paperLabel">Paper</span></label>
+                <label><input type="radio" name="themeMode" value="matrix"> <span id="matrixLabel">Matrix</span></label>
+                <label><input type="radio" name="themeMode" value="tokyo-night"> <span id="tokyoNightLabel">Tokyo Night</span></label>
+                <label><input type="radio" name="themeMode" value="cyberpunk"> <span id="cyberpunkLabel">Cyberpunk</span></label>
+                <label><input type="radio" name="themeMode" value="solarized"> <span id="solarizedLabel">Solarized</span></label>
+              </div>
+              <div class="option-group">
+                <strong id="languageLabel">Language:</strong>
+                <label><input type="radio" name="languageMode" value="en" checked> English</label>
+                <label><input type="radio" name="languageMode" value="ja"> 日本語</label>
+              </div>
+            </div>
+            <div class="settings-bottom-row">
+              <label><input id="saveSettings" type="checkbox" checked> <span id="saveSettingsLabel">Auto-save in browser</span></label>
+            </div>
+            <div class="file-settings-row">
+              <button id="exportSettingsBtn" class="clear-settings-btn" type="button">Save Settings</button>
+              <button id="importSettingsBtn" class="clear-settings-btn" type="button">Load Settings</button>
+              <input id="importSettingsFile" type="file" accept="application/json,.json" hidden>
+            </div>
+            <div class="pwa-settings-row">
+              <button id="installAppBtn" class="clear-settings-btn" type="button" hidden>Install App</button>
+              <span id="installAppStatus" class="file-save-status" role="status" aria-live="polite"></span>
+            </div>
+            <div id="fileSaveStatus" class="file-save-status" role="status" aria-live="polite"></div>
+            <div class="clear-settings-row">
+              <button id="clearSavedSettingsBtn" class="clear-settings-btn" type="button">Restore Defaults</button>
+              <button id="clearLocalDataBtn" class="clear-settings-btn danger-settings-btn" type="button">Clear Local Data</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group template-group">
+          <div id="templatesGroupHeading" class="settings-group-heading">Templates</div>
+          <div class="settings-group-body">
+            <div id="templateList" class="template-list"></div>
+            <div class="add-template-row"><button id="addTemplateBtn" class="add-template-btn" type="button">＋ Add Template</button></div>
+            <div id="templateHint" class="template-hint">Press Edit to modify a template.
+Press Save to save it before using the timer.
+You can create up to 6 templates.</div>
+          </div>
+        </div>
+
+
+        <div class="settings-group event-group">
+          <div id="eventsGroupHeading" class="settings-group-heading">Schedule</div>
+          <div class="settings-group-body">
+            <div class="event-controls">
+              <div class="option-group">
+                <strong id="countLabel">Count:</strong>
+                <label><input type="radio" name="countMode" value="down" checked> <span id="countDownLabel">Down</span></label>
+                <label><input type="radio" name="countMode" value="up"> <span id="countUpLabel">Up</span></label>
+              </div>
+              <label class="event-control-check"><input id="enableTimelineControl" type="checkbox"> <span id="timelineControlLabel">Enable timeline control</span></label>
+              <div class="manual-bell-setting event-manual-bell">
+                <label for="manualBellCount" id="manualBellLabel">Manual bell count</label>
+                <input id="manualBellCount" type="number" min="1" max="99" step="1" value="4" inputmode="numeric">
+              </div>
+              <div class="bell-volume-setting">
+                <label for="bellVolume" id="bellVolumeLabel">Bell volume</label>
+                <div class="bell-volume-control">
+                  <input id="bellVolume" type="range" min="0" max="100" step="1" value="100" aria-label="Bell volume">
+                  <output id="bellVolumeValue" for="bellVolume">100%</output>
+                </div>
+              </div>
+            </div>
+            <div class="event-table-wrap">
+              <table class="event-table" aria-label="Timer events">
+                <thead>
+                  <tr>
+                    <th id="timeColumnLabel">Time (min.sec)</th>
+                    <th id="bellColumnLabel">Bell count</th>
+                    <th id="skipForCountdownColumnLabel">Skip for Countdown</th>
+                    <th id="titleColumnLabel">Title</th>
+                    <th id="messageColumnLabel">Message</th>
+                    <th id="sessionEndColumnLabel">Session End</th>
+                    <th id="actionsColumnLabel">Order</th>
+                  </tr>
+                </thead>
+                <tbody id="eventRows"></tbody>
+              </table>
+            </div>
+            <div class="add-event-row">
+              <button id="addEventBtn" class="add-event-btn" type="button">＋ Add Event</button>
+            </div>
+            <div id="scheduleHint" class="schedule-hint">Time is measured from the timer start. Bell count 0 means no bell.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="templateLauncher" class="template-launcher main-template-launcher"></div>
+
+  <main class="timer-area">
+    <div class="time-layout">
+      <div class="primary-panel">
+        <div id="timerTitle" class="timer-title">Presentation</div>
+        <div id="timerMessage" class="timer-message">Presentation in progress</div>
+        <div id="timeDisplay" class="time">09:00</div>
+      </div>
+      <div id="secondaryPanel" class="secondary-panel">
+        <div id="secondaryLabel" class="secondary-label">Elapsed</div>
+        <div id="secondaryDisplay" class="secondary-display">00:00</div>
+      </div>
+    </div>
+
+    <div class="timeline-wrap custom-events" aria-label="Presentation timeline">
+      <div id="nextEventLabel" class="next-event"></div>
+      <div class="timeline-labels">
+        <span id="startLabel" class="timeline-label start">0</span>
+        <span id="endLabel" class="timeline-label end">18 min</span>
+      </div>
+      <div id="timelineBar" class="timeline-bar custom-event-bar">
+        <div id="timelineProgress" class="timeline-progress"></div>
+        <div id="eventMarkers"></div>
+        <div id="timelineMarker" class="timeline-marker"></div>
+      </div>
+    </div>
+
+    <div class="controls-wrap">
+      <div class="controls">
+        <button id="startBtn" type="button">Start</button>
+        <button id="resetBtn" type="button">Reset</button>
+        <button id="fullscreenBtn" type="button">Fullscreen</button>
+      </div>
+      <button id="manualBellBtn" class="manual-ring-btn" type="button">Ring</button>
+    </div>
+  </main>
+
+
+</div>
+
+<script src="./js/app.js"></script>
+<script src="./js/pwa.js"></script>
+</body>
+</html>
