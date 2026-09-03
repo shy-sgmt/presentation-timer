@@ -1,5 +1,14 @@
 # Changelog
 
+## v50
+
+README quick-launch release.
+
+- Added a prominent **Open Presentation Timer** link at the top of the GitHub README.
+- Added a direct **Download ZIP** link.
+- Added the same quick-launch instructions in Japanese.
+- Application behavior and design are unchanged.
+
 ## v49
 
 Distribution / easy-launch package.

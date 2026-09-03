@@ -1,39 +1,29 @@
 # Presentation Timer
 
-## Download and run
+## ▶ Use it now
 
-No installation is required.
+**No installation required. Open the timer directly in your browser:**
 
-### Windows
+### [▶ Open Presentation Timer](https://shy-sgmt.github.io/presentation-timer/)
 
-1. Download and extract the ZIP.
-2. Double-click:
+Or download the whole project:
 
-```text
-START Presentation Timer.bat
-```
+### [⬇ Download ZIP](https://github.com/shy-sgmt/presentation-timer/archive/refs/heads/main.zip)
 
-The timer opens in your default browser.
+---
 
-You can also open:
+### 日本語
 
-```text
-00_START_HERE.html
-```
+**インストール不要です。ブラウザですぐ使えます。**
 
-### macOS / Linux
+### [▶ Presentation Timerを開く](https://shy-sgmt.github.io/presentation-timer/)
 
-Extract the ZIP and open:
+PCに保存して使う場合：
 
-```text
-00_START_HERE.html
-```
+### [⬇ ZIPをダウンロード](https://github.com/shy-sgmt/presentation-timer/archive/refs/heads/main.zip)
 
-or:
-
-```text
-index.html
-```
+WindowsではZIPを展開後、  
+`START Presentation Timer.bat` をダブルクリックすれば起動できます。
 
 ---
 
