@@ -187,3 +187,12 @@ presentation-timer/
 Current packaged version: **v48**
 
 v48 is a documentation / GitHub packaging release based on the v47 application. The timer behavior and visual design are unchanged from v47.
+
+
+## Clear Local Data
+
+**Clear Local Data** removes all Presentation Timer data stored by current and older versions of the app on the same site.
+
+This includes legacy keys such as older Visual Timeline Timer versions, preventing old templates/settings from being restored after a reload.
+
+It does **not** clear storage belonging to unrelated applications.

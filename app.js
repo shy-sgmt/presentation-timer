@@ -276,7 +276,15 @@ els.fullscreen.onclick=async()=>{if(document.body.classList.contains('editing'))
 $('#saveFile').onclick=()=>{saveStore();const blob=new Blob([JSON.stringify({app:'Presentation Timer',version:16,savedAt:new Date().toISOString(),data:store},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`presentation-timer-settings-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);els.saveStatus.textContent=tr('saveOk')};
 $('#loadFile').onclick=()=>els.loadFileInput.click();els.loadFileInput.onchange=async()=>{const f=els.loadFileInput.files?.[0];if(!f)return;try{const j=JSON.parse(await f.text()),d=j.data||j;if(!d?.templates)throw 0;store={...freshStore(d.language||'en',d.theme||'dark'),...d};if(!store.templates[store.selected])store.selected=Object.keys(store.templates)[0];state=hydrate(store.templates[store.selected]);saveStore();syncControls();applyLanguage();render();els.saveStatus.textContent=tr('loadOk')}catch{els.saveStatus.textContent=tr('badFile')}finally{els.loadFileInput.value=''}};
 $('#restoreDefaults').onclick=()=>{if(confirm(tr('confirmRestore'))){const lang=store.language||'en',theme=store.theme||'dark';store=freshStore(lang,theme);state=hydrate(store.templates[store.selected]);saveStore();syncControls();applyLanguage();render()}};
-$('#clearData').onclick=()=>{if(confirm(tr('confirmClear'))){localStorage.removeItem(KEY);location.reload()}};
+$('#clearData').onclick=()=>{if(confirm(tr('confirmClear'))){
+  const keys=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k && k.startsWith('presentationTimer.'))keys.push(k);
+  }
+  keys.forEach(k=>localStorage.removeItem(k));
+  location.reload();
+}};
 document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;if(e.code==='Space'){e.preventDefault();els.startPause.click()}if(e.key.toLowerCase()==='r')els.reset.click();if(e.key.toLowerCase()==='f')els.fullscreen.click()});window.addEventListener('pagehide',()=>{if(!edit)saveStore()});
 syncControls();applyLanguage();localizeDefaultTemplates(store.language||'en');
 render();

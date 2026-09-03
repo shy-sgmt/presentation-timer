@@ -1,5 +1,12 @@
 # Changelog
 
+## v51
+
+- Fixed **Clear Local Data**.
+- Clear now removes all `presentationTimer.*` localStorage keys, including legacy versions.
+- Prevents old v14 data from being loaded again immediately after clearing.
+- Application design and timer behavior are otherwise unchanged.
+
 ## v50
 
 README quick-launch release.
